@@ -1,0 +1,50 @@
+<div class="col-3 column">
+      <q-img src="https://cdn.discordapp.com/attachments/1076438698285092915/1147989580868489318/cpc-library.jpg" fit/>
+      <q-btn label="Upload Image(Optional)" square color="cyan-10" text-color="grey-2"/>
+    </div>
+    <div class="col full-height column q-ml-xl q-gutter-y-lg">
+      <div class="col row q-gutter-x-md">
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Accesion No."/>
+        </div>
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " type="date" label="Date Received" />
+        </div>
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Author"/>
+        </div>
+      </div>
+      <div class="col row q-gutter-x-md">
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Book Title"/>
+        </div>
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Edition"/>
+        </div>
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Volume Copy No."/>
+        </div>
+      </div>
+      <div class="col row q-gutter-x-md">
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Publisher"/>
+        </div>
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Cost Price"/>
+        </div>
+        <div class="col-3">
+          <q-input standout="bg-light-blue-10 text-grey-4 " label="Copyright Year"/>
+        </div>
+      </div>
+      <div class="col-2 row q-pr-md">
+        <div class="col-10 q-pr-lg">
+          <q-input standout="bg-light-blue-10 text-grey-4" label="Remarks(Leave empty if no remarks)" autogrow/>
+        </div>
+      </div>
+      <div class="col-2 row q-pr-md">
+        <div class="col-10 q-pr-lg">
+          <q-input standout="bg-light-blue-10 text-grey-4" label="Descriptions" autogrow/>
+        </div>
+      </div>
+    </div>
+
