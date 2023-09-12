@@ -9,19 +9,38 @@
     >
       <div class="row">
         <div class="col-1">
-          <q-btn flat dense no-caps icon="account_circle" />
+          <q-btn flat dense no-caps icon="account_circle" to="/account">
+            <q-tooltip
+              class="bg-grey-2 text-grey-10"
+              :delay="200"
+              transition-show="fade"
+              transition-hide="fade"
+              >Account</q-tooltip
+            >
+          </q-btn>
         </div>
         <div class="col-11 row reverse">
-          <q-btn
-            icon="logout"
-            label="Logout"
-            class="q-ml-lg"
-            no-caps
-            flat
-            dense
-          />
-          <q-btn icon="settings" flat dense no-caps />
-          <q-btn icon="notifications" dense flat no-caps />
+          <q-btn icon="settings" flat dense no-caps to="/settings">
+            <q-tooltip
+              class="bg-grey-2 text-grey-10"
+              :delay="200"
+              transition-show="fade"
+              transition-hide="fade"
+              >Settings</q-tooltip
+            >
+          </q-btn>
+          <q-btn icon="notifications" dense flat no-caps to="/notifications">
+            <q-tooltip
+              class="bg-grey-2 text-grey-10"
+              :delay="200"
+              transition-show="fade"
+              transition-hide="fade"
+              >Notifications</q-tooltip
+            >
+            <q-badge color="red-5" text-color="grey-2" floating transparent>
+              6
+            </q-badge>
+          </q-btn>
         </div>
       </div>
       <q-separator color="grey-14" class="q-my-md" size="2px" />
@@ -40,6 +59,7 @@
         <div
           class="col row justify-between cursor-pointer bg-blue-grey-2 q-pa-md content-center shadow-5"
           style="border-radius: 15px"
+          @click="handleClick('onlines')"
         >
           <div class="column text-uppercase">
             <span class="text-subtitle2 text-grey-8">online </span>
@@ -50,6 +70,7 @@
         <div
           class="col row justify-between cursor-pointer bg-blue-grey-2 q-pa-md content-center shadow-5"
           style="border-radius: 15px"
+          @click="handleClick('new-registers')"
         >
           <div class="column text-uppercase">
             <span class="text-subtitle2 text-grey-8">new register</span>
@@ -60,6 +81,7 @@
         <div
           class="col row justify-between cursor-pointer bg-blue-grey-2 q-pa-md content-center shadow-5"
           style="border-radius: 15px"
+          @click="handleClick('recent-visits')"
         >
           <div class="column text-uppercase">
             <span class="text-subtitle2 text-grey-8">recent visit</span>
@@ -84,7 +106,7 @@ import NewRegister from 'assets/desktop/new-register.png';
 import { useRouter } from 'vue-router';
 
 defineComponent({
-  name: 'HomeViewPage',
+  name: 'HomeLayout',
 });
 
 const router = useRouter();

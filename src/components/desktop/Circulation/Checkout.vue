@@ -2,7 +2,7 @@
   <div class="column q-gutter-y-md">
     <div class="q-pa-md column q-gutter-y-md">
       <div class="row">
-        <q-btn-dropdown color="teal" rounded label="Borrow Records">
+        <q-btn-dropdown color="teal" rounded label="Check Out Records">
           <q-list class="text-center">
             <q-item
               clickable
@@ -44,9 +44,9 @@
         :rows="rows"
         :columns="columns"
         row-key="name"
-        :filter="filter"
         :selected-rows-label="getSelectedString"
         selection="multiple"
+        :filter="filter"
         v-model:selected="selected"
         :pagination="{
           rowsPerPage: 10,
@@ -54,7 +54,7 @@
         }"
       >
         <template v-slot:top>
-          <span class="text-h6 text-bold q-pr-md">Borrow Records</span>
+          <span class="text-h6 text-bold q-pr-md">Check Out Records</span>
           <q-btn
             v-if="selected.length > 1"
             color="teal"
@@ -94,7 +94,7 @@
 import { defineComponent, ref } from 'vue';
 
 defineComponent({
-  name: 'ViewBorrow',
+  name: 'ViewCheckout',
 });
 
 const filter = ref('');

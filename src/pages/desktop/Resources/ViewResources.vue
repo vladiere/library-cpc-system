@@ -22,6 +22,9 @@
           <span>444 overall total</span>
         </div>
       </div>
+      <div class="row">
+        <q-btn flat dense label="see all" icon-right="forward" to="view" />
+      </div>
     </div>
     <div class="col">
       <RecentBooks />

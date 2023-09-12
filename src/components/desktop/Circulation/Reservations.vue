@@ -1,60 +1,24 @@
 <template>
   <div class="column q-gutter-y-md">
     <div class="q-pa-md column q-gutter-y-md">
-      <div class="row">
-        <q-btn-dropdown color="teal" rounded label="Borrow Records">
-          <q-list class="text-center">
-            <q-item
-              clickable
-              active-class="text-grey-10"
-              v-close-popup
-              to="/borrow"
-            >
-              <q-item-section>
-                <q-item-label>Borrow Records</q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item
-              clickable
-              v-close-popup
-              active-class="text-grey-10"
-              :to="{ name: 'CheckinRecords' }"
-            >
-              <q-item-section>
-                <q-item-label>Check In Records</q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item
-              clickable
-              v-close-popup
-              active-class="text-grey-10"
-              :to="{ name: 'CheckoutRecords' }"
-            >
-              <q-item-section>
-                <q-item-label>Check Out Records</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
-      </div>
       <q-table
         bordered
         :rows="rows"
         :columns="columns"
         row-key="name"
-        :filter="filter"
         :selected-rows-label="getSelectedString"
         selection="multiple"
+        :filter="filter"
         v-model:selected="selected"
         :pagination="{
-          rowsPerPage: 10,
+          rowsPerPage: 7,
           sortBy: 'name',
         }"
       >
         <template v-slot:top>
-          <span class="text-h6 text-bold q-pr-md">Borrow Records</span>
+          <span class="text-h6 text-bold q-pr-md"
+            >reservations records for this week</span
+          >
           <q-btn
             v-if="selected.length > 1"
             color="teal"
@@ -94,7 +58,7 @@
 import { defineComponent, ref } from 'vue';
 
 defineComponent({
-  name: 'ViewBorrow',
+  name: 'ViewReservations',
 });
 
 const filter = ref('');

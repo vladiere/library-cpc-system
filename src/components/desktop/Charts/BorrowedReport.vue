@@ -1,17 +1,25 @@
 <template>
-  <div id="chart" class="column shadow-8 q-pa-xs text-capitalize" style="border-radius: 15px;">
+  <div
+    id="chart"
+    class="column shadow-8 q-pa-xs text-capitalize"
+    style="border-radius: 15px"
+  >
     <span class="text-h6 text-grey-8 q-pl-md">Borrowed Reports</span>
-    <apexchart type="bar" height="380" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      type="bar"
+      height="380"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { defineComponent, ref } from 'vue'
-  import VueApexCharts from 'vue3-apexcharts';
+import { defineComponent } from 'vue';
 
-  defineComponent({
-    name: 'BorrowedChart'
-  })
+defineComponent({
+  name: 'BorrowedChart',
+});
 
 interface DataPoint {
   name: string;
@@ -46,7 +54,20 @@ const chartOptions = {
     colors: ['transparent'],
   },
   xaxis: {
-    categories: ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    categories: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
   },
   yaxis: {
     title: {

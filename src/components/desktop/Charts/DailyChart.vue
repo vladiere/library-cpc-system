@@ -1,10 +1,10 @@
 <template>
   <div
     id="chart"
-    class="column shadow-8 q-pa-xs text-capitalize"
+    class="col column shadow-8 q-pa-xs text-capitalize"
     style="border-radius: 15px"
   >
-    <span class="text-h6 text-grey-8 q-pl-md">Visit Reports</span>
+    <span class="text-h6 q-pl-md">Daily Reports</span>
     <apexchart
       type="bar"
       height="380"
@@ -18,7 +18,7 @@
 import { defineComponent } from 'vue';
 
 defineComponent({
-  name: 'VisitReport',
+  name: 'DailyChart',
 });
 
 interface DataPoint {
@@ -27,10 +27,10 @@ interface DataPoint {
 }
 
 const series: DataPoint[] = [
-  { name: 'Daily', data: [44, 55, 57, 56, 61, 58, 63, 60, 66] },
-  { name: 'Weekly', data: [76, 85, 101, 98, 87, 105, 91, 114, 94] },
-  { name: 'Monthly', data: [35, 41, 36, 26, 45, 48, 52, 53, 41] },
-  { name: 'Yearly', data: [325, 441, 236, 626, 345, 148, 252, 353, 141] },
+  { name: 'BSIT', data: [44, 55, 57, 56, 61, 58, 63, 60, 66] },
+  { name: 'BSED', data: [35, 41, 36, 26, 45, 48, 52, 53, 41] },
+  { name: 'BEED', data: [35, 41, 36, 26, 45, 48, 52, 53, 41] },
+  { name: 'BSHM', data: [76, 85, 101, 98, 87, 105, 91, 114, 94] },
 ];
 
 const chartOptions = {
@@ -54,11 +54,24 @@ const chartOptions = {
     colors: ['transparent'],
   },
   xaxis: {
-    categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+    categories: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
   },
   yaxis: {
     title: {
-      text: 'Visitors Count',
+      text: 'Daily Visit Report',
     },
   },
   fill: {
@@ -66,7 +79,7 @@ const chartOptions = {
   },
   tooltip: {
     y: {
-      formatter: (val: number) => `$ ${val} thousands`,
+      formatter: (val: number) => `${val} Total Visit(s)`,
     },
   },
 };

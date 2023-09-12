@@ -4,13 +4,13 @@
   >
     <q-btn align="left" no-caps stretch flat to="/home">
       <q-avatar size="42px" class="q-mr-md">
-        <img :src="Dashboard" />
+        <q-img :src="Dashboard" fit="fill" width="85%" />
       </q-avatar>
       Dashboard
     </q-btn>
-    <q-btn align="left" no-caps stretch flat :to="{ name: 'UsersList' }">
+    <q-btn align="left" no-caps stretch flat to="/users">
       <q-avatar size="42px" class="q-mr-md">
-        <img :src="UsersList" />
+        <q-img :src="UsersList" fit="fill" width="85%" />
       </q-avatar>
       Users List
     </q-btn>
@@ -19,7 +19,7 @@
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar>
-              <img :src="Reports" />
+              <q-img :src="Reports" fit="fill" width="85%" />
             </q-avatar>
           </q-item-section>
 
@@ -29,11 +29,7 @@
         <q-card class="bg-blue-grey-4">
           <q-card-section>
             <q-list>
-              <q-item
-                clickable
-                :to="{ name: 'DailyReports' }"
-                active-class="text-grey-12 text-h6"
-              >
+              <q-item clickable to="/daily" active-class="text-grey-12 text-h6">
                 <q-item-section> Daily </q-item-section>
               </q-item>
               <q-item
@@ -65,7 +61,7 @@
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar>
-              <img :src="Circulation" />
+              <q-img :src="Circulation" fit="fill" width="85%" />
             </q-avatar>
           </q-item-section>
 
@@ -75,20 +71,32 @@
         <q-card class="bg-blue-grey-4">
           <q-card-section>
             <q-list>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item
+                clickable
+                active-class="text-grey-12 text-h6"
+                to="/reservations-holds"
+              >
                 <q-item-section> reservation and holds </q-item-section>
               </q-item>
               <q-item
                 clickable
                 active-class="text-grey-12 text-h6"
-                to="/circulation"
+                to="/borrow"
               >
                 <q-item-section> borrow </q-item-section>
               </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item
+                clickable
+                active-class="text-grey-12 text-h6"
+                to="/fines-fees"
+              >
                 <q-item-section> fines and fees </q-item-section>
               </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item
+                clickable
+                active-class="text-grey-12 text-h6"
+                to="/renewal"
+              >
                 <q-item-section> renewal </q-item-section>
               </q-item>
             </q-list>
@@ -99,7 +107,7 @@
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar>
-              <img :src="Assistants" />
+              <q-img :src="Assistants" fit="fill" width="85%" />
             </q-avatar>
           </q-item-section>
 
@@ -127,7 +135,7 @@
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar>
-              <img :src="Resources" />
+              <q-img :src="Resources" fit="fill" width="85%" />
             </q-avatar>
           </q-item-section>
 
@@ -166,7 +174,7 @@
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar>
-              <img :src="Catalogue" />
+              <q-img :src="Catalogue" fit="fill" width="85%" />
             </q-avatar>
           </q-item-section>
 
@@ -177,16 +185,13 @@
           <q-card-section>
             <q-list>
               <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> view resources </q-item-section>
+                <q-item-section> book subject </q-item-section>
               </q-item>
               <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> add resources </q-item-section>
+                <q-item-section> classification number </q-item-section>
               </q-item>
               <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> manage resources </q-item-section>
-              </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> edit resources </q-item-section>
+                <q-item-section> formats </q-item-section>
               </q-item>
             </q-list>
           </q-card-section>
@@ -196,7 +201,7 @@
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar>
-              <img :src="Acquisition" />
+              <q-img :src="Acquisition" fit="fill" width="85%" />
             </q-avatar>
           </q-item-section>
 
@@ -207,46 +212,22 @@
           <q-card-section>
             <q-list>
               <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> Daily </q-item-section>
+                <q-item-section> contributions </q-item-section>
               </q-item>
               <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> Weekly </q-item-section>
-              </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> Mothly </q-item-section>
-              </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> Yearly </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
-      <q-expansion-item>
-        <template v-slot:header>
-          <q-item-section avatar>
-            <q-avatar>
-              <img :src="ResetPassword" />
-            </q-avatar>
-          </q-item-section>
-
-          <q-item-section> Reset password </q-item-section>
-        </template>
-
-        <q-card class="bg-blue-grey-4">
-          <q-card-section>
-            <q-list>
-              <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> reset staff password </q-item-section>
-              </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> reset client password </q-item-section>
+                <q-item-section> book purchase </q-item-section>
               </q-item>
             </q-list>
           </q-card-section>
         </q-card>
       </q-expansion-item>
     </q-list>
+    <q-btn align="left" no-caps stretch flat>
+      <q-avatar size="42px" class="q-mr-md">
+        <q-img :src="Logout" fit="fill" width="85%" />
+      </q-avatar>
+      Logout
+    </q-btn>
   </div>
 </template>
 
@@ -258,9 +239,9 @@ import Circulation from 'assets/desktop/circulation.png';
 import Assistants from 'assets/desktop/assistants.png';
 import Resources from 'assets/desktop/resources.png';
 import Acquisition from 'assets/desktop/acquisitions.png';
-import ResetPassword from 'assets/desktop/reset-password.png';
 import Catalogue from 'assets/desktop/catalogue.png';
 import UsersList from 'assets/desktop/userslist.png';
+import Logout from 'assets/desktop/logout.png';
 
 defineComponent({
   name: 'MenuList',

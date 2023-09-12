@@ -66,12 +66,25 @@ if (!Platform.is.electron) {
           component: () => import('pages/web/Contribute/Contribute.vue')
         },
         {
+          path: '/instructor',
+          name: 'Intructor',
+          component: () => import('pages/web/Instructor/InstructorRecommend.vue'),
+          children: [
+            {
+              path: 'recommend',
+              name: 'InstructorRecommendations',
+              component: () => import('components/web/InstructorRecommendations.vue')
+            }
+          ]
+        },
+        {
           path: '/userbooks',
           name: 'userbooks',
           component: () => import('pages/web/UserBooks/UserBooks.vue'),
           children: [
             {
               path: '',
+              name: 'DisplayUserbooks',
               component: () => import('components/web/MyBooks.vue')
             },
             {
@@ -130,6 +143,7 @@ if (!Platform.is.electron) {
           children: [
             {
               path: '',
+              name: 'advance_searchall',
               component: () => import('components/web/Search/AdvanceSearch.vue'),
             },
             {

@@ -1,89 +1,72 @@
 <template>
-  <div class="column q-gutter-y-md">
-    <div class="q-pa-md column q-gutter-y-md">
-      <div class="row">
-        <q-btn-dropdown color="teal" rounded label="Borrow Records">
-          <q-list class="text-center">
-            <q-item
-              clickable
-              active-class="text-grey-10"
-              v-close-popup
-              to="/borrow"
-            >
-              <q-item-section>
-                <q-item-label>Borrow Records</q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item
-              clickable
-              v-close-popup
-              active-class="text-grey-10"
-              :to="{ name: 'CheckinRecords' }"
-            >
-              <q-item-section>
-                <q-item-label>Check In Records</q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item
-              clickable
-              v-close-popup
-              active-class="text-grey-10"
-              :to="{ name: 'CheckoutRecords' }"
-            >
-              <q-item-section>
-                <q-item-label>Check Out Records</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
-      </div>
+  <div class="column q-gutter-y-sm q-pt-md">
+    <span class="text-h5 text-bold">fines and fees management</span>
+    <div class="column q-gutter-y-md">
       <q-table
         bordered
+        class="shadow-13"
         :rows="rows"
         :columns="columns"
         row-key="name"
         :filter="filter"
-        :selected-rows-label="getSelectedString"
-        selection="multiple"
-        v-model:selected="selected"
         :pagination="{
-          rowsPerPage: 10,
+          rowsPerPage: 7,
           sortBy: 'name',
         }"
       >
         <template v-slot:top>
-          <span class="text-h6 text-bold q-pr-md">Borrow Records</span>
-          <q-btn
-            v-if="selected.length > 1"
-            color="teal"
-            text-color="grey-2"
-            dense
-            label="Accept All"
-            @click="handleClick(selected)"
-          />
-          <q-btn
-            v-if="selected.length == 1"
-            color="teal"
-            text-color="grey-2"
-            dense
-            label="Accept"
-            @click="handleClick(selected)"
-          />
+          <span class="text-h6 text-bold q-pr-md">fines and fees</span>
           <q-space />
-          <q-input
-            square
-            outlined
-            dense
-            debounce="300"
-            color="primary"
-            v-model="filter"
+          <q-btn
+            color="teal"
+            text-color="grey-2"
+            label="Remind All"
+            @click="handleClick(selected)"
+          />
+          <q-btn-dropdown
+            flat
+            :label="actionLabel"
+            no-caps
+            class="text-capitalize q-ml-md"
           >
-            <template v-slot:prepend>
-              <q-icon name="person_search" />
-            </template>
-          </q-input>
+            <q-list>
+              <q-item clickable v-close-popup @click="onItemClick('all')">
+                <q-item-section>
+                  <q-item-label>All</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item
+                clickable
+                v-close-popup
+                @click="onItemClick('overdue item fines')"
+              >
+                <q-item-section>
+                  <q-item-label>Overdue fines</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item
+                clickable
+                v-close-popup
+                @click="onItemClick('lost item fees')"
+              >
+                <q-item-section>
+                  <q-item-label>lost item fees</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item
+                clickable
+                v-close-popup
+                @click="onItemClick('damage items fees')"
+              >
+                <q-item-section>
+                  <q-item-label>damage item fees</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
         </template>
       </q-table>
     </div>
@@ -94,11 +77,12 @@
 import { defineComponent, ref } from 'vue';
 
 defineComponent({
-  name: 'ViewBorrow',
+  name: 'FinesFees',
 });
 
 const filter = ref('');
 const selected = ref([]);
+const actionLabel = ref('All');
 
 const columns = [
   {
@@ -240,15 +224,12 @@ const rows = [
   },
 ];
 
-const getSelectedString = () => {
-  return selected.value.length === 0
-    ? ''
-    : `${selected.value.length} record${
-        selected.value.length > 1 ? 's' : ''
-      } selected of ${rows.length}`;
-};
-
 const handleClick = (items: object) => {
   console.log(items);
+};
+
+const onItemClick = (action: string) => {
+  actionLabel.value = action;
+  filter.value = action === 'all' ? '' : action;
 };
 </script>

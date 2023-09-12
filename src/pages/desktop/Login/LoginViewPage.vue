@@ -76,12 +76,17 @@ import Logo from 'src/assets/logo.png';
 import { User } from 'src/models/desktop/user';
 import { useRouter } from 'vue-router';
 import LoginHook from 'src/controllers/desktopHooks/LoginController';
+import { api } from 'src/boot/axios';
+import { useQuasar } from 'quasar';
+import { useUserStore } from 'stores/user';
 
 defineComponent({
   name: 'LoginViewPage',
 });
 
 const router = useRouter();
+const $q = useQuasar();
+
 const { isFormValid, validateInput, isSubmitBtn } = LoginHook();
 
 const form = ref<User>({
@@ -99,8 +104,28 @@ const form = ref<User>({
   },
 });
 
-const handleSubmit = () => {
-  console.log(form.value);
-  router.push('/home');
+const handleSubmit = async () => {
+  if (!isFormValid) return false;
+
+  try {
+    const response = await api.post('login', {
+      username: form.value.username.value,
+      password: form.value.password.value,
+    });
+
+    const userData = response.data.user;
+    const userStore = useUserStore();
+    userStore.initUser(userData);
+
+    router.push('/home');
+  } catch (error: any) {
+    console.error('Failed', error.response.data);
+    $q.notify({
+      position: 'top',
+      message: error.response.data.message,
+      color: 'negative',
+      timeout: 3000,
+    });
+  }
 };
 </script>

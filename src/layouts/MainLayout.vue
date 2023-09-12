@@ -24,30 +24,6 @@
             ></span
           >
         </q-toolbar-title>
-        <div
-          v-if="!$q.platform.is.mobile"
-          class="bg-primary text-white row justify-center rounded-borders"
-        >
-          <q-input
-            dark
-            dense
-            standout
-            v-model="text"
-            input-class="text-right"
-            class="q-ml-md"
-          >
-            <template v-slot:prepend>
-              <q-icon color="dark" v-if="text === ''" name="search" />
-              <q-icon
-                v-else
-                name="clear"
-                color="dark"
-                class="cursor-pointer"
-                @click="text = ''"
-              />
-            </template>
-          </q-input>
-        </div>
 
         <q-btn-dropdown
           flat
@@ -75,7 +51,7 @@
           @click="toggleRightDrawer"
         />
       </q-toolbar>
-      <hr />
+      <q-separator />
     </q-header>
 
     <q-drawer
@@ -90,13 +66,19 @@
           header
           :class="
             $q.platform.is.mobile
-              ? 'text-dark text-h6 text-bold'
-              : 'text-dark text-h5 text-bold'
+              ? 'text-dark text-h6 text-bold row q-gutter-x-md'
+              : 'text-dark text-h5 text-bold row q-gutter-x-md'
           "
         >
-          CPC Library
+          <q-avatar>
+            <q-img src="https://cdn.quasar.dev/img/avatar.png" fit="contain" />
+          </q-avatar>
+          <div class="column">
+            <span class="text-subtitle1">Danya, John B.</span>
+            <span class="text-caption">BSIT</span>
+          </div>
         </q-item-label>
-        <hr />
+        <q-separator />
         <EssentialLink
           class="text-dark"
           v-for="link in essentialLinks"
@@ -115,7 +97,7 @@
         >
           Browse
         </q-item-label>
-        <hr />
+        <q-separator />
         <BrowseLinks
           class="text-dark"
           v-for="browse in browseLinks"
@@ -129,7 +111,7 @@
       <q-scroll-area
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
-        style="height: 91.5vh; max-width: 100%"
+        style="height: 100vh; max-width: 100%"
       >
         <router-view />
         <FooterPage />
@@ -182,6 +164,11 @@ const browseLinks: BrowseLinksProps[] = [
     title: 'Contribute',
     icon: 'fas fa-book',
     link: '/contribute',
+  },
+  {
+    title: 'Instructor Recommendations',
+    icon: 'fas fa-chalkboard-user',
+    link: 'instructor_recommend',
   },
 ];
 

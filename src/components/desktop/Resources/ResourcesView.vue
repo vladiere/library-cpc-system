@@ -1,5 +1,9 @@
 <template>
-  <div class="">
+  <div class="column q-gutter-y-lg">
+    <div class="row q-gutter-x-xl">
+      <q-btn flat dense label="Back" icon="undo" @click="handleClickBtn" />
+      <span class="text-h4 text-bold">Books List</span>
+    </div>
     <q-table
       :rows="rows"
       row-key="name"
@@ -7,16 +11,44 @@
       bordered
       title="Records of Old Books"
       color="grey-5"
-    />
+      :filter="filter"
+      :pagination="{
+        rowsPerPage: 10,
+        sortBy: 'name',
+      }"
+    >
+      <template v-slot:top>
+        <span class="text-h6 text-bold">Books List</span>
+        <q-space />
+        <q-input
+          square
+          outlined
+          dense
+          debounce="300"
+          color="grey-7"
+          v-model="filter"
+          label="Search Book"
+          class="text-lowercase"
+        >
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
+    </q-table>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 defineComponent({
-  name: 'ViewResourcesOld',
+  name: 'ResourcesView',
 });
+
+const filter = ref('');
+const router = useRouter();
 
 const rows = [
   {
@@ -120,4 +152,8 @@ const rows = [
     iron: '6%',
   },
 ];
+
+const handleClickBtn = () => {
+  router.replace({ name: 'DisplayResources' });
+};
 </script>

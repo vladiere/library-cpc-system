@@ -200,9 +200,8 @@ module.exports = configure(function (/* ctx */) {
         },
         publish: {
           provider: 'github',
-          repo: 'CPC-library',
+          repo: 'library-cpc-system',
           owner: 'vladiere',
-          url: 'https://github.com/vladiere/CPC-library/releases/tag/testing',
         },
       },
     },

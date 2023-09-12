@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="column text-capitalize q-gutter-x-md q-mt-lg text-grey-10 q-py-xl text-grey-8 q-pl-xl q-pr-xl q-gutter-y-md float-right"
-    style="width: 82vw"
-  >
+  <div class="column text-capitalize">
     <div class="q-pa-md justify-center row items-center">
-      <span class="text-h6">Users List</span>
+      <span class="text-h4 text-bold">Users List</span>
     </div>
     <div class="q-pa-md">
       <q-table

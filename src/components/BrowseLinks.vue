@@ -1,7 +1,7 @@
 <template>
-  <q-item clickable :to="link">
+  <q-item clickable @click="gotoRoute(link)">
     <q-item-section v-if="icon" avatar>
-      <q-icon :name="icon" size="1.3rem"/>
+      <q-icon :name="icon" size="1.3rem" />
     </q-item-section>
 
     <q-item-section>
@@ -13,10 +13,11 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
 defineComponent({
-  name: 'BrowseLinks'
-})
+  name: 'BrowseLinks',
+});
 
 export interface BrowseLinksProps {
   title: string;
@@ -30,4 +31,13 @@ withDefaults(defineProps<BrowseLinksProps>(), {
   icon: '',
 });
 
+const router = useRouter();
+
+const gotoRoute = (link: string) => {
+  if (link === 'instructor_recommend') {
+    router.push({ name: 'InstructorRecommendations', query: { q: 'all' } });
+  } else {
+    router.push(link);
+  }
+};
 </script>

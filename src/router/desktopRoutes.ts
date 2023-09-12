@@ -7,6 +7,7 @@ if (Platform.is.electron) {
   routes.push(
     {
       path: '/',
+      name: 'DesktopLayout',
       component: () => import('layouts/DesktopLayout.vue'),
       children: [
         {
@@ -21,8 +22,50 @@ if (Platform.is.electron) {
           children: [
             {
               path: '',
-              name: 'HomeView',
-              component: () => import('pages/desktop/Home/HomeViewPage.vue'),
+              name: 'HomeLayout',
+              component: () => import('layouts/desktop/HomeLayout.vue'),
+              children: [
+                {
+                  path: '',
+                  name: 'ReportsActivity',
+                  component: () => import('components/desktop/Home/ReportsActivity.vue'),
+                },
+                {
+                  path: '/trending',
+                  name: 'TrendingBooks',
+                  component: () => import('components/desktop/Home/TrendBooks.vue')
+                },
+                {
+                  path: '/notifications',
+                  name: 'Notifications',
+                  component: () => import('components/desktop/Home/Notifications.vue')
+                },
+                {
+                  path: '/onlines',
+                  name: 'Onlines',
+                  component: () => import('components/desktop/Home/Onlines.vue')
+                },
+                {
+                  path: '/new-registers',
+                  name: 'NewRegister',
+                  component: () => import('components/desktop/Home/NewRegister.vue')
+                },
+                {
+                  path: '/recent-visits',
+                  name: 'RecentVisits',
+                  component: () => import('components/desktop/Home/RecentVisit.vue')
+                },
+                {
+                  path: '/account',
+                  name: 'Account',
+                  component: () => import('components/desktop/Home/Account.vue')
+                },
+                {
+                  path: '/settings',
+                  name: 'Settings',
+                  component: () => import('components/desktop/Home/Settings.vue')
+                },
+              ]
             },
             {
               path: '/staff',
@@ -61,7 +104,26 @@ if (Platform.is.electron) {
             {
               path: '/daily',
               name: 'DailyReports',
-              component: () => import('components/desktop/Charts/DailyReport.vue')
+              component: () => import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: '',
+                  name: 'DefaultDailyView',
+                  component: () => import('components/desktop/Charts/DailyReport.vue'),
+                  children: [
+                    {
+                      path: '',
+                      name: 'DailyChart',
+                      component: () => import('components/desktop/Charts/DailyChart.vue')
+                    },
+                    {
+                      path: 'add_report',
+                      name: 'AddReport',
+                      component: () => import('components/desktop/Charts/AddDailyReport.vue')
+                    },
+                  ]
+                },
+              ]
             },
             {
               path: '/weekly',
@@ -85,7 +147,13 @@ if (Platform.is.electron) {
               children: [
                 {
                   path: '',
+                  name: 'DisplayResources',
                   component: () => import('pages/desktop/Resources/ViewResources.vue')
+                },
+                {
+                  path: '/view',
+                  name: 'ViewAllResources',
+                  component: () => import('components/desktop/Resources/ResourcesView.vue')
                 },
               ]
             },
@@ -96,6 +164,7 @@ if (Platform.is.electron) {
               children: [
                 {
                   path: '',
+                  name: 'AddResources',
                   component: () => import('components/desktop/Resources/AddResources.vue')
                 },
                 {
@@ -113,6 +182,7 @@ if (Platform.is.electron) {
               children: [
                 {
                   path: '',
+                  name: 'ManageResources',
                   component: () => import('pages/desktop/Resources/ManageResourcesPage.vue'),
                 },
                 {
@@ -125,18 +195,83 @@ if (Platform.is.electron) {
             {
               path: '/users',
               name: 'UsersList',
-              component: () => import('pages/desktop/Users/UsersList.vue')
+              component: () => import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: '',
+                  name: 'UsersLists',
+                  component: () => import('pages/desktop/Users/UsersList.vue')
+                },
+              ]
             },
             {
-              path: '/circulation',
-              name: 'ForCirculations',
+              path: '/reservations-holds',
+              name: 'ReservationHold',
+              component: () => import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: '',
+                  name: 'ReservationsHolds',
+                  component: () => import('components/desktop/Circulation/ReservationHolds.vue'),
+                  children: [
+                    {
+                      path: '',
+                      name: 'ReservationsView',
+                      component: () => import('components/desktop/Circulation/Reservations.vue')
+                    },
+                    {
+                      path: 'holds',
+                      name: 'HoldsRecords',
+                      component: () => import('components/desktop/Circulation/Holds.vue')
+                    },
+                  ]
+                },
+              ]
+            },
+            {
+              path: '/borrow',
+              name: 'ForBorrow',
               component: () => import('layouts/desktop/InnerPageLayout.vue'),
               children: [
                 {
                   path: '',
                   name: 'ViewBooks',
                   component: () => import('components/desktop/Circulation/Borrow.vue')
-                }
+                },
+                {
+                  path: 'check-in',
+                  name: 'CheckinRecords',
+                  component: () => import('components/desktop/Circulation/Checkin.vue')
+                },
+                {
+                  path: 'check-out',
+                  name: 'CheckoutRecords',
+                  component: () => import('components/desktop/Circulation/Checkout.vue')
+                },
+              ]
+            },
+            {
+              path: '/fines-fees',
+              name: 'FinesFees',
+              component: import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: '',
+                  name: 'FinesFees',
+                  component: () => import('components/desktop/FinesFees/FinesFees.vue')
+                },
+              ]
+            },
+            {
+              path: '/renewal',
+              name: 'Renewal',
+              component: () => import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: '',
+                  name: 'RenewalView',
+                  component: () => import('components/desktop/Renewal/Renewal.vue')
+                },
               ]
             },
           ],

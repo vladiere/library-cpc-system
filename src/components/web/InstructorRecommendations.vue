@@ -1,8 +1,12 @@
 <template>
   <div class="column q-gutter-y-md q-ml-lg">
-    <span class="text-h6 text-grey-9 self-center">My Books</span>
+    <span class="text-h6 text-grey-9 self-center"
+      >Instructor Recommendations</span
+    >
     <div class="col q-gutter-y-md">
-      <span class="text-subtitle1 text-grey-9">Books you Borrowed</span>
+      <span class="text-subtitle1 text-grey-9"
+        >Books recommended by instructors</span
+      >
       <div
         v-if="myBooks.length === 0"
         class="column content-center self-center q-gutter-y-md"
@@ -16,7 +20,7 @@
         :bar-style="barStyle"
         style="height: 70vh; max-width: 100%"
       >
-        <div class="row items-center content-center text-capitalize">
+        <div class="row justify-center text-capitalize">
           <q-img
             v-for="myBook in myBooks"
             :key="myBook.id"
