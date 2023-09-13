@@ -1,7 +1,7 @@
 <template>
   <q-layout
     view="lhr lpR lFr"
-    class="column text-capitalize q-gutter-x-md text-grey-10 q-py-xl text-grey-8 q-pr-xl float-right"
+    class="column text-capitalize q-gutter-x-md text-grey-10 q-py-xl text-grey-8 float-right"
     style="width: 78vw"
   >
     <q-page-container>

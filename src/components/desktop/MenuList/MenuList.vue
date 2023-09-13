@@ -222,7 +222,7 @@
         </q-card>
       </q-expansion-item>
     </q-list>
-    <q-btn align="left" no-caps stretch flat>
+    <q-btn align="left" no-caps stretch flat @click="handleBtnLogout">
       <q-avatar size="42px" class="q-mr-md">
         <q-img :src="Logout" fit="fill" width="85%" />
       </q-avatar>
@@ -242,8 +242,21 @@ import Acquisition from 'assets/desktop/acquisitions.png';
 import Catalogue from 'assets/desktop/catalogue.png';
 import UsersList from 'assets/desktop/userslist.png';
 import Logout from 'assets/desktop/logout.png';
+import { useUserStore, useLibrarianDataStore } from 'src/stores/user';
+import { useRouter } from 'vue-router';
 
 defineComponent({
   name: 'MenuList',
 });
+
+const userStore = useUserStore();
+const librarianStore = useLibrarianDataStore();
+const router = useRouter();
+
+const handleBtnLogout = () => {
+  userStore.clearUser();
+  librarianStore.clearLibrarian();
+
+  router.push('/');
+};
 </script>

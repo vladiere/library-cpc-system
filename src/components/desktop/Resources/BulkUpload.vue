@@ -1,174 +1,300 @@
 <template>
-  <div class="column q-gutter-y-md q-pt-lg">
-    <div class="row">
+  <div class="column q-pt-lg q-pr-lg">
+    <div class="row justify-between">
       <q-btn flat icon="arrow_left" label="Back" to="/resources/add" />
+      <q-btn
+        color="teal-3"
+        text-color="grey-10"
+        label="Add Records"
+        @click="handleBtnAddRecords"
+        v-if="tableConfig.rows.length !== 0"
+      />
     </div>
-    <div class="row q-pl-md">
-      <q-file outlined label="Upload File" v-model="fileExcel">
-        <template v-slot:prepend>
-          <q-icon name="attach_file" />
-        </template>
-      </q-file>
+    <div
+      v-if="tableConfig.rows.length === 0"
+      class="row justify-center q-pt-lg"
+    >
+      <q-uploader
+        color="blue"
+        :url="getUrl"
+        auto-upload
+        label="Upload Excel file"
+        field-name="exceldata"
+        :headers="[
+          { name: 'Authorization', value: `Bearer ${userStore.token}` },
+        ]"
+        accept=".xlsx, .xls"
+        @rejected="onRejected"
+        @uploaded="onFileUploaded"
+      />
     </div>
-    <div class="q-pa-md">
+    <div v-if="tableConfig.rows.length !== 0" class="q-pt-lg">
       <q-table
         flat
         bordered
-        title="Treats"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-      />
+        dense
+        :pagination="{
+          rowsPerPage: 20,
+          sortBy: 'name',
+        }"
+        :filter="filter"
+        :rows="tableConfig.rows"
+        :columns="tableConfig.columns"
+        :row-key="tableConfig.rowKey"
+        style="width: 76vw !important"
+      >
+        <template v-slot:top>
+          <span class="text-h6 text-bold">Accession Records</span>
+          <q-space />
+          <q-input
+            square
+            outlined
+            dense
+            debounce="300"
+            color="primary"
+            v-model="filter"
+          >
+            <template v-slot:prepend>
+              <q-icon name="search" />
+            </template>
+            <template v-if="filter" v-slot:append>
+              <q-icon
+                name="close"
+                color="red"
+                @click.stop.prevent="filter = null"
+                class="cursor-pointer"
+              />
+            </template>
+          </q-input>
+        </template>
+      </q-table>
+    </div>
+    <div v-else class="self-center q-pt-xl text-grey-6 text-h3 text-bold">
+      No Bulk upload results
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
+import { useQuasar } from 'quasar';
+import { computed, defineComponent, ref } from 'vue';
+import { useUserStore } from 'src/stores/user';
+import { api } from 'src/boot/axios';
 
 defineComponent({
   name: 'BulkUploads',
 });
 
-const fileExcel = ref();
+const rows = ref<string[][]>([]);
+const $q = useQuasar();
+const userStore = useUserStore();
+const filter = ref(null);
+const dataToSend = ref(Object);
 
-const columns = [
+const onRejected = (rejectedEntries: any) => {
+  $q.notify({
+    type: 'negative',
+    message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
+  });
+};
+
+const getUrl = () => {
+  return 'http://localhost:1337/api/upload/excel';
+};
+
+const columns = ref([
   {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: (row: any) => row.name,
-    format: (val: any) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: 'calories',
+    name: 'Accession No',
+    require: true,
+    label: 'Accession No.',
     align: 'center',
-    label: 'Calories',
-    field: 'calories',
+    field: 'Accession No',
     sortable: true,
-  },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  {
-    name: 'calcium',
-    label: 'Calcium (%)',
-    field: 'calcium',
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
   },
   {
-    name: 'iron',
-    label: 'Iron (%)',
-    field: 'iron',
+    name: 'Date Received',
+    require: true,
+    label: 'Date Received',
+    align: 'center',
+    field: 'Date Received',
     sortable: true,
-    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
   },
-];
+  {
+    name: 'Author',
+    require: true,
+    label: 'Author',
+    align: 'center',
+    field: 'Author',
+    sortable: true,
+  },
+  {
+    name: 'Title of the Book',
+    require: true,
+    label: 'Title of the Book',
+    align: 'center',
+    field: 'Title of the Book',
+    sortable: true,
+  },
+  {
+    name: 'Edition',
+    require: true,
+    label: 'Edition',
+    align: 'center',
+    field: 'Edition',
+    sortable: true,
+  },
+  {
+    name: 'Volumes',
+    require: true,
+    label: 'Volumes',
+    align: 'center',
+    field: 'Volumes',
+    sortable: true,
+  },
+  {
+    name: 'Publisher',
+    require: true,
+    label: 'Publisher',
+    align: 'center',
+    field: 'Publisher',
+    sortable: true,
+  },
+  {
+    name: 'Copyright Yr',
+    require: true,
+    label: 'Copyright Yr.',
+    align: 'center',
+    field: 'Copyright Yr',
+    sortable: true,
+  },
+  {
+    name: 'Remarks',
+    require: true,
+    label: 'Remarks',
+    align: 'center',
+    field: 'Remarks',
+    sortable: true,
+  },
+]);
 
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%',
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%',
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%',
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%',
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%',
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%',
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%',
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%',
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%',
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%',
-  },
-];
+const onFileUploaded = (res: any) => {
+  const responseData = JSON.parse(res.xhr.response);
+  const jsonData = responseData.jsonData;
+  dataToSend.value = jsonData;
+
+  // Initialize a variable to store the previous values of columns
+  const previousValues: any = {};
+
+  rows.value = jsonData.map((item: any) => {
+    const row: any = {};
+
+    columns.value.forEach((col, index) => {
+      if (
+        item.hasOwnProperty(col.field) &&
+        item[col.field] !== null &&
+        item[col.field] !== undefined
+      ) {
+        let cellValue = item[col.field];
+        if (cellValue === '"') {
+          cellValue = previousValues[col.field] || '';
+        } else if (col.field === 'Date Received' && !isNaN(cellValue)) {
+          const excelDate = parseInt(cellValue);
+          const jsDate = new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+          cellValue = jsDate.toDateString();
+        } else {
+          cellValue = cellValue.toString();
+        }
+        row[col.field] = cellValue;
+
+        previousValues[col.field] = cellValue;
+      } else if (previousValues.hasOwnProperty(col.field)) {
+        if (item[col.field] === '"') {
+          row[col.field] = previousValues[col.field] || '';
+        } else {
+          row[col.field] = '';
+        }
+      } else {
+        row[col.field] = '';
+      }
+    });
+
+    return row;
+  });
+};
+
+const tableConfig = computed(() => {
+  return {
+    rows: rows.value,
+    columns: columns.value,
+    rowKey: 'Accession No.',
+  };
+});
+
+const convertToLowerCase = (obj: any) => {
+  for (const key in obj) {
+    if (typeof obj[key] === 'string') {
+      obj[key] = obj[key].toLowerCase();
+    } else if (typeof obj[key] === 'object') {
+      obj[key] = convertToLowerCase(obj[key]);
+    }
+  }
+  return obj;
+};
+
+// Function to send a batch of data to the backend
+const sendBatchToBackend = async (batch: any, token: string) => {
+  try {
+    // Convert batch to lowercase
+    const jsonData = convertToLowerCase(batch);
+
+    const response = await api.post(
+      'add/records',
+      {
+        jsonData,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('Response from the backend:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending JSON data to the backend:', error);
+    throw error;
+  }
+};
+
+const handleBtnAddRecords = async () => {
+  try {
+    const jsonData = rows.value;
+    const token = userStore.token;
+
+    const batchSize = 100; // Number of rows to send in each batch
+    const totalRows = jsonData.length;
+
+    // Split data into smaller batches
+    const batches = [];
+    for (let i = 0; i < totalRows; i += batchSize) {
+      const start = i;
+      const end = Math.min(i + batchSize, totalRows);
+      batches.push(jsonData.slice(start, end));
+    }
+
+    // Send batches concurrently
+    const promises = batches.map((batch) => sendBatchToBackend(batch, token));
+
+    // Wait for all promises to resolve
+    const responses = await Promise.all(promises);
+
+    console.log(responses);
+    // Handle the responses from the backend as needed
+  } catch (error) {
+    // Handle the error as needed
+    console.error(error);
+  }
+};
 </script>

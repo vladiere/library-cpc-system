@@ -20,11 +20,32 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import LibraryLogo from 'assets/logo.png';
 import Menu from 'components/desktop/MenuList/MenuList.vue';
+import { useRouter } from 'vue-router';
+import { useLibrarianDataStore, useUserStore } from 'src/stores/user';
+import { api } from 'src/boot/axios';
 
 defineComponent({
   name: 'SideLayout',
+});
+
+const router = useRouter();
+const librarianStore = useLibrarianDataStore();
+const userStore = useUserStore();
+
+onMounted(async () => {
+  try {
+    const response = await api.get('protected/get/all', {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`,
+      },
+    });
+
+    librarianStore.initLibrarian(response.data.users[0]);
+  } catch (error) {
+    console.error(error);
+  }
 });
 </script>

@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import TrendingBook from 'assets/desktop/trending.png';
 import MostVisit from 'assets/desktop/most-visit.png';
 import Online from 'assets/desktop/online.png';
@@ -90,8 +90,6 @@ defineComponent({
 const router = useRouter();
 
 const handleClick = (link: string) => {
-  console.log(link);
-
   router.push(link);
 };
 </script>

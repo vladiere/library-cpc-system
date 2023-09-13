@@ -13,7 +13,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.firstname.value"
+              v-model="librarianStore.firstname"
               label="firstname"
             />
             <q-input
@@ -23,7 +23,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.middlename.value"
+              v-model="librarianStore.middlename"
               label="middlename"
             />
             <q-input
@@ -33,7 +33,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.lastname.value"
+              v-model="librarianStore.lastname"
               label="lastname"
             />
             <q-input
@@ -43,7 +43,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.email_address.value"
+              v-model="librarianStore.email_address"
               label="email address"
             />
             <q-input
@@ -53,7 +53,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.phone_number.value"
+              v-model="librarianStore.phone_number"
               label="phone number"
             />
             <q-input
@@ -63,7 +63,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.hobbies.value"
+              v-model="librarianStore.hobbies"
               autogrow
               label="hobbies"
             />
@@ -74,7 +74,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.description.value"
+              v-model="librarianStore.description"
               autogrow
               label="decriptions"
             />
@@ -90,7 +90,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.street_address.value"
+              v-model="librarianStore.street_address"
               label="street address"
             />
             <q-input
@@ -100,7 +100,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.city.value"
+              v-model="librarianStore.city"
               label="city"
             />
             <q-input
@@ -110,7 +110,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.state_province_region.value"
+              v-model="librarianStore.state_province_region"
               label="state/province/region"
             />
             <q-input
@@ -120,7 +120,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.address_type.value"
+              v-model="librarianStore.address_type"
               label="address type"
             />
             <q-input
@@ -130,7 +130,7 @@
               outlined
               label-color="grey-10"
               color="grey-10"
-              v-model="staffForm.postal_code.value"
+              v-model="librarianStore.postal_code"
               label="postal code"
               type="number"
               min="0"
@@ -145,101 +145,11 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import { AddStaff } from 'src/models/desktop/Register/addStaff';
+import { useLibrarianDataStore } from 'src/stores/user';
 
 defineComponent({
   name: 'ViewAccount',
 });
 
-const staffForm = ref<AddStaff>({
-  firstname: {
-    value: 'John',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  middlename: {
-    value: 'Doe',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  lastname: {
-    value: 'Smith',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  privilage: {
-    value: 'Admin',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  street_address: {
-    value: '123 Main St',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  city: {
-    value: 'Anytown',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  state_province_region: {
-    value: 'California',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  postal_code: {
-    value: 12345,
-    error: false,
-    msg: '',
-    required: true,
-  },
-  address_type: {
-    value: 'Home',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  email_address: {
-    value: 'john.smith@example.com',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  phone_number: {
-    value: '+1 (123) 456-7890',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  hobbies: {
-    value: 'Reading, Swimming',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  description: {
-    value: 'A dedicated employee',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  username: {
-    value: '',
-    error: false,
-    msg: '',
-    required: true,
-  },
-  password: {
-    value: '',
-    error: false,
-    msg: '',
-    required: true,
-  },
-});
+const librarianStore = useLibrarianDataStore();
 </script>
