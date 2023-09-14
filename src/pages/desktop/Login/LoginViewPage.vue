@@ -35,15 +35,6 @@
             v-model="form.username.value"
             label="Username"
           />
-          <div class="row justify-end q-pt-sm">
-            <router-link
-              to="/forgot-password"
-              class="text-black"
-              style="text-decoration: none"
-            >
-              Forgot Password
-            </router-link>
-          </div>
           <q-input
             square
             outlined

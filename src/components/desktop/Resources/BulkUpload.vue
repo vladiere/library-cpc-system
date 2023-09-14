@@ -8,6 +8,7 @@
         label="Add Records"
         @click="handleBtnAddRecords"
         v-if="tableConfig.rows.length !== 0"
+        :loading="loading"
       />
     </div>
     <div
@@ -90,6 +91,7 @@ const $q = useQuasar();
 const userStore = useUserStore();
 const filter = ref(null);
 const dataToSend = ref(Object);
+const loading = ref(false);
 
 const onRejected = (rejectedEntries: any) => {
   $q.notify({
@@ -243,6 +245,8 @@ const convertToLowerCase = (obj: any) => {
 
 // Function to send a batch of data to the backend
 const sendBatchToBackend = async (batch: any, token: string) => {
+  loading.value = true;
+
   try {
     // Convert batch to lowercase
     const jsonData = convertToLowerCase(batch);
@@ -259,8 +263,8 @@ const sendBatchToBackend = async (batch: any, token: string) => {
         },
       }
     );
-
     console.log('Response from the backend:', response.data);
+    loading.value = false;
     return response.data;
   } catch (error) {
     console.error('Error sending JSON data to the backend:', error);
@@ -268,6 +272,7 @@ const sendBatchToBackend = async (batch: any, token: string) => {
   }
 };
 
+// Handles button when click to add
 const handleBtnAddRecords = async () => {
   try {
     const jsonData = rows.value;

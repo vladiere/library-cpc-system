@@ -276,12 +276,6 @@ if (Platform.is.electron) {
             },
           ],
         },
-        {
-          path: '/forgot-password',
-          name: 'forgot-password',
-          component: () =>
-            import('pages/desktop/ForgotPass/ForgotPasswordView.vue'),
-        },
       ],
     },
   );
