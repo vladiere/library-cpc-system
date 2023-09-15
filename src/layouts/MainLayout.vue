@@ -6,7 +6,7 @@
           class="row items-center cursor-pointer"
           @click="navigateToHome"
         >
-          <q-img avatar src="../assets/logo.png" style="width: 2rem" />
+          <q-img avatar :src="LibraryLogo" style="width: 2rem" />
           <span
             :class="
               $q.platform.is.mobile
@@ -129,6 +129,7 @@ import EssentialLink, {
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import FooterPage from 'components/web/TheFooter.vue';
+import LibraryLogo from 'src/assets/librarylogo.png';
 
 const $q = useQuasar();
 const text = ref('');

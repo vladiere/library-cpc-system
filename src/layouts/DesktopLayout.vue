@@ -21,14 +21,14 @@
     </q-header>
 
     <q-page-container>
-      <router-view/>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
-import Logo from 'src/assets/logo.png';
+import Logo from 'src/assets/applogo.png';
 
 defineComponent({
   name: 'DesktopLayout',

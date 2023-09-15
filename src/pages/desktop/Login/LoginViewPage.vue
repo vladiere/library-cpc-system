@@ -15,8 +15,13 @@
     >
       <div class="text-center q-gutter-lg">
         <div class="column items-center">
-          <q-img :src="Logo" fit="cover" width="150px" />
-          <div class="row justify-center items-center q-mt-md">
+          <q-img
+            :src="Logo"
+            fit="cover"
+            width="45%"
+            style="border-radius: 50%"
+          />
+          <div class="row justify-center items-center q-mt-md text-blue-10">
             <span class="text-h3" style="font-family: 'Redressed', cursive"
               >CPC</span
             >
@@ -27,7 +32,8 @@
           <q-input
             square
             outlined
-            color="grey-10"
+            color="blue-10"
+            label-color="blue-10"
             @update:model-value="validateInput(form, 'username')"
             @blur="validateInput(form, 'username')"
             :error="form.username.error"
@@ -39,7 +45,8 @@
             square
             outlined
             class="q-my-md"
-            color="grey-10"
+            color="blue-10"
+            label-color="blue-10"
             type="password"
             @update:model-value="validateInput(form, 'password')"
             @blur="validateInput(form, 'password')"
@@ -51,8 +58,7 @@
           <q-btn
             label="Login"
             type="submit"
-            flat
-            style="width: 20%"
+            color="blue-10"
             :disable="!isSubmitBtn(form)"
           />
         </q-form>
@@ -63,7 +69,7 @@
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
-import Logo from 'src/assets/logo.png';
+import Logo from 'src/assets/librarylogo.png';
 import { User } from 'src/models/desktop/user';
 import { useRouter } from 'vue-router';
 import LoginHook from 'src/controllers/desktopHooks/LoginController';

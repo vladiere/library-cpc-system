@@ -1,34 +1,87 @@
 <style lang="scss">
+.other-link {
+  font-size: 16px;
+}
+
+.other-link span:nth-child(2) {
+  font-size: 18px;
+  font-weight: 700;
+}
+
 .other-link span:nth-child(2):hover {
   font-style: italic;
   color: rgb(72, 72, 202) !important;
   text-decoration: underline !important;
   cursor: pointer;
 }
+
+.hover-input:hover {
+  box-shadow: 1px 1px 4px 2px rgba(30, 136, 229, 1);
+}
 </style>
 
 <template>
-  <q-page class="bg-primary">
-    <div class="row">
-      <div class="col-12 col-md-4 col-lg-4 q-px-xl">
-        <div class="q-mt-lg text-center">
-          <q-img :src="Logo" fit="fill" width="50%" />
+  <q-page>
+    <div
+      :class="$q.platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
+      :style="
+        $q.platform.is.mobile ? '' : 'border: 1px solid #000; height: 100vh'
+      "
+    >
+      <div
+        :class="
+          $q.platform.is.mobile
+            ? 'q-px-md'
+            : 'col-4 column q-px-lg justify-center'
+        "
+      >
+        <div
+          :class="
+            $q.platform.is.mobile
+              ? 'column items-center content-center q-gutter-y-md q-pb-lg'
+              : 'col-4 column justify-center content-center'
+          "
+        >
+          <q-img
+            :src="Logo"
+            :width="$q.platform.is.mobile ? '50%' : '65%'"
+            style="border-radius: 50%"
+          />
+          <span
+            :class="
+              $q.platform.is.mobile
+                ? 'text-bold text-h3 text-blue-10'
+                : 'hidden'
+            "
+            >CPC Library</span
+          >
         </div>
         <div
           :class="
             $q.platform.is.mobile
-              ? 'text-h4 text-bold text-center q-mt-md'
-              : 'text-h3 text-bold text-center q-mt-lg'
+              ? 'other-link text-bold text-grey-10'
+              : 'row other-link text-weight-bolder'
           "
         >
-          CPC E-Library
+          <span
+            :class="
+              $q.platform.is.mobile ? 'q-mr-xs' : 'text-subtitle1 q-mr-xs'
+            "
+            >Don't have an account now?</span
+          >
+          <span
+            @click="gotoLink('/register')"
+            class="text-subtitle1 text-blue-7"
+            style="text-decoration: none"
+            >Signup Now</span
+          >
         </div>
         <div class="column q-mt-md">
-          <q-form @submit.prevent="submitForm" class="column">
+          <q-form @submit.prevent="submitForm" class="column q-gutter-y-md">
             <q-input
               :debounce="1000"
               outlined
-              color="teal-6"
+              color="blue-7"
               @update:model-value="validateInput(form, 'email')"
               @blur="validateInput(form, 'email')"
               :error="form.email.error"
@@ -41,26 +94,12 @@
                 <q-icon name="mail" />
               </template>
             </q-input>
-            <div
-              class="row justify-end items-center q-mb-md q-mt-none cursor-pointer other-link"
-            >
-              <span
-                @click="gotoLink('/forgot-password')"
-                :class="
-                  $q.platform.is.mobile
-                    ? 'text-subtitle2 text-dark'
-                    : 'text-subtitle1 text-dark'
-                "
-                style="text-decoration: none"
-                >Forgot Password?</span
-              >
-            </div>
             <q-input
               :debounce="1000"
               outlined
               @update:model-value="validateInput(form, 'password')"
               @blur="validateInput(form, 'password')"
-              color="teal-6"
+              color="blue-7"
               :type="isPwd ? 'text' : 'password'"
               :error="form.password.error"
               :error-message="form.password.msg"
@@ -79,42 +118,45 @@
                 />
               </template>
             </q-input>
-            <div class="column q-my-md">
-              <q-btn
-                label="Signin"
-                :color="!isSubmitBtn(form) ? 'blue-grey-2' : 'teal-7'"
-                :text-color="!isSubmitBtn(form) ? 'black' : 'grey-1'"
-                type="submit"
-                :disable="!isSubmitBtn(form)"
-                style="width: 35%"
-              />
-            </div>
-          </q-form>
-          <div class="row other-link">
-            <span class="text-subtitle1 q-mr-xs"
-              >Don't have an account yet?</span
-            >
-            <span
-              @click="gotoLink('/register')"
+            <div
               :class="
                 $q.platform.is.mobile
-                  ? 'text-subtitle2 text-dark'
-                  : 'text-subtitle1 text-dark'
+                  ? 'column fit'
+                  : 'row q-my-md justify-between'
               "
-              style="text-decoration: none"
-              >Signup Now</span
             >
-          </div>
+              <q-btn
+                label="Login"
+                :color="!isSubmitBtn(form) ? 'blue-grey-2' : 'blue-7'"
+                :text-color="!isSubmitBtn(form) ? 'black' : 'grey-1'"
+                :size="$q.platform.is.mobile ? '20px' : ''"
+                type="submit"
+                :disable="!isSubmitBtn(form)"
+                class="col-3"
+                style="border-radius: 8px"
+              />
+
+              <span
+                @click="gotoLink('/forgot-password')"
+                :class="
+                  $q.platform.is.mobile
+                    ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer'
+                    : 'text-subtitle1 text-dark cursor-pointer'
+                "
+                style="text-decoration: none"
+                >Forgot Password?</span
+              >
+            </div>
+          </q-form>
         </div>
       </div>
-      <div
-        :class="
-          $q.platform.is.mobile
-            ? 'hidden'
-            : 'col-12 col-md-8 col-lg-8 q-pa-none'
-        "
-      >
-        <q-img :src="BgImg" fit="cover" height="100vh" />
+      <div :class="$q.platform.is.mobile ? 'hidden' : 'col row relative'">
+        <q-img :src="BgImage" />
+        <span
+          class="absolute-center q-pl-xl text-weight-bolder text-blue-10"
+          style="border-radius: 15px; font-size: 5rem"
+          >CPC Library</span
+        >
       </div>
     </div>
   </q-page>
@@ -124,10 +166,10 @@
 import LoginHook from 'src/controllers/hooks/LoginHook';
 import { defineComponent, ref } from 'vue';
 import { User } from 'src/models/web/users';
-import Logo from '/src/assets/logo.png';
-import BgImg from 'src/assets/bg.svg';
+import Logo from '/src/assets/librarylogo.png';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
+import BgImage from 'src/assets/bg.svg';
 
 defineComponent({
   name: 'LoginViewPage',

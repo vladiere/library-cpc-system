@@ -22,11 +22,25 @@
     </div>
     <q-input
       standout="bg-light-blue-10 text-grey-4"
-      label="Accesion No."
-      v-model="addBook.accesion_no"
-      type="number"
+      label="Volume Copy"
+      v-model="addBook.volumes"
       min="0"
+      type="number"
     />
+    <div class="row wrap" v-if="copies !== 0">
+      <div v-for="index in copies" :key="index">
+        {{ index }}
+        <q-input
+          v-for="ind in index"
+          :key="ind"
+          standout="bg-light-blue-10 text-grey-4"
+          label="Accesion No."
+          v-model="addBook.accesion_no"
+          type="number"
+          min="0"
+        />
+      </div>
+    </div>
     <q-input
       standout="bg-light-blue-10 text-grey-4"
       type="date"
@@ -47,11 +61,6 @@
       standout="bg-light-blue-10 text-grey-4"
       label="Edition"
       v-model="addBook.edition"
-    />
-    <q-input
-      standout="bg-light-blue-10 text-grey-4"
-      label="Volume Copy No."
-      v-model="addBook.volumes"
     />
     <q-input
       standout="bg-light-blue-10 text-grey-4"
@@ -76,12 +85,6 @@
       autogrow
       v-model="addBook.remarks"
     />
-    <q-input
-      standout="bg-light-blue-10 text-grey-4"
-      label="Descriptions"
-      autogrow
-      v-model="addBook.image"
-    />
     <q-file
       standout="bg-light-blue-10 text-grey-4"
       bottom-slots
@@ -104,43 +107,37 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed, watchEffect } from 'vue';
+import IAddBook from 'src/models/desktop/Books/addBook';
 
 defineComponent({
   name: 'AddResources',
 });
 
-interface Books {
-  id: number;
-  image: string;
-  accesion_no: number;
-  date_received: string;
-  author: string;
-  title: string;
-  edition: string;
-  volumes: string;
-  cost_price: number;
-  publisher: string;
-  copyright_yr: string;
-  remarks: string;
-  description: string;
-}
-
 const forImage = ref();
 
-const addBook = ref<Books>({
-  id: 0,
+const addBook = ref<IAddBook>({
+  accession_no: 0,
   image: '',
   accesion_no: 0,
   date_received: '',
   author: '',
   title: '',
   edition: '',
-  volumes: '',
+  volumes: 0,
   cost_price: 0,
   publisher: '',
   copyright_yr: '',
   remarks: '',
-  description: '',
 });
+
+const temp = ref({
+  copies: 0,
+});
+
+const copies = computed(() => {
+  return addBook.value.volumes || 0;
+});
+
+console.log(typeof addBook.value.volumes);
 </script>

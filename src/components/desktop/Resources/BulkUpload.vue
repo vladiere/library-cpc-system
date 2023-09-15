@@ -162,6 +162,14 @@ const columns = ref([
     sortable: true,
   },
   {
+    name: 'Cost Price',
+    require: true,
+    label: 'Cost Price',
+    align: 'center',
+    field: 'Cost Price',
+    sortable: true,
+  },
+  {
     name: 'Copyright Yr',
     require: true,
     label: 'Copyright Yr.',

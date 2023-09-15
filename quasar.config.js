@@ -193,7 +193,7 @@ module.exports = configure(function (/* ctx */) {
         productName: 'CPC Library',
         appId: 'cpc-library',
         win: {
-          target: 'nsis',
+          target: 'win32',
         },
         linux: {
           target: ['deb', 'snap', 'rpm', 'AppImage'],

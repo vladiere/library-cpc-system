@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import LibraryLogo from 'assets/logo.png';
+import { defineComponent, onMounted } from 'vue';
+import LibraryLogo from 'assets/applogo.png';
 import Menu from 'components/desktop/MenuList/MenuList.vue';
 import { useRouter } from 'vue-router';
 import { useLibrarianDataStore, useUserStore } from 'src/stores/user';
