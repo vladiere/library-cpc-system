@@ -274,6 +274,45 @@ if (Platform.is.electron) {
                 },
               ]
             },
+            {
+              path: '/catalogue',
+              name: 'Catalogue',
+              component: () => import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: 'book_subject',
+                  name: 'BookSubject',
+                  component: () => import('components/desktop/Catalogue/BookSubject.vue'),
+                },
+                {
+                  path: 'classification_no',
+                  name: 'ClassificationNumber',
+                  component: () => import('components/desktop/Catalogue/ClassificationNo.vue')
+                },
+                {
+                  path: 'formats',
+                  name: 'FormatsView',
+                  component: () => import('components/desktop/Catalogue/Formats.vue')
+                },
+              ]
+            },
+            {
+              path: '/acquisitions',
+              name: 'AcquisitionsView',
+              component: () => import('layouts/desktop/InnerPageLayout.vue'),
+              children: [
+                {
+                  path: 'book_purchase',
+                  name: 'BookPurchase',
+                  component: () => import('components/desktop/Acquisitions/BookPurchase.vue')
+                },
+                {
+                  path: 'contributions',
+                  name: 'ContributionsPage',
+                  component: () => import('components/desktop/Acquisitions/Contributions.vue')
+                },
+              ]
+            },
           ],
         },
       ],

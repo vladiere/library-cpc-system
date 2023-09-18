@@ -1,12 +1,12 @@
 <template>
   <q-layout view="lhh lpR lFf">
     <div
-      class="q-ml-lg bg-blue-grey-2 q-mt-md fixed-left shadow-10"
+      class="q-ml-lg bg-blue-10 text-grey-2 q-mt-md fixed-left shadow-10"
       style="border-radius: 20px; width: 18vw; height: 90vh; top: 5%"
     >
-      <div class="row q-mt-md q-gutter-x-md justify-center items-center">
+      <div class="q-mt-md flex flex-center">
         <q-img :src="LibraryLogo" style="width: 15%" />
-        <span class="text-subtitle1 text-bold text-grey-10">CPC Library</span>
+        <span class="text-subtitle1 text-bold">CPC Library</span>
       </div>
       <q-separator size="2px" class="q-mt-lg bg-grey-8" />
       <q-scroll-area style="height: 79vh; max-width: 100%">

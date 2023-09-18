@@ -4,7 +4,7 @@
     style="width: 82vw"
   >
     <div
-      class="col-4 column bg-orange-3 q-px-md q-pt-md q-pb-md shadow-8"
+      class="col-4 column bg-blue-3 q-px-md q-pt-md q-pb-md shadow-8"
       style="border-radius: 15px"
     >
       <div class="row">
@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent } from 'vue';
 import TrendingBook from 'assets/desktop/trending.png';
 import MostVisit from 'assets/desktop/most-visit.png';
 import Online from 'assets/desktop/online.png';

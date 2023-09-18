@@ -67,7 +67,7 @@
             :class="
               $q.platform.is.mobile ? 'q-mr-xs' : 'text-subtitle1 q-mr-xs'
             "
-            >Don't have an account now?</span
+            >Don't have an account?</span
           >
           <span
             @click="gotoLink('/register')"
@@ -108,7 +108,7 @@
               for="password"
             >
               <template v-slot:prepend>
-                <q-icon name="lock" />
+                <q-icon :name="isPwd ? 'lock_open' : 'lock'" />
               </template>
               <template v-slot:append>
                 <q-icon
@@ -153,8 +153,14 @@
       <div :class="$q.platform.is.mobile ? 'hidden' : 'col row relative'">
         <q-img :src="BgImage" />
         <span
-          class="absolute-center q-pl-xl text-weight-bolder text-blue-10"
-          style="border-radius: 15px; font-size: 5rem"
+          class="absolute-center q-ml-xl text-weight-bolder text-blue-10"
+          style="
+            border-radius: 15px;
+            font-size: 5rem;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont,
+              'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+              'Helvetica Neue', sans-serif;
+          "
           >CPC Library</span
         >
       </div>

@@ -129,7 +129,7 @@ import EssentialLink, {
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import FooterPage from 'components/web/TheFooter.vue';
-import LibraryLogo from 'src/assets/librarylogo.png';
+import LibraryLogo from 'src/assets/applogo.png';
 
 const $q = useQuasar();
 const text = ref('');

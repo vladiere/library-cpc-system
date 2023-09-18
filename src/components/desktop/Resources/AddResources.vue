@@ -1,5 +1,5 @@
 <template>
-  <div class="column text-capitalize q-gutter-y-md q-pt-lg">
+  <div class="column text-capitalize q-gutter-y-md q-pt-lg q-pr-md">
     <div class="row text-h5 self-center q-gutter-x-sm">
       add new resources
       <span class="text-caption"
@@ -27,20 +27,14 @@
       min="0"
       type="number"
     />
-    <div class="row wrap" v-if="copies !== 0">
-      <div v-for="index in copies" :key="index">
-        {{ index }}
-        <q-input
-          v-for="ind in index"
-          :key="ind"
-          standout="bg-light-blue-10 text-grey-4"
-          label="Accesion No."
-          v-model="addBook.accesion_no"
-          type="number"
-          min="0"
-        />
-      </div>
-    </div>
+    <q-input
+      standout="bg-light-blue-10 text-grey-4"
+      label="Accesion No."
+      v-model="addBook.accession_no"
+      lazy-rules
+      :rules="[(val) => regex.test(val)]"
+      error-message="Numbers only"
+    />
     <q-input
       standout="bg-light-blue-10 text-grey-4"
       type="date"
@@ -103,23 +97,26 @@
         />
       </template>
     </q-file>
+    <div class="flex flex-center">
+      <q-btn label="Add Record" color="blue-10" @click="handleAddRecord" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref, computed, watchEffect } from 'vue';
+import { defineComponent, ref, watchEffect } from 'vue';
 import IAddBook from 'src/models/desktop/Books/addBook';
+import { api } from 'src/boot/axios';
+import { useUserStore } from 'src/stores/user';
 
 defineComponent({
   name: 'AddResources',
 });
 
 const forImage = ref();
-
 const addBook = ref<IAddBook>({
   accession_no: 0,
   image: '',
-  accesion_no: 0,
   date_received: '',
   author: '',
   title: '',
@@ -131,13 +128,48 @@ const addBook = ref<IAddBook>({
   remarks: '',
 });
 
-const temp = ref({
-  copies: 0,
-});
+const userStore = useUserStore();
+const temp = ref<number[]>([]);
+const regex = /^[0-9,\s]*$/;
 
-const copies = computed(() => {
-  return addBook.value.volumes || 0;
-});
+const handleAddRecord = async () => {
+  try {
+    const response = await api.post(
+      'add/single/records',
+      {
+        records: addBook.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-console.log(typeof addBook.value.volumes);
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+watchEffect(() => {
+  const currentVolume = addBook.value.volumes;
+  const currentLength = temp.value.length;
+
+  if (currentVolume > currentLength) {
+    const numberOfNewItems = addBook.value.volumes - temp.value.length;
+    for (let i = 0; i < numberOfNewItems; i++) {
+      temp.value.push(1);
+    }
+  } else if (currentVolume < currentLength) {
+    // Decrease the temp array by removing the last items
+    const numberOfItemsToRemove = currentLength - currentVolume;
+    for (let i = 0; i < numberOfItemsToRemove; i++) {
+      temp.value.pop();
+    }
+  }
+
+  console.log(temp.value);
+});
 </script>

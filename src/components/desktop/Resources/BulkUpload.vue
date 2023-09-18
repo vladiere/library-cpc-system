@@ -260,7 +260,7 @@ const sendBatchToBackend = async (batch: any, token: string) => {
     const jsonData = convertToLowerCase(batch);
 
     const response = await api.post(
-      'add/records',
+      'add/bulk/records',
       {
         jsonData,
       },

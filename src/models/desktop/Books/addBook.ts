@@ -1,7 +1,6 @@
 export default interface IAddBook {
   accession_no: number;
   image: string;
-  accesion_no: number;
   date_received: string;
   author: string;
   title: string;

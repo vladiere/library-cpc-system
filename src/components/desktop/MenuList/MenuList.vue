@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="column fit q-mt-md content-center q-pt-md text-capitalize text-subtitle1"
-  >
+  <div class="column q-mt-md q-pt-md text-capitalize text-subtitle1">
     <q-btn align="left" no-caps stretch flat to="/home">
       <q-avatar size="42px" class="q-mr-md">
         <q-img :src="Dashboard" fit="fill" width="85%" />
@@ -26,7 +24,7 @@
           <q-item-section> Reports </q-item-section>
         </template>
 
-        <q-card class="bg-blue-grey-4">
+        <q-card class="bg-blue-10">
           <q-card-section>
             <q-list>
               <q-item clickable to="/daily" active-class="text-grey-12 text-h6">
@@ -68,7 +66,7 @@
           <q-item-section> Circulation </q-item-section>
         </template>
 
-        <q-card class="bg-blue-grey-4">
+        <q-card class="bg-blue-10">
           <q-card-section>
             <q-list>
               <q-item
@@ -114,7 +112,7 @@
           <q-item-section> staff </q-item-section>
         </template>
 
-        <q-card class="bg-blue-grey-4">
+        <q-card class="bg-blue-10">
           <q-card-section>
             <q-list>
               <q-item clickable active-class="text-grey-12 text-h6" to="/staff">
@@ -142,7 +140,7 @@
           <q-item-section> Resources </q-item-section>
         </template>
 
-        <q-card class="bg-blue-grey-4">
+        <q-card class="bg-blue-10">
           <q-card-section>
             <q-list>
               <q-item
@@ -181,16 +179,28 @@
           <q-item-section> catalogue </q-item-section>
         </template>
 
-        <q-card class="bg-blue-grey-4">
+        <q-card class="bg-blue-10">
           <q-card-section>
             <q-list>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item
+                clickable
+                active-class="text-grey-12 text-h6"
+                to="/catalogue/book_subject"
+              >
                 <q-item-section> book subject </q-item-section>
               </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
-                <q-item-section> classification number </q-item-section>
+              <q-item
+                clickable
+                active-class="text-grey-12 text-h6"
+                to="/catalogue/classification_no"
+              >
+                <q-item-section> classification no </q-item-section>
               </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item
+                clickable
+                active-class="text-grey-12 text-h6"
+                to="/catalogue/formats"
+              >
                 <q-item-section> formats </q-item-section>
               </q-item>
             </q-list>
@@ -208,13 +218,13 @@
           <q-item-section> Acquisitions </q-item-section>
         </template>
 
-        <q-card class="bg-blue-grey-4">
+        <q-card class="bg-blue-10">
           <q-card-section>
             <q-list>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item clickable active-class="text-grey-12 text-h6" to="/acquisitions/contributions">
                 <q-item-section> contributions </q-item-section>
               </q-item>
-              <q-item clickable active-class="text-grey-12 text-h6">
+              <q-item clickable active-class="text-grey-12 text-h6" to="/acquisitions/book_purchase">
                 <q-item-section> book purchase </q-item-section>
               </q-item>
             </q-list>

@@ -4,7 +4,7 @@
     style="width: 82vw"
   >
     <div
-      class="col-4 column bg-orange-3 q-px-md q-pt-md q-pb-md shadow-8"
+      class="col-4 column bg-grey-3 q-px-md q-pt-md q-pb-md shadow-8"
       style="border-radius: 15px"
     >
       <div class="row">

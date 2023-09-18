@@ -22,7 +22,9 @@
             style="border-radius: 50%"
           />
           <div class="row justify-center items-center q-mt-md text-blue-10">
-            <span class="text-h3" style="font-family: 'Redressed', cursive"
+            <span
+              class="text-h3 text-weight-bolder"
+              style="font-family: 'Redressed', cursive"
               >CPC</span
             >
             <small class="text-h5">Library</small>
@@ -47,14 +49,22 @@
             class="q-my-md"
             color="blue-10"
             label-color="blue-10"
-            type="password"
+            :type="isPwd ? 'password' : 'text'"
             @update:model-value="validateInput(form, 'password')"
             @blur="validateInput(form, 'password')"
             :error="form.password.error"
             :error-message="form.password.msg"
             v-model="form.password.value"
             label="Password"
-          />
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              />
+            </template>
+          </q-input>
           <q-btn
             label="Login"
             type="submit"
@@ -83,6 +93,7 @@ defineComponent({
 
 const router = useRouter();
 const $q = useQuasar();
+const isPwd = ref(true);
 
 const { isFormValid, validateInput, isSubmitBtn } = LoginHook();
 
