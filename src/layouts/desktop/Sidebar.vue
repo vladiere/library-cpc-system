@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lhh lpR lFf">
     <div
-      class="q-ml-lg bg-blue-10 text-grey-2 q-mt-md fixed-left shadow-10"
+      class="q-ml-lg bg-blue-2 text-grey-10 q-mt-md fixed-left shadow-10"
       style="border-radius: 20px; width: 18vw; height: 90vh; top: 5%"
     >
       <div class="q-mt-md flex flex-center">

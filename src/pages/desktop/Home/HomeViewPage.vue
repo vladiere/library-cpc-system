@@ -1,6 +1,6 @@
 <template>
   <q-layout
-    class="column q-py-xl q-pl-xl q-pr-md q-mt-sm float-right"
+    class="column q-py-xl q-pl-xl q-mt-sm float-right"
     style="width: 82vw"
   >
     <div

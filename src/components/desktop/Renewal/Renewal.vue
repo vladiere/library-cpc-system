@@ -1,5 +1,5 @@
 <template>
-  <div class="column q-gutter-y-md q-pt-lg">
+  <div class="column q-gutter-y-md q-pt-lg q-pr-md">
     <div class="row justify-between">
       <span class="text-h5 text-bold">Renewal Records</span>
       <q-btn
@@ -38,7 +38,7 @@
               </q-btn>
               <q-btn flat dense icon="cancel" color="red-5">
                 <q-tooltip
-                  class="bg-red-7 text-grey-10"
+                  class="bg-red-7 text-grey-2"
                   :delay="200"
                   transition-show="scale"
                   transition-hide="scale"
@@ -71,7 +71,7 @@
               </q-btn>
               <q-btn flat dense icon="cancel" color="red-5">
                 <q-tooltip
-                  class="bg-red-7 text-grey-10"
+                  class="bg-red-7 text-grey-2"
                   :delay="200"
                   transition-show="scale"
                   transition-hide="scale"
@@ -104,7 +104,7 @@
               </q-btn>
               <q-btn flat dense icon="cancel" color="red-5">
                 <q-tooltip
-                  class="bg-red-7 text-grey-10"
+                  class="bg-red-7 text-grey-2"
                   :delay="200"
                   transition-show="scale"
                   transition-hide="scale"

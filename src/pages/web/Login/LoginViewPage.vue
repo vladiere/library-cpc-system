@@ -1,4 +1,6 @@
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
 .other-link {
   font-size: 16px;
 }
@@ -132,6 +134,7 @@
                 :size="$q.platform.is.mobile ? '20px' : ''"
                 type="submit"
                 :disable="!isSubmitBtn(form)"
+                @click="gotoLink('/home')"
                 class="col-3"
                 style="border-radius: 8px"
               />
@@ -152,17 +155,74 @@
       </div>
       <div :class="$q.platform.is.mobile ? 'hidden' : 'col row relative'">
         <q-img :src="BgImage" />
-        <span
-          class="absolute-center q-ml-xl text-weight-bolder text-blue-10"
-          style="
-            border-radius: 15px;
-            font-size: 5rem;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont,
-              'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-              'Helvetica Neue', sans-serif;
-          "
-          >CPC Library</span
-        >
+        <div class="absolute-center q-ml-xl">
+          <span
+            class="text-weight-bolder text-blue-10"
+            style="
+              font-size: 5rem;
+              font-family: system-ui, -apple-system, BlinkMacSystemFont,
+                'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+                'Helvetica Neue', sans-serif;
+            "
+            >CPC Library</span
+          >
+          <div
+            class="col column q-ml-md text-h5 text-left"
+            style="font-family: 'Indie Flower', cursive"
+          >
+            <span
+              >you are
+              <span class="text-green text-bold text-strike"
+                >READERS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-yellow text-bold text-strike"
+                >DREAMERS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-red text-bold text-strike"
+                >EXPLORERS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-orange text-bold text-strike"
+                >RESEARCHERS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-light-blue text-bold text-strike"
+                >AUTHORS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-green-9 text-bold text-strike"
+                >ADVENTURERS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-yellow-9 text-bold text-strike"
+                >STORYTELLERS</span
+              ></span
+            >
+            <span
+              >you are
+              <span class="text-red-9 text-bold text-strike"
+                >THE FUTURE</span
+              ></span
+            >
+            <span class="text-uppercase text-decoration"
+              >you are the reason why we are here!</span
+            >
+          </div>
+        </div>
       </div>
     </div>
   </q-page>

@@ -116,7 +116,7 @@
             min="0"
           />
           <div class="column q-pt-md">
-            <span class="text-h6">Privilage</span>
+            <span class="text-h6">Privilege</span>
             <div class="row text-capitalize">
               <q-radio
                 v-model="staffForm.privilage"
