@@ -1,10 +1,10 @@
 <template>
-  <q-page padding>
+  <q-page :padding="!$q.platform.is.mobile">
     <span class="text-h4 text-grey-10 text-bold q-pl-lg">Contribute</span>
     <div
       :class="
         $q.platform.is.mobile
-          ? ''
+          ? 'q-pa-md'
           : 'q-py-lg q-px-md q-ma-xl row content-center q-gutter-x-lg'
       "
       :style="
