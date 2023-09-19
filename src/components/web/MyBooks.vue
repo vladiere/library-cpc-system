@@ -1,8 +1,10 @@
 <template>
-  <div class="column q-gutter-y-md q-ml-lg">
+  <div
+    :class="$q.platform.is.mobile ? 'column' : 'column q-gutter-y-md q-ml-lg'"
+  >
     <span class="text-h6 text-grey-9 self-center">My Books</span>
-    <div class="col q-gutter-y-md">
-      <span class="text-subtitle1 text-grey-9">Books you Borrowed</span>
+    <div class="col">
+      <span class="text-subtitle1 text-grey-9 q-ml-md">Books you Borrowed</span>
       <div
         v-if="myBooks.length === 0"
         class="column content-center self-center q-gutter-y-md"
@@ -14,16 +16,30 @@
         v-else
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
-        style="height: 70vh; max-width: 100%"
+        :style="
+          $q.platform.is.mobile
+            ? 'height: 400px; max-width: 100%;'
+            : 'height: 70vh; max-width: 100%'
+        "
       >
-        <div class="row items-center content-center text-capitalize">
+        <div
+          :class="
+            $q.platform.is.mobile
+              ? ''
+              : 'row items-center content-center text-capitalize'
+          "
+        >
           <q-img
             v-for="myBook in myBooks"
             :key="myBook.id"
             :src="myBook.link"
             spinner-color="white"
             style="height: 200px; max-width: 150px"
-            class="q-ma-md cursor-pointer rounded-borders"
+            :class="
+              $q.platform.is.mobile
+                ? 'cursor-pointer q-ma-sm'
+                : 'q-ma-md cursor-pointer rounded-borders'
+            "
             @click="gotoLink('/book')"
           >
             <div class="absolute-bottom text-subtitle1 text-center">
@@ -43,12 +59,14 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ManEmpty from 'assets/man-empty.png';
+import { useQuasar } from 'quasar';
 
 defineComponent({
   name: 'MyBooksPage',
 });
 
 const router = useRouter();
+const $q = useQuasar();
 
 interface MyBook {
   id: number;

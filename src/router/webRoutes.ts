@@ -68,7 +68,8 @@ if (!Platform.is.electron) {
         {
           path: '/instructor',
           name: 'Intructor',
-          component: () => import('pages/web/Instructor/InstructorRecommend.vue'),
+          // component: () => import('pages/web/Instructor/InstructorRecommend.vue'),
+          component: () => import('layouts/web/IntructorRecommendLayout.vue'),
           children: [
             {
               path: 'recommend',
@@ -80,7 +81,7 @@ if (!Platform.is.electron) {
         {
           path: '/userbooks',
           name: 'userbooks',
-          component: () => import('pages/web/UserBooks/UserBooks.vue'),
+          component: () => import('layouts/web/MyBooksLayout.vue'),
           children: [
             {
               path: '',

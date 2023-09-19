@@ -1,12 +1,9 @@
 <template>
-  <div class="column q-gutter-y-md q-ml-lg">
+  <div class="column q-gutter-y-md q-ml-md">
     <span class="text-h6 text-grey-9 self-center"
       >Instructor Recommendations</span
     >
-    <div class="col q-gutter-y-md">
-      <span class="text-subtitle1 text-grey-9"
-        >Books recommended by instructors</span
-      >
+    <div class="col">
       <div
         v-if="myBooks.length === 0"
         class="column content-center self-center q-gutter-y-md"
@@ -20,20 +17,30 @@
         :bar-style="barStyle"
         style="height: 70vh; max-width: 100%"
       >
-        <div class="row justify-center text-capitalize">
+        <div
+          :class="
+            $q.platform.is.mobile ? '' : 'row justify-center text-capitalize'
+          "
+        >
           <q-img
             v-for="myBook in myBooks"
             :key="myBook.id"
             :src="myBook.link"
             spinner-color="white"
             style="height: 200px; max-width: 150px"
-            class="q-ma-md cursor-pointer rounded-borders"
+            :class="
+              $q.platform.is.mobile
+                ? 'q-ma-sm'
+                : 'q-ma-md cursor-pointer rounded-borders'
+            "
             @click="gotoLink('/book')"
           >
-            <div class="absolute-bottom text-subtitle1 text-center">
+            <div
+              class="absolute-bottom text-subtitle1 text-capitalize text-center"
+            >
               {{ myBook.title }}
-              <q-badge align="middle" :color="statusBook(myBook.status)">
-                {{ myBook.status }}
+              <q-badge align="middle" color="blue-7" class="q-px-md q-py-sm">
+                By. {{ myBook.recommendedBy }}
               </q-badge>
             </div>
           </q-img>
@@ -58,7 +65,7 @@ interface MyBook {
   id: number;
   link: string;
   title: string;
-  status: string;
+  recommendedBy: string;
 }
 
 const thumbStyle = ref({
@@ -82,65 +89,57 @@ const myBooks = ref<MyBook[]>([
     id: 1,
     link: 'https://picsum.photos/200/300?random=1',
     title: 'The one',
-    status: 'pending',
+    recommendedBy: 'pending',
   },
   {
     id: 2,
     link: 'https://picsum.photos/200/300?random=2',
     title: 'The two',
-    status: 'should return',
+    recommendedBy: 'should return',
   },
   {
     id: 3,
     link: 'https://picsum.photos/200/300?random=3',
     title: 'The three',
-    status: 'pending',
+    recommendedBy: 'pending',
   },
   {
     id: 4,
     link: 'https://picsum.photos/200/300?random=4',
     title: 'The four',
-    status: 'should return',
+    recommendedBy: 'should return',
   },
   {
     id: 5,
     link: 'https://picsum.photos/200/300?random=5',
     title: 'the five',
-    status: 'pending',
+    recommendedBy: 'pending',
   },
   {
     id: 6,
     link: 'https://picsum.photos/200/300?random=6',
     title: 'the six',
-    status: 'should return',
+    recommendedBy: 'should return',
   },
   {
     id: 7,
     link: 'https://picsum.photos/200/300?random=7',
     title: 'the seven',
-    status: 'pending',
+    recommendedBy: 'pending',
   },
   {
     id: 8,
     link: 'https://picsum.photos/200/300?random=8',
     title: 'the eight',
-    status: 'should return',
+    recommendedBy: 'should return',
   },
   {
     id: 9,
     link: 'https://picsum.photos/200/300?random=9',
     title: 'the nine',
-    status: 'pending',
+    recommendedBy: 'pending',
   },
 ]);
-
-const statusBook = (stat: string) => {
-  if (stat === 'pending') {
-    return 'teal';
-  } else {
-    return 'deep-orange-7';
-  }
-};
 
 const gotoLink = (link: string) => {
   router.push(link);

@@ -1,10 +1,10 @@
 <template>
-  <div class="q-py-lg q-px-xl q-mb-lg">
+  <div :class="$q.platform.is.mobile ? '' : 'q-py-lg q-mb-lg'">
     <BooksCard />
-    <TrendingBooksCard />
-    <TrendingBooksCard />
-    <TrendingBooksCard />
-    <TrendingBooksCard />
+    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
   </div>
 </template>
 
@@ -12,7 +12,11 @@
 import { defineComponent } from 'vue';
 import BooksCard from 'components/web/BooksCard.vue';
 import TrendingBooksCard from 'components/web/TrendingBooksCard.vue';
+import { useQuasar } from 'quasar';
+
 defineComponent({
   name: 'HomeBooksPage',
 });
+
+const $q = useQuasar();
 </script>

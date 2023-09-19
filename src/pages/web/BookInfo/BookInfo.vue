@@ -45,26 +45,32 @@
           </q-btn>
         </div>
       </div>
-      <div class="col-10 bordered column q-pl-lg">
-        <div class="text-h5">
+      <div
+        :class="
+          $q.platform.is.mobile
+            ? 'col-10 bordered column q-ml-sm'
+            : 'col-10 bordered column q-pl-lg'
+        "
+      >
+        <div :class="$q.platform.is.mobile ? 'text-h6' : 'text-h5'">
           Title:
           <span class="text-subtitle1">
             The Experience of God: Being, Consciousness, Bliss
           </span>
         </div>
-        <div class="text-h5">
+        <div :class="$q.platform.is.mobile ? 'text-h6' : 'text-h5'">
           Author:
           <span class="text-subtitle1"> David Bentley Hart </span>
         </div>
-        <div class="text-h5">
+        <div :class="$q.platform.is.mobile ? 'text-h6' : 'text-h5'">
           Publisher:
           <span class="text-subtitle1"> David Bentley Hart </span>
         </div>
-        <div class="text-h5">
+        <div :class="$q.platform.is.mobile ? 'text-h6' : 'text-h5'">
           Date:
           <span class="text-subtitle1"> August 27, 2013 </span>
         </div>
-        <div class="text-h5">
+        <div :class="$q.platform.is.mobile ? 'text-h6' : 'text-h5'">
           Value:
           <span class="text-subtitle1"> 980 </span>
         </div>
@@ -83,7 +89,7 @@
         </div>
       </div>
     </div>
-    <ThisAuthor />
+    <ThisAuthor class="q-mt-md" />
   </q-page>
 </template>
 

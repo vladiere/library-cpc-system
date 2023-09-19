@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHr lpr fFf">
-    <q-header reveal class="bg-primary text-white">
+    <q-header reveal elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title
           class="row items-center cursor-pointer"
@@ -10,8 +10,8 @@
           <span
             :class="
               $q.platform.is.mobile
-                ? 'q-mx-sm text-dark text-h6 text-bold'
-                : 'q-mx-xs text-dark text-h4 text-bold'
+                ? 'q-mx-sm text-grey-2 text-h6 text-bold'
+                : 'q-mx-xs text-grey-2 text-h4 text-bold'
             "
             >CPC
             <small
@@ -30,10 +30,9 @@
           :label="$q.platform.is.mobile ? '' : 'Browse'"
           dropdown-icon="fas fa-regular fa-chevron-down"
           :class="$q.platform.is.mobile ? '' : 'q-mx-xl'"
-          color="dark"
           @click="onMainClick"
         >
-          <q-list class="bg-secondary">
+          <q-list>
             <BrowseLinks
               class="text-dark"
               v-for="browse in browseLinks"
@@ -42,14 +41,7 @@
             />
           </q-list>
         </q-btn-dropdown>
-        <q-btn
-          dense
-          flat
-          round
-          icon="menu"
-          color="dark"
-          @click="toggleRightDrawer"
-        />
+        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
       <q-separator />
     </q-header>
@@ -57,9 +49,9 @@
     <q-drawer
       show-if-above
       v-model="rightDrawerOpen"
-      class="bg-secondary"
       side="right"
       bordered
+      class="bg-grey-2"
     >
       <q-list>
         <q-item-label
@@ -107,7 +99,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container class="bg-primary">
+    <q-page-container class="bg-grey-2">
       <q-scroll-area
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
