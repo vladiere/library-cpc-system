@@ -68,7 +68,6 @@ if (!Platform.is.electron) {
         {
           path: '/instructor',
           name: 'Intructor',
-          // component: () => import('pages/web/Instructor/InstructorRecommend.vue'),
           component: () => import('layouts/web/IntructorRecommendLayout.vue'),
           children: [
             {
