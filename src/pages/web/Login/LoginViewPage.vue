@@ -46,7 +46,8 @@
         >
           <q-img
             :src="Logo"
-            :width="$q.platform.is.mobile ? '50%' : '65%'"
+            fit="contain"
+            width="50%"
             style="border-radius: 50%"
           />
           <span
@@ -129,11 +130,9 @@
             >
               <q-btn
                 label="Login"
-                :color="!isSubmitBtn(form) ? 'blue-grey-2' : 'blue-7'"
-                :text-color="!isSubmitBtn(form) ? 'black' : 'grey-1'"
+                color="primary"
                 :size="$q.platform.is.mobile ? '20px' : ''"
                 type="submit"
-                :disable="!isSubmitBtn(form)"
                 @click="gotoLink('/home')"
                 class="col-3"
                 style="border-radius: 8px"
@@ -154,7 +153,7 @@
         </div>
       </div>
       <div :class="$q.platform.is.mobile ? 'hidden' : 'col row relative'">
-        <q-img :src="BgImage" />
+        <!-- <q-img :src="BgImage" /> -->
         <div class="absolute-center q-ml-xl">
           <span
             class="text-weight-bolder text-blue-10"

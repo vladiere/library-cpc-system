@@ -108,6 +108,8 @@ import { defineComponent, ref, watchEffect } from 'vue';
 import IAddBook from 'src/models/desktop/Books/addBook';
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user';
+import { useQuasar } from 'quasar';
+import { canConstructResponseFromBodyStream } from 'workbox-core/_private';
 
 defineComponent({
   name: 'AddResources',
@@ -128,6 +130,7 @@ const addBook = ref<IAddBook>({
   remarks: '',
 });
 
+const $q = useQuasar();
 const userStore = useUserStore();
 const temp = ref<number[]>([]);
 const regex = /^[0-9,\s]*$/;
@@ -146,6 +149,12 @@ const handleAddRecord = async () => {
         },
       }
     );
+
+    $q.notify({
+      message: response.data.data.result[0][0],
+      color: 'positive',
+      position: 'center',
+    });
 
     console.log(response);
   } catch (error) {
@@ -169,7 +178,5 @@ watchEffect(() => {
       temp.value.pop();
     }
   }
-
-  console.log(temp.value);
 });
 </script>

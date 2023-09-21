@@ -14,20 +14,16 @@
       style="width: 30%"
     >
       <div class="text-center q-gutter-lg">
-        <div class="column items-center">
+        <div class="column">
           <q-img
             :src="Logo"
             fit="cover"
             width="45%"
+            class="self-center"
             style="border-radius: 50%"
           />
-          <div class="row justify-center items-center q-mt-md text-blue-10">
-            <span
-              class="text-h3 text-weight-bolder"
-              style="font-family: 'Redressed', cursive"
-              >CPC</span
-            >
-            <small class="text-h5">Library</small>
+          <div class="row items-center q-mt-md text-blue-10 text-h5 text-bold">
+            <span>Login</span>
           </div>
         </div>
         <q-form @submit.prevent="handleSubmit" class="column">
