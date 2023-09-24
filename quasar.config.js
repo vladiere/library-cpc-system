@@ -103,7 +103,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'Dialog'],
+      plugins: ['Notify', 'Dialog', 'SessionStorage', 'LocalStorage'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -174,7 +174,7 @@ module.exports = configure(function (/* ctx */) {
 
       inspectPort: 5858,
 
-      bundler: 'builder', // 'packager' or 'builder'
+      bundler: 'packager', // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
@@ -185,24 +185,12 @@ module.exports = configure(function (/* ctx */) {
         // protocol: 'myapp://path',
         // Windows only
         // win32metadata: { ... }
-        platform: 'win32',
       },
 
       builder: {
         // https://www.electron.build/configuration/configuration
-        productName: 'CPC Library',
-        appId: 'cpc-library',
-        win: {
-          target: 'win32',
-        },
-        linux: {
-          target: ['deb', 'snap', 'rpm', 'AppImage'],
-        },
-        publish: {
-          provider: 'github',
-          repo: 'library-cpc-system',
-          owner: 'vladiere',
-        },
+
+        appId: 'cpc-library-electron',
       },
     },
 

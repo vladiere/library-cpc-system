@@ -197,8 +197,12 @@ const recommendBooks = ref<RecommendBook[]>([
   },
 ]);
 
+const props = defineProps<{
+  count: number;
+}>();
+
 const groupedImages = computed(() => {
-  const groupSize = 4; // Number of images in each slide
+  const groupSize = props.count; // Number of images in each slide
   const result = [];
 
   for (let i = 0; i < recommendBooks.value.length; i += groupSize) {

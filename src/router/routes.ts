@@ -1,10 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import webRoutes from './webRoutes'
-import desktopnRoutes from './desktopRoutes'
-
 const routes: RouteRecordRaw[] = [
 
-  ...desktopnRoutes,
   ...webRoutes,
   {
     path: '/:catchAll(.*)*',

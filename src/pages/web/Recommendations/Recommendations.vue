@@ -1,8 +1,8 @@
 <template>
   <q-page padding>
     <div :class="$q.platform.is.mobile ? '' : 'q-pa-xl'">
-      <RecommendBook />
-      <RecommendByInstructor />
+      <RecommendBook :count="$q.platform.is.mobile ? 3 : 5" />
+      <RecommendByInstructor :count="$q.platform.is.mobile ? 3 : 5" />
     </div>
   </q-page>
 </template>
