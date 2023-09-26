@@ -100,13 +100,9 @@
     </q-drawer>
 
     <q-page-container class="bg-grey-2">
-      <q-scroll-area
-        :thumb-style="thumbStyle"
-        :bar-style="barStyle"
-        style="height: 100vh; max-width: 100%"
-      >
+      <q-scroll-area style="height: 100vh; max-width: 100%">
         <router-view />
-        <FooterPage />
+        <Footer />
       </q-scroll-area>
     </q-page-container>
   </q-layout>
@@ -120,11 +116,10 @@ import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
-import FooterPage from 'components/web/TheFooter.vue';
 import LibraryLogo from 'src/assets/applogo.png';
+import Footer from 'src/components/web/Footer/FooterComponent.vue';
 
 const $q = useQuasar();
-const text = ref('');
 const router = useRouter();
 
 const browseLinks: BrowseLinksProps[] = [
@@ -203,20 +198,5 @@ const onMainClick = () => {
 
 const navigateToHome = () => {
   router.push('/home');
-};
-const thumbStyle = {
-  right: '4px',
-  borderRadius: '5px',
-  backgroundColor: '#027be3',
-  width: '5px',
-  opacity: 0.75,
-};
-
-const barStyle = {
-  right: '2px',
-  borderRadius: '9px',
-  backgroundColor: '#027be3',
-  width: '9px',
-  opacity: 0.2,
 };
 </script>

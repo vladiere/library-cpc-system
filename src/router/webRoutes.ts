@@ -1,5 +1,4 @@
 import { RouteRecordRaw } from 'vue-router';
-import { Platform } from 'quasar';
 
 const routes: RouteRecordRaw[] = [];
 

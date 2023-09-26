@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page padding class="q-mb-lg">
     <div
       :class="
         $q.platform.is.mobile
@@ -12,8 +12,8 @@
         style="border: 1px solid #455a64; border-radius: 5px"
       >
         <q-img
-          src="https://www.picsum.photos/200/900"
-          style="height: 200px; max-width: 160px"
+          src="https://www.picsum.photos/1200/900"
+          style="height: 200px; max-width: 260px"
         />
         <q-rating
           v-model="ratingModel"
