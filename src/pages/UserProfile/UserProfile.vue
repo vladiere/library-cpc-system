@@ -46,13 +46,6 @@ defineComponent({
   name: 'UserProfilePage',
 });
 
-interface AccountProfile {
-  id: number;
-  student_id: number;
-  name: string;
-  picture: string;
-}
-
 const accountProfile = ref({
   id: 1,
   student_id: 20200800,

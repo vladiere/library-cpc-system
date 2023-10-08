@@ -2,10 +2,7 @@
   <q-layout view="lHr lpR lFr">
     <q-header reveal elevated class="bg-blue-12">
       <q-toolbar>
-        <q-toolbar-title
-          class="row items-center cursor-pointer"
-          @click="navigateToHome"
-        >
+        <q-toolbar-title class="row items-center">
           <q-img avatar :src="LibraryLogo" style="width: 2rem" />
           <span
             :class="
@@ -28,7 +25,6 @@
         <q-btn-dropdown
           flat
           :label="$q.platform.is.mobile ? '' : 'Browse'"
-          dropdown-icon="fas fa-regular fa-chevron-down"
           :class="$q.platform.is.mobile ? '' : 'q-mx-xl'"
           @click="onMainClick"
         >
@@ -53,7 +49,7 @@
       bordered
       class="bg-grey-2"
     >
-      <q-list>
+      <q-list dense>
         <q-item-label
           header
           :class="
@@ -89,7 +85,9 @@
         >
           Browse
         </q-item-label>
+
         <q-separator />
+
         <BrowseLinks
           class="text-dark"
           v-for="browse in browseLinks"
@@ -100,27 +98,68 @@
     </q-drawer>
 
     <q-page-container class="bg-grey-2">
-      <q-scroll-area style="height: 100vh; max-width: 100%">
-        <router-view />
-        <Footer />
-      </q-scroll-area>
+      <router-view />
+
+      <!-- place QPageScroller at end of page -->
+      <q-page-scroller
+        position="bottom-right"
+        :scroll-offset="150"
+        :offset="[18, 18]"
+      >
+        <q-btn fab icon="keyboard_arrow_up" color="primary" />
+      </q-page-scroller>
     </q-page-container>
+
+    <q-footer reveal elevated class="bg-grey-4 text-dark column q-pa-md">
+      <q-toolbar>
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="src/assets/applogo.png" />
+          </q-avatar>
+          CPC Library
+        </q-toolbar-title>
+      </q-toolbar>
+      <div class="row q-gutter-x-md">
+        <div class="col column">
+          <span>Providing Knowledge Since 2020</span>
+          <span>Proudly Serving the CPC Community</span>
+        </div>
+        <div class="col column">
+          <span>School CPC Founded in March 2005</span>
+          <span>CPC Library Establish in July 2020</span>
+        </div>
+        <div class="col column">
+          <div class="row q-gutter-x-sm">
+            <span class="text-bold">Address: </span>
+            <span>Cordova, Poblacion, 6017, Cebu</span>
+          </div>
+          <div class="row q-gutter-x-sm">
+            <span class="text-bold">Phone: </span>
+            <span>(032) 494 1410</span>
+          </div>
+          <div class="row q-gutter-x-sm">
+            <span class="text-bold">Email: </span>
+            <span>cpc.library@gmail.com</span>
+          </div>
+        </div>
+      </div>
+      <div class="col self-center">
+        <span class="text-bold">© 2023 CPC Library. All Rights Reserved.</span>
+      </div>
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
-import Footer from 'src/components/Footer/FooterComponent.vue';
 
 const $q = useQuasar();
-const router = useRouter();
 
 const browseLinks: BrowseLinksProps[] = [
   {
@@ -162,6 +201,12 @@ const browseLinks: BrowseLinksProps[] = [
 
 const essentialLinks: EssentialLinkProps[] = [
   {
+    title: 'Home',
+    caption: 'Return to homepage',
+    icon: 'fas fa-house',
+    link: '/home',
+  },
+  {
     title: 'My Books',
     caption: 'Collections, Borrow History and Lists',
     icon: 'fas fa-book',
@@ -194,9 +239,5 @@ function toggleRightDrawer() {
 
 const onMainClick = () => {
   console.log('Clicked on main button');
-};
-
-const navigateToHome = () => {
-  router.push('/home');
 };
 </script>

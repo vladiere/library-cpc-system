@@ -96,7 +96,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import ThisAuthor from 'components/web/ThisAuthor.vue';
+import ThisAuthor from 'components/ThisAuthor.vue';
 
 const $q = useQuasar();
 
