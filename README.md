@@ -1,6 +1,6 @@
-# CPC Library (cpc-library)
+# CPC Library (cpclibrary-frontend)
 
-CPC Library for ease use and faster booking from the library
+The cpc library is a system for student and faculty staffs of the CPC
 
 ## Install the dependencies
 ```bash

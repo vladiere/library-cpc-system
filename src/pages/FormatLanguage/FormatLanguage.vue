@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-  import { defineComponent } from 'vue'
-  defineComponent({
-    name: 'FormatsPage'
-  })
+import { defineComponent, ref } from 'vue';
+defineComponent({
+  name: 'FormatsPage',
+});
 
- interface Format {
+interface Format {
   id: number;
   name: string;
 }
@@ -27,13 +27,22 @@
 const formats = ref<Format[]>([
   { id: 1, name: 'Books' },
   { id: 2, name: 'Periodicals (journals, magazines, newspapers)' },
-  { id: 3, name: 'Audiovisual materials (CDs, DVDs, Blu-rays, streaming media)' },
+  {
+    id: 3,
+    name: 'Audiovisual materials (CDs, DVDs, Blu-rays, streaming media)',
+  },
   { id: 4, name: 'E-books and electronic resources' },
   { id: 5, name: 'Microforms (microfilm, microfiche)' },
   { id: 6, name: 'Maps and atlases' },
   { id: 7, name: 'Manuscripts and archives' },
-  { id: 8, name: 'Special collections (rare books, artist books, graphic novels)' },
-  { id: 9, name: 'Reference materials (encyclopedias, dictionaries, handbooks)' },
+  {
+    id: 8,
+    name: 'Special collections (rare books, artist books, graphic novels)',
+  },
+  {
+    id: 9,
+    name: 'Reference materials (encyclopedias, dictionaries, handbooks)',
+  },
   { id: 10, name: 'Government documents' },
   { id: 11, name: 'English' },
   { id: 12, name: 'Spanish' },
@@ -44,6 +53,9 @@ const formats = ref<Format[]>([
   { id: 17, name: 'Arabic' },
   { id: 18, name: 'Russian' },
   { id: 19, name: 'Latin' },
-  { id: 20, name: 'Other languages (including regional or indigenous languages)' }
+  {
+    id: 20,
+    name: 'Other languages (including regional or indigenous languages)',
+  },
 ]);
 </script>

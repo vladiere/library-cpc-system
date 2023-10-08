@@ -27,10 +27,10 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios', 'apexcharts'],
+    boot: ['axios'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ['app.scss'],
+    css: ['app.sass'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -41,6 +41,7 @@ module.exports = configure(function (/* ctx */) {
       'themify',
       'line-awesome',
       'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
+
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
     ],
@@ -85,12 +86,7 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {
-        brand: {
-          dsecondary: '#555a7d',
-          dprimary: '#44496b',
-        },
-      },
+      config: {},
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -103,7 +99,15 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'Dialog', 'SessionStorage', 'LocalStorage'],
+      plugins: [
+        'Notify',
+        'Dialog',
+        'SessionStorage',
+        'LocalStorage',
+        'Loading',
+        'Platform',
+        'Cookies',
+      ],
     },
 
     // animations: 'all', // --- includes all animations
@@ -190,7 +194,7 @@ module.exports = configure(function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'cpc-library-electron',
+        appId: 'cpclibrary-frontend',
       },
     },
 
