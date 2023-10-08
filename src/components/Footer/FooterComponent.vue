@@ -1,5 +1,5 @@
 <template>
-  <div class="column text-subtitle1 bg-grey-8 q-pa-sm">
+  <div class="column text-subtitle1 bg-grey-4 q-pa-sm">
     <div class="col-3 items-center row q-gutter-x-md">
       <div class="col column">
         <div class="row items-center q-gutter-x-sm">

@@ -5,14 +5,21 @@
     <q-input color="grey-10" outlined dense v-model="text" label="Category" />
     <q-input color="grey-10" outlined dense v-model="text" label="Publisher" />
     <div class="row">
-      <q-btn label="Submit" class="btn-fixed-width" color="teal" text-color="grey-10"/>
+      <q-btn
+        label="Submit"
+        class="btn-fixed-width"
+        color="teal"
+        text-color="grey-10"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { defineComponent } from 'vue'
-  defineComponent({
-    name: 'AdvanceSearch'
-  })
+import { defineComponent, ref } from 'vue';
+defineComponent({
+  name: 'AdvanceSearch',
+});
+
+const text = ref('');
 </script>

@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
-import TrendingBooks from 'components/web/TrendingBooksCard.vue';
+import TrendingBooks from 'components/TrendingBooksCard.vue';
 import { useQuasar } from 'quasar';
 
 defineComponent({

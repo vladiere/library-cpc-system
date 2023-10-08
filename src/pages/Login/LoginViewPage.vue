@@ -80,18 +80,22 @@
           >
         </div>
         <div class="column q-mt-md">
-          <q-form @submit.prevent="submitForm" class="column q-gutter-y-md">
+          <q-form
+            @submit.prevent="submitForm"
+            greedy
+            class="column q-gutter-y-md"
+          >
             <q-input
               :debounce="1000"
               outlined
               color="blue-7"
-              @update:model-value="validateInput(form, 'email')"
-              @blur="validateInput(form, 'email')"
-              :error="form.email.error"
-              :error-message="form.email.msg"
-              v-model="form.email.value"
-              label="Email"
-              for="email"
+              v-model="form.email"
+              label="Email address"
+              type="email"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'Enter your email address',
+              ]"
             >
               <template v-slot:prepend>
                 <q-icon name="mail" />
@@ -100,15 +104,14 @@
             <q-input
               :debounce="1000"
               outlined
-              @update:model-value="validateInput(form, 'password')"
-              @blur="validateInput(form, 'password')"
               color="blue-7"
               :type="isPwd ? 'text' : 'password'"
-              :error="form.password.error"
-              :error-message="form.password.msg"
-              v-model="form.password.value"
+              v-model="form.password"
               label="Password"
-              for="password"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'Enter your password',
+              ]"
             >
               <template v-slot:prepend>
                 <q-icon :name="isPwd ? 'lock_open' : 'lock'" />
@@ -228,41 +231,30 @@
 </template>
 
 <script setup lang="ts">
-import LoginHook from 'src/controllers/hooks/LoginHook';
 import { defineComponent, ref } from 'vue';
-import { User } from 'src/models/web/users';
 import Logo from '/src/assets/librarylogo.png';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import BgImage from 'src/assets/bg.svg';
 
 defineComponent({
   name: 'LoginViewPage',
 });
 
 const isPwd = ref(false);
-const { isFormValid, validateInput, isSubmitBtn } = LoginHook();
 const $q = useQuasar();
 const router = useRouter();
 
-const form = ref<User>({
-  email: {
-    value: '',
-    email: true,
-    error: false,
-    msg: '',
-    required: true,
-  },
-  password: {
-    value: '',
-    error: false,
-    msg: '',
-    required: true,
-  },
+const form = ref({
+  email: '',
+  password: '',
 });
 
 const submitForm = () => {
-  if (!isFormValid) return false;
+  try {
+    console.log('testing form');
+  } catch (error: any) {
+    throw new Error(error);
+  }
 };
 
 const gotoLink = (link: string) => {

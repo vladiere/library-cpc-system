@@ -2,11 +2,11 @@
   <q-page padding>
     <div
       :class="
-        $q.platform.is.mobile
+        Platform.is.mobile
           ? ''
           : 'column q-mx-xl q-pa-md bg-blue-grey-13 text-capitalize'
       "
-      :style="$q.platform.is.mobile ? '' : 'border-radius: 5px;'"
+      :style="Platform.is.mobile ? '' : 'border-radius: 5px;'"
     >
       <div class="row q-gutter-x-md">
         <div class="column">
@@ -22,7 +22,7 @@
         </div>
         <div
           :class="
-            $q.platform.is.mobile
+            Platform.is.mobile
               ? 'column text-capitalize text-grey-10'
               : 'column text-capitalize text-h6 text-grey-10'
           "
@@ -33,14 +33,14 @@
           <span>Department: {{ accountProfile.department }}</span>
         </div>
       </div>
-      <RecommendedBook />
+      <RecommendedBook :count="Platform.is.mobile ? 3 : 5" />
     </div>
   </q-page>
 </template>
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
-import RecommendedBook from 'components/web/Recommend.vue';
-import { useQuasar } from 'quasar';
+import RecommendedBook from 'components/Recommend.vue';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'UserProfilePage',
@@ -52,8 +52,6 @@ interface AccountProfile {
   name: string;
   picture: string;
 }
-
-const $q = useQuasar();
 
 const accountProfile = ref({
   id: 1,

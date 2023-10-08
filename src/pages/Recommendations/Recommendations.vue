@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
-import RecommendBook from 'components/web/Recommend.vue';
-import RecommendByInstructor from 'src/components/web/RecommendByInstructor.vue';
+import RecommendBook from 'components/Recommend.vue';
+import RecommendByInstructor from 'src/components/RecommendByInstructor.vue';
 import { useQuasar } from 'quasar';
 
 defineComponent({

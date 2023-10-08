@@ -10,8 +10,8 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
-import BooksCard from 'components/web/BooksCard.vue';
-import TrendingBooksCard from 'components/web/TrendingBooksCard.vue';
+import BooksCard from 'components/BooksCard.vue';
+import TrendingBooksCard from 'components/TrendingBooksCard.vue';
 import { useQuasar } from 'quasar';
 
 defineComponent({

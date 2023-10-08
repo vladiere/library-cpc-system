@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHr lpr fFf">
+  <q-layout view="lHr lpR lFr">
     <q-header reveal elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title
@@ -117,7 +117,7 @@ import EssentialLink, {
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
-import Footer from 'src/components/web/Footer/FooterComponent.vue';
+import Footer from 'src/components/Footer/FooterComponent.vue';
 
 const $q = useQuasar();
 const router = useRouter();

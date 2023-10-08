@@ -6,7 +6,7 @@
 
 <template>
   <q-page>
-    <div v-if="!$q.platform.is.mobile" class="q-pa-xl">
+    <div v-if="!Platform.is.mobile" class="q-pa-xl">
       <BooksCard />
     </div>
     <div v-else class="row justify-center q-gutter-sm">
@@ -34,12 +34,10 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
-import BooksCard from 'components/web/BooksCard.vue';
-import { useQuasar } from 'quasar';
+import BooksCard from 'components/BooksCard.vue';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'RecentBooksPage',
 });
-
-const $q = useQuasar();
 </script>

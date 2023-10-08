@@ -28,7 +28,7 @@
       transition-prev="slide-prev"
       transition-next="slide-next"
       :control-color="!$q.platform.is.mobile ? 'dark' : ''"
-      :control-type="!$q.platform.is.mobile ? 'regular' : ''"
+      :control-type="!$q.platform.is.mobile ? 'regular' : undefined"
       :prev_icon="!$q.platform.is.mobile ? 'arrow_left' : ''"
       :height="$q.platform.is.mobile ? '160px' : '300px'"
       :next_icon="!$q.platform.is.mobile ? 'arrow_right' : ''"

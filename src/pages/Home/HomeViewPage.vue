@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
-import HomeBooks from 'components/web/HomeBooks.vue';
+import HomeBooks from 'components/HomeBooks.vue';
 import { useQuasar } from 'quasar';
 
 defineComponent({
