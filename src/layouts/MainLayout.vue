@@ -6,14 +6,14 @@
           <q-img avatar :src="LibraryLogo" style="width: 2rem" />
           <span
             :class="
-              $q.platform.is.mobile
+              Platform.is.mobile
                 ? 'q-mx-sm text-grey-2 text-h6 text-bold'
                 : 'q-mx-xs text-grey-2 text-h4 text-bold'
             "
             >CPC
             <small
               :style="
-                $q.platform.is.mobile
+                Platform.is.mobile
                   ? 'font-size: 14px !important'
                   : 'font-size: 18px !important'
               "
@@ -24,8 +24,8 @@
 
         <q-btn-dropdown
           flat
-          :label="$q.platform.is.mobile ? '' : 'Browse'"
-          :class="$q.platform.is.mobile ? '' : 'q-mx-xl'"
+          :label="Platform.is.mobile ? '' : 'Browse'"
+          :class="Platform.is.mobile ? '' : 'q-mx-xl'"
           @click="onMainClick"
         >
           <q-list>
@@ -53,7 +53,7 @@
         <q-item-label
           header
           :class="
-            $q.platform.is.mobile
+            Platform.is.mobile
               ? 'text-dark text-h6 text-bold row q-gutter-x-md'
               : 'text-dark text-h5 text-bold row q-gutter-x-md'
           "
@@ -78,7 +78,7 @@
         <q-item-label
           header
           :class="
-            $q.platform.is.mobile
+            Platform.is.mobile
               ? 'text-dark text-h6 text-bold'
               : 'text-dark text-h5 text-bold'
           "
@@ -110,7 +110,7 @@
       </q-page-scroller>
     </q-page-container>
 
-    <q-footer reveal elevated class="bg-grey-4 text-dark column q-pa-md">
+    <q-footer reveal class="bg-grey-4 text-dark column q-pa-md q-gutter-y-md">
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
@@ -119,7 +119,13 @@
           CPC Library
         </q-toolbar-title>
       </q-toolbar>
-      <div class="row q-gutter-x-md">
+      <div
+        :class="
+          Platform.is.mobile
+            ? 'column q-gutter-y-md text-center content-center items-center'
+            : 'row q-gutter-x-md'
+        "
+      >
         <div class="col column">
           <span>Providing Knowledge Since 2020</span>
           <span>Proudly Serving the CPC Community</span>
@@ -152,14 +158,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
 import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
-
-const $q = useQuasar();
 
 const browseLinks: BrowseLinksProps[] = [
   {
