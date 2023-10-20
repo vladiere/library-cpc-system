@@ -6,33 +6,45 @@
 
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>{{ caption }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
 
 <script setup lang="ts">
-  import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { api } from 'src/boot/axios';
+import { useUserStore } from 'src/stores/user-store';
 
 export interface EssentialLinkProps {
   title: string;
-  caption?: string;
   link?: string;
   icon?: string;
 }
 withDefaults(defineProps<EssentialLinkProps>(), {
-  caption: '',
   link: '#',
   icon: '',
 });
 
 const router = useRouter();
+const userStore = useUserStore();
 
-const gotoRoute = (link: string) => {
+const gotoRoute = async (link: string) => {
   if (link === 'logout') {
-    router.push('/');
+    try {
+      await api.post('/user/logout', {refreshToken: userStore.refresh as string}, {
+        headers: {
+          Authorization: `Bearer ${userStore.token as string}`
+        }
+      });
+
+      userStore.logoutUser();
+
+      router.push('/');
+    } catch(error:any) {
+      throw new Error(error);
+    }
   } else if (link === 'profile') {
-    router.push({ name: 'UserProfile', params: { account: 'vladiere' } })
+    router.push({ name: 'UserProfile', params: { account: 'vladiere' } });
   } else {
     router.push(link);
   }

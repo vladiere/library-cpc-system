@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHr lpR lFr">
+  <q-layout view="hHh LpR lFr">
     <q-header reveal elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title class="row items-center">
@@ -26,7 +26,6 @@
           flat
           :label="Platform.is.mobile ? '' : 'Browse'"
           :class="Platform.is.mobile ? '' : 'q-mx-xl'"
-          @click="onMainClick"
         >
           <q-list>
             <BrowseLinks
@@ -43,10 +42,11 @@
     </q-header>
 
     <q-drawer
-      show-if-above
       v-model="rightDrawerOpen"
       side="right"
       bordered
+      overlay
+      elevated
       class="bg-grey-2"
     >
       <q-list dense>
@@ -59,22 +59,22 @@
           "
         >
           <q-avatar>
-            <q-img src="https://cdn.quasar.dev/img/avatar.png" fit="contain" />
+            <q-img :src="userData.img_path || 'https://cdn-icons-png.flaticon.com/128/1144/1144760.png'" fit="contain" />
           </q-avatar>
           <div class="column">
-            <span class="text-subtitle1">Danya, John B.</span>
-            <span class="text-caption">BSIT</span>
+            <span class="text-subtitle1 text-capitalize">{{ userData.fullname }}</span>
+            <span class="text-caption text-uppercase">{{ userData.department}}</span>
           </div>
         </q-item-label>
         <q-separator />
         <EssentialLink
-          class="text-dark"
+          class="text-dark q-mt-sm"
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
         />
       </q-list>
-      <q-list>
+      <q-list dense>
         <q-item-label
           header
           :class="
@@ -89,7 +89,7 @@
         <q-separator />
 
         <BrowseLinks
-          class="text-dark"
+          class="text-dark q-mt-sm"
           v-for="browse in browseLinks"
           :key="browse.title"
           v-bind="browse"
@@ -98,72 +98,52 @@
     </q-drawer>
 
     <q-page-container class="bg-grey-2">
-      <router-view />
-
+      <router-view v-slot="{ Component }">
+        <transition apper v-bind="backTransition">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+      <FooterComponent />
       <!-- place QPageScroller at end of page -->
       <q-page-scroller
         position="bottom-right"
         :scroll-offset="150"
-        :offset="[18, 18]"
+        :offset="[10, 10]"
       >
-        <q-btn fab icon="keyboard_arrow_up" color="primary" />
+        <q-btn
+          :round="Platform.is.mobile"
+          :fab="!Platform.is.mobile"
+          icon="keyboard_arrow_up"
+          color="primary"
+        />
       </q-page-scroller>
     </q-page-container>
-
-    <q-footer reveal class="bg-grey-4 text-dark column q-pa-md q-gutter-y-md">
-      <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="src/assets/applogo.png" />
-          </q-avatar>
-          CPC Library
-        </q-toolbar-title>
-      </q-toolbar>
-      <div
-        :class="
-          Platform.is.mobile
-            ? 'column q-gutter-y-md text-center content-center items-center'
-            : 'row q-gutter-x-md'
-        "
-      >
-        <div class="col column">
-          <span>Providing Knowledge Since 2020</span>
-          <span>Proudly Serving the CPC Community</span>
-        </div>
-        <div class="col column">
-          <span>School CPC Founded in March 2005</span>
-          <span>CPC Library Establish in July 2020</span>
-        </div>
-        <div class="col column">
-          <div class="row q-gutter-x-sm">
-            <span class="text-bold">Address: </span>
-            <span>Cordova, Poblacion, 6017, Cebu</span>
-          </div>
-          <div class="row q-gutter-x-sm">
-            <span class="text-bold">Phone: </span>
-            <span>(032) 494 1410</span>
-          </div>
-          <div class="row q-gutter-x-sm">
-            <span class="text-bold">Email: </span>
-            <span>cpc.library@gmail.com</span>
-          </div>
-        </div>
-      </div>
-      <div class="col self-center">
-        <span class="text-bold">© 2023 CPC Library. All Rights Reserved.</span>
-      </div>
-    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Platform } from 'quasar';
+import { ref, onMounted, onBeforeMount } from 'vue';
+import { Platform, SessionStorage } from 'quasar';
+import { useRouter } from 'vue-router'
 import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
+import FooterComponent from 'src/components/Footer/FooterComponent.vue';
+import { backTransition } from 'src/utils/transitions';
+import { api } from 'src/boot/axios';
+import jwt_decode from 'jwt-decode';
+import { useUserStore } from 'src/stores/user-store';
+
+interface UserData {
+  user_id: number;
+  fullname: string;
+  id_number: number;
+  department: string;
+  email_address: string;
+  img_path: string;
+}
 
 const browseLinks: BrowseLinksProps[] = [
   {
@@ -206,25 +186,21 @@ const browseLinks: BrowseLinksProps[] = [
 const essentialLinks: EssentialLinkProps[] = [
   {
     title: 'Home',
-    caption: 'Return to homepage',
     icon: 'fas fa-house',
     link: '/home',
   },
   {
     title: 'My Books',
-    caption: 'Collections, Borrow History and Lists',
     icon: 'fas fa-book',
     link: '/userbooks',
   },
   {
     title: 'Profile',
-    caption: 'User Profile and Information',
     icon: 'fas fa-user',
     link: 'profile',
   },
   {
     title: 'Settings',
-    caption: 'System and User Settings',
     icon: 'chat',
     link: '/settings',
   },
@@ -234,14 +210,36 @@ const essentialLinks: EssentialLinkProps[] = [
     link: 'logout',
   },
 ];
-
+const router = useRouter();
+const userData = ref<UserData>([]);
+const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
 
-function toggleRightDrawer() {
+const decoded = jwt_decode(userStore.token);
+
+const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value;
 }
 
-const onMainClick = () => {
-  console.log('Clicked on main button');
-};
+const getUserData = async () => {
+  try {
+    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    })
+
+    userData.value = response.data[0];
+  } catch (error: any) {
+    throw new Error(error)
+  }
+}
+
+onBeforeMount(() => {
+  rightDrawerOpen.value = false;
+})
+
+onMounted(() => {
+  getUserData();
+})
 </script>

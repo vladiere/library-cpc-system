@@ -11,11 +11,12 @@
 
       <q-btn
         class="q-mt-xl"
-        color="white"
-        text-color="blue"
+        text-color="dark"
         unelevated
+        flat
+        icon="mdi-step-backward"
         to="/"
-        label="Go Home"
+        label="Return"
         no-caps
       />
     </div>

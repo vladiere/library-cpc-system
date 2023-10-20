@@ -1,11 +1,21 @@
 <template>
-  <div class="column text-subtitle1 bg-grey-4 q-pa-sm">
-    <div class="col-3 items-center row q-gutter-x-md">
+  <div class="bg-grey-4 text-dark column q-pa-md q-mt-xl q-gutter-y-md">
+    <q-toolbar>
+      <q-toolbar-title>
+        <q-avatar>
+          <img src="src/assets/applogo.png" />
+        </q-avatar>
+        CPC Library
+      </q-toolbar-title>
+    </q-toolbar>
+    <div
+      :class="
+        Platform.is.mobile
+          ? 'column q-gutter-y-md text-center content-center items-center'
+          : 'row q-gutter-x-md'
+      "
+    >
       <div class="col column">
-        <div class="row items-center q-gutter-x-sm">
-          <q-img :src="LibraryLogo" style="width: 10%" />
-          <span class="text-bold"> CPC Library </span>
-        </div>
         <span>Providing Knowledge Since 2020</span>
         <span>Proudly Serving the CPC Community</span>
       </div>
@@ -36,7 +46,7 @@
 
 <script setup lang="ts">
 import { defineComponent } from 'vue';
-import LibraryLogo from 'src/assets/applogo.png';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'FooterComponent',

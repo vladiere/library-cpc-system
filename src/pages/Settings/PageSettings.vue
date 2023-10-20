@@ -1,6 +1,9 @@
 <template>
-  <q-page padding>
-    <div class="column rounded-borders">
+  <q-page padding class="column items-center">
+    <div
+      class="column q-px-xl"
+      :style="Platform.is.mobile ? '' : 'width: 45%'"
+    >
       <q-tabs
         v-model="tab"
         dense
@@ -10,7 +13,7 @@
         align="justify"
       >
         <q-tab name="password" label="Password" />
-        <q-tab name="mail" label="Email and Number" />
+        <q-tab name="mail" label="Email Address" />
       </q-tabs>
 
       <q-separator />
@@ -24,7 +27,6 @@
           <div class="text-h6">Change Password</div>
           <div class="column q-gutter-y-md">
             <q-input
-              dense
               square
               outlined
               label="Old Password"
@@ -41,7 +43,6 @@
               </template>
             </q-input>
             <q-input
-              dense
               square
               outlined
               label="New Password"
@@ -58,7 +59,6 @@
               </template>
             </q-input>
             <q-input
-              dense
               square
               outlined
               label="Confirm Password"
@@ -88,7 +88,6 @@
           <div class="text-h6">Change Email</div>
           <div class="column q-gutter-y-md">
             <q-input
-              dense
               square
               outlined
               label="New Email"
@@ -99,7 +98,6 @@
               </template>
             </q-input>
             <q-input
-              dense
               square
               outlined
               label="Confirm New Email"
@@ -113,35 +111,6 @@
               <q-btn color="grey-5" text-color="grey-10" label="Save email" />
             </div>
           </div>
-          <q-separator size="2px" class="q-my-md" />
-          <div class="text-h6">Change Number</div>
-          <div class="column q-gutter-y-md">
-            <q-input
-              dense
-              square
-              outlined
-              label="Mobile/Phone Number"
-              v-model="emailNumber.number"
-            >
-              <template v-slot:prepend>
-                <q-icon name="dialpad" />
-              </template>
-            </q-input>
-            <q-input
-              dense
-              square
-              outlined
-              label="Confirm code "
-              v-model="emailNumber.confirmCode"
-            >
-              <template v-slot:prepend>
-                <q-icon name="confirmation_number" />
-              </template>
-            </q-input>
-            <div class="row">
-              <q-btn color="grey-5" text-color="grey-10" label="Save number" />
-            </div>
-          </div>
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -150,6 +119,7 @@
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
+import { Platform } from 'quasar'
 
 defineComponent({
   name: 'SettingsPage',

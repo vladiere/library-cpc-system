@@ -1,10 +1,10 @@
 <template>
   <div
     :class="
-      $q.platform.is.mobile ? 'column q-pa-md' : 'column fullscreen relative'
+      Platform.is.mobile ? 'column q-pa-md' : 'column fullscreen relative'
     "
   >
-    <div v-if="!$q.platform.is.mobile" class="col-4 bg-blue-10 q-pa-md">
+    <div v-if="!Platform.is.mobile" class="col-4 bg-blue-10 q-pa-md">
       <span
         class="text-h3 text-bold text-grey-1"
         style="
@@ -16,7 +16,7 @@
     </div>
     <div
       :class="
-        $q.platform.is.mobile
+        Platform.is.mobile
           ? ''
           : 'col absolute-center flex flex-center q-pa-md bg-grey-2 fullscreen shadow-8'
       "
@@ -24,7 +24,7 @@
     >
       <div
         class="column q-gutter-y-md"
-        :style="$q.platform.is.mobile ? '' : 'width: 400px'"
+        :style="Platform.is.mobile ? '' : 'width: 400px'"
       >
         <q-img :src="ForgotPass" width="20%" class="self-center" fit="cover" />
         <span class="text-h6 text-bold text-uppercase self-center"
@@ -48,7 +48,7 @@
           </template>
         </q-input>
         <q-btn label="next" square color="blue-7" />
-        <span class="cursor-pointer flex flex-center"
+        <span class="cursor-pointer flex flex-center" @click="handleClick"
           ><q-icon name="arrow_back_ios" /> Back to Login</span
         >
       </div>
@@ -59,18 +59,22 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import ForgotPass from 'src/assets/forgotpass.png';
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
+import { useRouter } from 'vue-router';
 
 defineComponent({
   name: 'ForgotPassword',
 });
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+const router = useRouter();
 const form = ref({
   email: '',
 });
-const $q = useQuasar();
+
+const handleClick = () => {
+  router.push('/');
+};
 
 const validateEmail = ref([
   (val: string) => (val && val.length > 0) || 'Please enter your Email Address',

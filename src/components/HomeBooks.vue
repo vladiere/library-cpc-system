@@ -1,10 +1,12 @@
 <template>
-  <div :class="$q.platform.is.mobile ? '' : 'q-py-lg q-mb-lg'">
-    <BooksCard />
-    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
-    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
-    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
-    <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+  <div :class="$q.platform.is.mobile ? '' : ' q-py-lg q-mb-lg'">
+    <div class="column q-gutter-y-md">
+      <BooksCard />
+      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+    </div>
   </div>
 </template>
 

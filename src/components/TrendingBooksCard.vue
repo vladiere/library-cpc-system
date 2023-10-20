@@ -3,7 +3,7 @@
     :class="
       $q.platform.is.mobile
         ? 'text-capitalize'
-        : 'q-ml-sm q-mt-md text-capitalize'
+        : 'q-ml-sm q-mt-xl text-capitalize'
     "
   >
     <span

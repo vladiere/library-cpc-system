@@ -25,21 +25,21 @@
 <template>
   <q-page>
     <div
-      :class="$q.platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
+      :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
       :style="
-        $q.platform.is.mobile ? '' : 'border: 1px solid #000; height: 100vh'
+        Platform.is.mobile ? '' : 'border: 1px solid #000; height: 100vh'
       "
     >
       <div
         :class="
-          $q.platform.is.mobile
+          Platform.is.mobile
             ? 'q-px-md'
             : 'col-4 column q-px-lg justify-center'
         "
       >
         <div
           :class="
-            $q.platform.is.mobile
+            Platform.is.mobile
               ? 'column items-center content-center q-gutter-y-md q-pb-lg'
               : 'col-4 column justify-center content-center'
           "
@@ -52,7 +52,7 @@
           />
           <span
             :class="
-              $q.platform.is.mobile
+              Platform.is.mobile
                 ? 'text-bold text-h3 text-blue-10'
                 : 'hidden'
             "
@@ -61,14 +61,14 @@
         </div>
         <div
           :class="
-            $q.platform.is.mobile
+            Platform.is.mobile
               ? 'other-link text-bold text-grey-10'
               : 'row other-link text-weight-bolder'
           "
         >
           <span
             :class="
-              $q.platform.is.mobile ? 'q-mr-xs' : 'text-subtitle1 q-mr-xs'
+              Platform.is.mobile ? 'q-mr-xs' : 'text-subtitle1 q-mr-xs'
             "
             >Don't have an account?</span
           >
@@ -126,7 +126,7 @@
             </q-input>
             <div
               :class="
-                $q.platform.is.mobile
+                Platform.is.mobile
                   ? 'column fit'
                   : 'row q-my-md justify-between'
               "
@@ -134,9 +134,8 @@
               <q-btn
                 label="Login"
                 color="primary"
-                :size="$q.platform.is.mobile ? '20px' : ''"
+                :size="Platform.is.mobile ? '20px' : ''"
                 type="submit"
-                @click="gotoLink('/home')"
                 class="col-3"
                 style="border-radius: 8px"
               />
@@ -144,7 +143,7 @@
               <span
                 @click="gotoLink('/forgot-password')"
                 :class="
-                  $q.platform.is.mobile
+                  Platform.is.mobile
                     ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer'
                     : 'text-subtitle1 text-dark cursor-pointer'
                 "
@@ -155,8 +154,7 @@
           </q-form>
         </div>
       </div>
-      <div :class="$q.platform.is.mobile ? 'hidden' : 'col row relative'">
-        <!-- <q-img :src="BgImage" /> -->
+      <div :class="Platform.is.mobile ? 'hidden' : 'col row relative'">
         <div class="absolute-center q-ml-xl">
           <span
             class="text-weight-bolder text-blue-10"
@@ -233,27 +231,40 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import Logo from '/src/assets/librarylogo.png';
-import { useQuasar } from 'quasar';
+import { Platform, Notify } from 'quasar';
 import { useRouter } from 'vue-router';
+import { notApi } from 'src/boot/axios';
+import { useUserStore } from 'src/stores/user-store';
 
 defineComponent({
   name: 'LoginViewPage',
 });
 
 const isPwd = ref(false);
-const $q = useQuasar();
 const router = useRouter();
-
+const userStore = useUserStore();
 const form = ref({
   email: '',
   password: '',
 });
 
-const submitForm = () => {
+const submitForm = async () => {
   try {
-    console.log('testing form');
+    const response = await notApi.post('/user/login', { form: form.value });
+
+    userStore.initAuthorize(response.data);
+    router.push('/home');
   } catch (error: any) {
-    throw new Error(error);
+    if (error.response.data.message) {
+      Notify.create({
+        message: error.response.data.message,
+        type: 'negative',
+        position: 'top',
+        timeout: 2300
+      })
+    } else {
+      throw new Error(error)
+    }
   }
 };
 

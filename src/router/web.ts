@@ -2,7 +2,6 @@ import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [];
 
-
 routes.push(
   {
     path: '/',
@@ -11,160 +10,187 @@ routes.push(
       {
         path: '/',
         name: 'login',
+        meta: { auth: false },
         component: () => import('pages/Login/LoginViewPage.vue'),
       },
       {
         path: '/forgot-password',
         name: 'ForgotPassword',
-        component: () => import('pages/ForgotPassword/ForgotPass.vue')
+        meta: { auth: false },
+        component: () => import('pages/ForgotPassword/ForgotPass.vue'),
       },
       {
         path: '/register',
         name: 'register',
-        component: () => import('pages/RegisterPage/RegisterPage.vue')
+        meta: { auth: false },
+        component: () => import('pages/RegisterPage/RegisterPage.vue'),
       },
     ],
   },
   {
     path: '/home',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { auth: true },
     children: [
       {
-        path: '',
+        path: '/home',
+        meta: { auth: true },
         component: () => import('pages/Home/HomeViewPage.vue'),
       },
       {
         path: '/book',
         name: 'books',
-        component: () => import('pages/BookInfo/BookInfo.vue')
+        meta: { auth: true },
+        component: () => import('pages/BookInfo/BookInfo.vue'),
       },
       {
         path: '/category',
         name: 'category',
-        component: () => import('pages/Category/Category.vue')
+        meta: { auth: true },
+        component: () => import('pages/Category/Category.vue'),
       },
       {
         path: '/trending',
         name: 'trending',
-        component: () => import('pages/Trending/TrendingPage.vue')
+        meta: { auth: true },
+        component: () => import('pages/Trending/TrendingPage.vue'),
       },
       {
         path: '/profile/:account',
         name: 'UserProfile',
-        component: () => import('pages/UserProfile/UserProfile.vue')
+        meta: { auth: true },
+        component: () => import('pages/UserProfile/UserProfile.vue'),
       },
       {
         path: '/recommendation',
         name: 'recommendation',
-        component: () => import('pages/Recommendations/Recommendations.vue')
+        meta: { auth: true },
+        component: () => import('pages/Recommendations/Recommendations.vue'),
       },
       {
         path: '/contribute',
         name: 'contribute',
-        component: () => import('pages/Contribute/Contribute.vue')
+        meta: { auth: true },
+        component: () => import('pages/Contribute/Contribute.vue'),
       },
       {
         path: '/instructor',
         name: 'Intructor',
+        meta: { auth: true },
         component: () => import('layouts/IntructorRecommendLayout.vue'),
         children: [
           {
             path: 'recommend',
             name: 'InstructorRecommendations',
-            component: () => import('components/InstructorRecommendations.vue')
-          }
-        ]
+            meta: { auth: true },
+            component: () => import('components/InstructorRecommendations.vue'),
+          },
+        ],
       },
       {
         path: '/userbooks',
         name: 'userbooks',
+        meta: { auth: true },
         component: () => import('layouts/MyBooksLayout.vue'),
         children: [
           {
             path: '',
             name: 'DisplayUserbooks',
-            component: () => import('components/MyBooks.vue')
+            meta: { auth: true },
+            component: () => import('components/MyBooks.vue'),
           },
           {
             path: '/userbooks/mylists',
+            meta: { auth: true },
             name: 'mylists',
-            component: () => import('components/SeeAllLists.vue')
+            component: () => import('components/SeeAllLists.vue'),
           },
           {
             path: '/userbooks/collections',
+            meta: { auth: true },
             name: 'user_collections',
-            component: () => import('components/Collections.vue')
+            component: () => import('components/Collections.vue'),
           },
           {
             path: '/userbooks/borrowshistory',
             name: 'user_borrow_history',
-            component: () => import('components/BorrowsHistory.vue')
+            meta: { auth: true },
+            component: () => import('components/BorrowsHistory.vue'),
           },
           {
             path: '/userbooks/mylists/add',
+            meta: { auth: true },
             name: 'create_list',
-            component: () => import('components/CreateList.vue')
+            component: () => import('components/CreateList.vue'),
           },
           {
             path: '/userbooks/mylists/:list_id',
+            meta: { auth: true },
             name: 'ListsName',
-            component: () => import('components/MyList.vue')
+            component: () => import('components/MyList.vue'),
           },
-        ]
+        ],
       },
       {
         path: '/settings',
         name: 'settings',
+        meta: { auth: true },
         component: () => import('pages/Settings/PageSettings.vue'),
         children: [
           {
             path: '/settings/account',
             name: 'account_settings',
-            component: () => import('pages/Settings/AccountSettings.vue')
+            meta: { auth: true },
+            component: () => import('pages/Settings/AccountSettings.vue'),
           },
           {
             path: '/settings/system',
             name: 'system_settings',
-            component: () => import('pages/Settings/SystemSettings.vue')
+            meta: { auth: true },
+            component: () => import('pages/Settings/SystemSettings.vue'),
           },
-        ]
+        ],
       },
       {
         path: '/recent',
         name: 'recent',
-        component: () => import('pages/RecentBooks/RecentBooksPage.vue')
+        meta: { auth: true },
+        component: () => import('pages/RecentBooks/RecentBooksPage.vue'),
       },
       {
         path: '/advancesearch',
         name: 'advancesearch',
+        meta: { auth: true },
         component: () => import('pages/Search/SearchPage.vue'),
         children: [
           {
             path: '',
             name: 'advance_searchall',
+            meta: { auth: true },
             component: () => import('components/Search/AdvanceSearch.vue'),
           },
           {
             path: '/search/book',
             name: 'search_book',
-            component: () => import('components/Search/BooksSearch.vue')
+            meta: { auth: true },
+            component: () => import('components/Search/BooksSearch.vue'),
           },
           {
             path: '/search/author',
             name: 'search_author',
-            component: () => import('components/Search/AuthorSearch.vue')
+            meta: { auth: true },
+            component: () => import('components/Search/AuthorSearch.vue'),
           },
           {
             path: '/search/inside',
             name: 'search_inside',
-            component: () => import('components/Search/InsideSearch.vue')
+            meta: { auth: true },
+            component: () => import('components/Search/InsideSearch.vue'),
           },
-        ]
+        ],
       },
     ],
   },
 );
-
-
 
 export default routes;
