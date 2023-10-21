@@ -1,24 +1,30 @@
 <template>
-  <div :class="$q.platform.is.mobile ? '' : ' q-py-lg q-mb-lg'">
+  <div :class="Platform.is.mobile ? '' : ' q-py-lg q-mb-lg'">
     <div class="column q-gutter-y-md">
-      <BooksCard />
-      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
-      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
-      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
-      <TrendingBooksCard :count="$q.platform.is.mobile ? 3 : 5" />
+      <BooksCard v-if="!loading"/>
+      <q-skeleton v-else height="300px" width="100%" />
+      <TrendingBooksCard :count="Platform.is.mobile ? 3 : 5" />
+      <TrendingBooksCard :count="Platform.is.mobile ? 3 : 5" />
+      <TrendingBooksCard :count="Platform.is.mobile ? 3 : 5" />
+      <TrendingBooksCard :count="Platform.is.mobile ? 3 : 5" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import BooksCard from 'components/BooksCard.vue';
 import TrendingBooksCard from 'components/TrendingBooksCard.vue';
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'HomeBooksPage',
 });
 
-const $q = useQuasar();
+const loading = ref(true)
+
+setTimeout(() => {
+  loading.value = false
+}, 2000);
+
 </script>

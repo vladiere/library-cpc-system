@@ -24,15 +24,7 @@
       style="text-decoration: underline"
       >Recent Books</span
     >
-    <div
-      v-if="recommendBooks.length === 0"
-      class="column content-center items-center q-mt-md"
-    >
-      <q-img :src="ManEmpty" style="width: 15rem" />
-      <span class="text-grey-9 text-h6">Empty Recent Book</span>
-    </div>
     <q-carousel
-      v-else
       v-model="activeIndex"
       :arrows="!Platform.is.mobile"
       :swipeable="Platform.is.mobile"
@@ -42,7 +34,7 @@
       :control-color="!Platform.is.mobile ? 'dark' : ''"
       :control-type="!Platform.is.mobile ? 'regular' : undefined"
       :prev_icon="!Platform.is.mobile ? 'arrow_left' : ''"
-      :height="Platform.is.mobile ? '180px' : '365px'"
+      :height="Platform.is.mobile ? '255px' : '365px'"
       :next_icon="!Platform.is.mobile ? 'arrow_right' : ''"
     >
       <q-carousel-slide
@@ -53,38 +45,20 @@
         transition-next="fade"
         class="flex q-pa-none q-ma-none"
       >
-        <!-- <q-img -->
-        <!--   v-for="bookRecommend in slideImages" -->
-        <!--   :src="checkIfImage(bookRecommend.img_path)" -->
-        <!--   fit="fill" -->
-        <!--   class="cursor-pointer" -->
-        <!--   :width="Platform.is.mobile ? '32%' : '20%'" -->
-        <!--   :height="Platform.is.mobile ? '160px' : '300px'" -->
-        <!--   :key="bookRecommend.book_id" -->
-        <!--   @click="navigateToBookInfo(bookRecommend.book_id, bookRecommend.title)" -->
-        <!-- > -->
-        <!--   <div class="absolute-bottom text-center column bg-transparent "> -->
-        <!--     <q-item-label -->
-        <!--       lines="2" -->
-        <!--       align="left" -->
-        <!--       :class="Platform.is.mobile ? 'text-dark' : 'text-subtitle1 text-dark'" -->
-        <!--       >{{ bookRecommend.title }}</q-item-label -->
-        <!--     > -->
-        <!--   </div> -->
-        <!-- </q-img> -->
         <q-card
           square
           flat
+          :style="Platform.is.mobile ? 'max-width: 115px': ''"
           v-for="bookRecommend in slideImages"
           :key="bookRecommend.book_id"
           class="my-card bg-transparent cursor-pointer"
           @click="navigateToBookInfo(bookRecommend.book_id, bookRecommend.title)"
         >
-          <q-img :src="checkIfImage(bookRecommend.img_path)" height="255px" fit="fill"/>
+          <q-img :src="checkIfImage(bookRecommend.img_path)" :height="Platform.is.mobile ? '150px' : '255px'" fit="fill"/>
 
           <q-card-section>
-            <q-item-label lines="2" class="text-h6">{{ bookRecommend.title }}</q-item-label>
-            <q-item-label class="text-subtitle2">{{ bookRecommend.author_name }}</q-item-label>
+            <q-item-label lines="2" :class="Platform.is.mobile ? 'text-subtile1' : 'text-h6'">{{ bookRecommend.title }}</q-item-label>
+            <q-item-label :class="Platform.is.mobile ? 'text-body' : 'text-subtitle2'">{{ bookRecommend.author_name }}</q-item-label>
           </q-card-section>
         </q-card>
       </q-carousel-slide>
@@ -94,12 +68,13 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref, computed, onUnmounted, onMounted } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ManEmpty from 'assets/man-empty.png';
 import { Platform } from 'quasar';
 import { api } from 'src/boot/axios'
 import { useUserStore } from 'src/stores/user-store';
+import { useBooksStore } from 'src/stores/books-store'
 
 defineComponent({
   name: 'RecommendBooks',
@@ -108,6 +83,7 @@ defineComponent({
 const router = useRouter();
 const activeIndex = ref(0);
 const userStore = useUserStore();
+const bookStore = useBooksStore();
 
 interface RecommendBook {
   author_name: string;
@@ -148,23 +124,8 @@ const checkIfImage = (img: string | null) => {
   }
 }
 
-const getAllBooks = async () => {
-  try {
-    const response = await api.get('/get/all/books/inventory', {
-      headers: {
-        Authorization: `Bearer ${(userStore.token as string)}`
-      }
-    })
-
-    recommendBooks.value = response.data
-  } catch (error: any) {
-    throw new Error(error)
-  }
-}
-
 onMounted(() => {
-  getAllBooks()
+  recommendBooks.value = bookStore.getAllBooks;
 })
 
-onUnmounted(() => recommendBooks.value = [])
 </script>

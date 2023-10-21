@@ -135,6 +135,7 @@ import { backTransition } from 'src/utils/transitions';
 import { api } from 'src/boot/axios';
 import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
+import { useBooksStore } from 'src/stores/books-store'
 
 interface UserData {
   user_id: number;
@@ -143,6 +144,42 @@ interface UserData {
   department: string;
   email_address: string;
   img_path: string;
+}
+
+const router = useRouter();
+const userData = ref<UserData>([]);
+const userStore = useUserStore();
+const bookStore = useBooksStore();
+const rightDrawerOpen = ref(false);
+
+const decoded = jwt_decode(userStore.token);
+
+const getUserData = async () => {
+  try {
+    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    })
+
+    userData.value = response.data[0];
+  } catch (error: any) {
+    throw new Error(error)
+  }
+}
+
+const getAllBooks = async () => {
+  try {
+    const response = await api.get('/get/all/books/inventory', {
+      headers: {
+        Authorization: `Bearer ${(userStore.token as string)}`
+      }
+    })
+
+    bookStore.initBooks(response.data);
+  } catch (error: any) {
+    throw new Error(error)
+  }
 }
 
 const browseLinks: BrowseLinksProps[] = [
@@ -198,6 +235,7 @@ const essentialLinks: EssentialLinkProps[] = [
     title: 'Profile',
     icon: 'fas fa-user',
     link: 'profile',
+    acc: `${userData.value.fullname}`
   },
   {
     title: 'Settings',
@@ -210,30 +248,12 @@ const essentialLinks: EssentialLinkProps[] = [
     link: 'logout',
   },
 ];
-const router = useRouter();
-const userData = ref<UserData>([]);
-const userStore = useUserStore();
-const rightDrawerOpen = ref(false);
 
-const decoded = jwt_decode(userStore.token);
 
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value;
 }
 
-const getUserData = async () => {
-  try {
-    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    })
-
-    userData.value = response.data[0];
-  } catch (error: any) {
-    throw new Error(error)
-  }
-}
 
 onBeforeMount(() => {
   rightDrawerOpen.value = false;
@@ -241,5 +261,8 @@ onBeforeMount(() => {
 
 onMounted(() => {
   getUserData();
+  if (bookStore.getAllBooks.length === 0) {
+     getAllBooks();
+  }
 })
 </script>

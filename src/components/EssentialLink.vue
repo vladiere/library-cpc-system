@@ -1,11 +1,11 @@
 <template>
-  <q-item clickable @click="gotoRoute(link)">
+  <q-item clickable @click="gotoRoute(props.link)">
     <q-item-section v-if="icon" avatar>
-      <q-icon :name="icon" size="1.3rem" />
+      <q-icon :name="props.icon" size="1.3rem" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label>{{ props.title }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
@@ -19,10 +19,12 @@ export interface EssentialLinkProps {
   title: string;
   link?: string;
   icon?: string;
+  acc?: string;
 }
-withDefaults(defineProps<EssentialLinkProps>(), {
+const props = withDefaults(defineProps<EssentialLinkProps>(), {
   link: '#',
   icon: '',
+  acc: ''
 });
 
 const router = useRouter();
@@ -44,9 +46,11 @@ const gotoRoute = async (link: string) => {
       throw new Error(error);
     }
   } else if (link === 'profile') {
-    router.push({ name: 'UserProfile', params: { account: 'vladiere' } });
+    router.push({ name: 'UserProfile', params: { account: props.acc } });
   } else {
     router.push(link);
   }
 };
+
+console.log(props.acc)
 </script>

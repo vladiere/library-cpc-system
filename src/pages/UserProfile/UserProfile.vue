@@ -4,7 +4,7 @@
       :class="
         Platform.is.mobile
           ? ''
-          : 'column q-mx-xl q-pa-md bg-blue-grey-13 text-capitalize'
+          : 'column q-mx-xl q-pa-md bg-transparent text-capitalize'
       "
       :style="Platform.is.mobile ? '' : 'border-radius: 5px;'"
     >
