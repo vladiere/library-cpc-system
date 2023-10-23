@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="column items-center">
     <div
-      class="column q-px-xl"
+      class="column q-px-xl q-mt-xl"
       :style="Platform.is.mobile ? '' : 'width: 45%'"
     >
       <q-tabs
@@ -25,23 +25,7 @@
       >
         <q-tab-panel name="password">
           <div class="text-h6">Change Password</div>
-          <div class="column q-gutter-y-md">
-            <q-input
-              square
-              outlined
-              label="Old Password"
-              color="grey-10"
-              v-model="password.oldPass"
-              :type="isPwd ? 'password' : 'text'"
-            >
-              <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
-              </template>
-            </q-input>
+          <q-form @reset="onSuccess" greedy @submit.prevent="changePassword" class="column q-gutter-y-md">
             <q-input
               square
               outlined
@@ -49,6 +33,11 @@
               color="grey-10"
               v-model="password.newPass"
               :type="isPwd ? 'password' : 'text'"
+              lazy-rules
+              :rules="[
+                val => val && val.length > 0 || 'Please enter your new password',
+                val => val.length > 8 || 'Password must be at least 8 characters'
+              ]"
             >
               <template v-slot:append>
                 <q-icon
@@ -65,6 +54,11 @@
               color="grey-10"
               v-model="password.confirmPass"
               :type="isPwd ? 'password' : 'text'"
+              lazy-rules
+              :rules="[
+                val => val && val.length > 0 || 'Please confirm your password',
+                val => val === password.newPass || 'Password does not match'
+              ]"
             >
               <template v-slot:append>
                 <q-icon
@@ -79,9 +73,10 @@
                 color="blue-grey-9"
                 text-color="grey-2"
                 label="Save Settings"
+                type="submit"
               />
             </div>
-          </div>
+          </q-form>
         </q-tab-panel>
 
         <q-tab-panel name="mail" class="bg-grey-2 text-dark">
@@ -90,8 +85,18 @@
             <q-input
               square
               outlined
+              label="Old Email"
+              v-model="emails.oldEmail"
+            >
+              <template v-slot:prepend>
+                <q-icon name="email" />
+              </template>
+            </q-input>
+            <q-input
+              square
+              outlined
               label="New Email"
-              v-model="emailNumber.newEmail"
+              v-model="emails.newEmail"
             >
               <template v-slot:prepend>
                 <q-icon name="email" />
@@ -101,7 +106,7 @@
               square
               outlined
               label="Confirm New Email"
-              v-model="emailNumber.confirmEmail"
+              v-model="emails.confirmEmail"
             >
               <template v-slot:prepend>
                 <q-icon name="email" />
@@ -118,39 +123,59 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
-import { Platform } from 'quasar'
+import { defineComponent, ref, watch, onMounted } from 'vue';
+import { Platform, SessionStorage, Notify } from 'quasar'
+import { useRouter } from 'vue-router';
+import { api } from 'src/boot/axios'
+import { useUserStore } from 'src/stores/user-store';
 
 defineComponent({
   name: 'SettingsPage',
 });
 
-interface Passwords {
-  oldPass: string;
-  newPass: string;
-  confirmPass: string;
-  otpCode: string;
-}
-
-interface EmailNumber {
-  newEmail: string;
-  confirmEmail: string;
-  number: string;
-  confirmCode: string;
-}
-
+const router = useRouter();
+const userStore = useUserStore();
 const tab = ref('password');
 const isPwd = ref(true);
 const password = ref({
-  oldPass: '',
   newPass: '',
   confirmPass: '',
-  otpCode: '',
 });
-const emailNumber = ref({
+const emails = ref({
+  oldemail: '',
   newEmail: '',
   confirmEmail: '',
-  number: '',
   confirmCode: '',
 });
+
+const onSuccess = () => {
+  password.value.newPass = '';
+  password.value.confirmPass = '';
+}
+
+const changePassword = async () => {
+  try {
+    const response = await api.post('/user/change/password', { email: router.currentRoute.value.params.email, password: password.value.newPass }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    })
+
+    if (response.data[0][0].status === 201) {
+      Notify.create({
+        message: response.data[0][0].message,
+        type: 'positive',
+        position: 'top-right',
+        timeout: 2300
+      });
+      password.value.newPass = '';
+      password.value.confirmPass = '';
+    } else {
+      console.error(response);
+    }
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 </script>

@@ -1,13 +1,13 @@
 <template>
   <div class="bg-grey-4 text-dark column q-pa-md q-mt-xl q-gutter-y-md">
-    <q-toolbar>
+    <div class="self-center q-mb-lg">
       <q-toolbar-title>
         <q-avatar>
-          <img src="src/assets/applogo.png" />
+          <img :src="AppLogo" />
         </q-avatar>
         CPC Library
       </q-toolbar-title>
-    </q-toolbar>
+    </div>
     <div
       :class="
         Platform.is.mobile
@@ -47,6 +47,7 @@
 <script setup lang="ts">
 import { defineComponent } from 'vue';
 import { Platform } from 'quasar';
+import AppLogo from 'src/assets/applogo.png'
 
 defineComponent({
   name: 'FooterComponent',

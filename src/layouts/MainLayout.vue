@@ -122,9 +122,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount } from 'vue';
-import { Platform, SessionStorage } from 'quasar';
-import { useRouter } from 'vue-router'
+import { ref, onBeforeMount } from 'vue';
+import { Platform } from 'quasar';
 import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
@@ -132,10 +131,10 @@ import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
 import FooterComponent from 'src/components/Footer/FooterComponent.vue';
 import { backTransition } from 'src/utils/transitions';
+import { SpinnerHourglass } from 'src/utils/loading';
 import { api } from 'src/boot/axios';
 import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
-import { useBooksStore } from 'src/stores/books-store'
 
 interface UserData {
   user_id: number;
@@ -146,10 +145,8 @@ interface UserData {
   img_path: string;
 }
 
-const router = useRouter();
 const userData = ref<UserData>([]);
 const userStore = useUserStore();
-const bookStore = useBooksStore();
 const rightDrawerOpen = ref(false);
 
 const decoded = jwt_decode(userStore.token);
@@ -163,24 +160,24 @@ const getUserData = async () => {
     })
 
     userData.value = response.data[0];
+
+    essentialLinks.value.push(
+    {
+      title: 'Profile',
+      icon: 'fas fa-user',
+      link: `/profile/${userData.value.fullname.replace(/\s+/g, '')}`
+    },
+    {
+      title: 'Settings',
+      icon: 'chat',
+      link: `/settings/${userData.value.email_address}`,
+    },)
+
   } catch (error: any) {
     throw new Error(error)
   }
 }
 
-const getAllBooks = async () => {
-  try {
-    const response = await api.get('/get/all/books/inventory', {
-      headers: {
-        Authorization: `Bearer ${(userStore.token as string)}`
-      }
-    })
-
-    bookStore.initBooks(response.data);
-  } catch (error: any) {
-    throw new Error(error)
-  }
-}
 
 const browseLinks: BrowseLinksProps[] = [
   {
@@ -220,7 +217,7 @@ const browseLinks: BrowseLinksProps[] = [
   },
 ];
 
-const essentialLinks: EssentialLinkProps[] = [
+const essentialLinks = ref<EssentialLinkProps[]>([
   {
     title: 'Home',
     icon: 'fas fa-house',
@@ -232,37 +229,30 @@ const essentialLinks: EssentialLinkProps[] = [
     link: '/userbooks',
   },
   {
-    title: 'Profile',
-    icon: 'fas fa-user',
-    link: 'profile',
-    acc: `${userData.value.fullname}`
-  },
-  {
-    title: 'Settings',
-    icon: 'chat',
-    link: '/settings',
-  },
-  {
     title: 'Logout',
     icon: 'logout',
     link: 'logout',
   },
-];
+]);
 
 
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value;
 }
 
+const setLoadingScreen = () => {
+  SpinnerHourglass(true, 'Redirecting....')
+  setTimeout(() => {
+    SpinnerHourglass(false)
+  }, 1400);
+}
 
 onBeforeMount(() => {
   rightDrawerOpen.value = false;
+  getUserData();
+
+  setLoadingScreen();
 })
 
-onMounted(() => {
-  getUserData();
-  if (bookStore.getAllBooks.length === 0) {
-     getAllBooks();
-  }
-})
+
 </script>

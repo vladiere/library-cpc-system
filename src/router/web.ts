@@ -42,7 +42,21 @@ routes.push(
         path: '/book',
         name: 'books',
         meta: { auth: true },
-        component: () => import('pages/BookInfo/BookInfo.vue'),
+        component: () => import('layouts/BookLayouts.vue'),
+        children: [
+          {
+            path: 'info/:book_id',
+            name: 'book_info',
+            meta: { auth: true },
+            component: () => import('pages/Books/BookInfoPage.vue'),
+          },
+          {
+            path: 'collections',
+            name: 'all_books',
+            meta: { auth: true },
+            component: () => import('pages/Books/AllBooksPage.vue'),
+          },
+        ],
       },
       {
         path: '/category',
@@ -133,24 +147,10 @@ routes.push(
         ],
       },
       {
-        path: '/settings',
+        path: '/settings/:email',
         name: 'settings',
         meta: { auth: true },
         component: () => import('pages/Settings/PageSettings.vue'),
-        children: [
-          {
-            path: '/settings/account',
-            name: 'account_settings',
-            meta: { auth: true },
-            component: () => import('pages/Settings/AccountSettings.vue'),
-          },
-          {
-            path: '/settings/system',
-            name: 'system_settings',
-            meta: { auth: true },
-            component: () => import('pages/Settings/SystemSettings.vue'),
-          },
-        ],
       },
       {
         path: '/recent',

@@ -19,12 +19,10 @@ export interface EssentialLinkProps {
   title: string;
   link?: string;
   icon?: string;
-  acc?: string;
 }
 const props = withDefaults(defineProps<EssentialLinkProps>(), {
   link: '#',
   icon: '',
-  acc: ''
 });
 
 const router = useRouter();
@@ -45,12 +43,9 @@ const gotoRoute = async (link: string) => {
     } catch(error:any) {
       throw new Error(error);
     }
-  } else if (link === 'profile') {
-    router.push({ name: 'UserProfile', params: { account: props.acc } });
   } else {
     router.push(link);
   }
 };
 
-console.log(props.acc)
 </script>
