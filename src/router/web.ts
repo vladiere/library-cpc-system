@@ -45,7 +45,7 @@ routes.push(
         component: () => import('layouts/BookLayouts.vue'),
         children: [
           {
-            path: 'info/:book_id',
+            path: 'info/:book_title',
             name: 'book_info',
             meta: { auth: true },
             component: () => import('pages/Books/BookInfoPage.vue'),
@@ -133,13 +133,7 @@ routes.push(
             component: () => import('components/BorrowsHistory.vue'),
           },
           {
-            path: '/userbooks/mylists/add',
-            meta: { auth: true },
-            name: 'create_list',
-            component: () => import('components/CreateList.vue'),
-          },
-          {
-            path: '/userbooks/mylists/:list_id',
+            path: '/userbooks/mylists/:list_name',
             meta: { auth: true },
             name: 'ListsName',
             component: () => import('components/MyList.vue'),

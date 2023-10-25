@@ -1,72 +1,82 @@
-<style lang="sass" scoped>
-.q-mt-xl
-  margin-top: 8em
-
-.q-mt-lg-i
-  margin-top: 3em
-
-.left-container
-  width: 100%
-  max-width: 380px
-
-  img
-    width: 100%
-    height: 420px
-    border-radius: 5px
-
-.text-underline
-  text-decoration: underline
-</style>
-
 <template>
   <q-page padding class="q-mb-lg">
-    <div class="row q-gutter-x-xl q-mt-xl q-ml-xl">
-      <div class="col column q-gutter-y-md left-container">
-        <img src="https://picsum.photos/1200/900" class="shadow-2"/>
-        <div class="row q-gutter-x-md justify-center">
-          <q-icon name="mdi-bookmark-plus" size="3em" color="blue-9"/>
-          <q-btn label="Reserve" color="blue-9" padding="5px 20px"/>
-          <q-icon name="mdi-plus-box" size="3em" color="blue-9"/>
-        </div>
-      </div>
-      <div class="col column q-gutter-y-md">
-        <span class="text-h4 text-capitalize text-blue-9 text-weight-light">The seven eleven warriors</span>
-        <span class="text-h6 text-capitalize q-mt-lg text-weight-light">
-          by
-          <span class="text-underline">john doe</span>
-        </span>
-        <div class="column q-gutter-y-md q-mt-lg-i text-h6 text-weight-light">
-          <div class="col row q-gutter-x-sm">
-            <span>Edition:</span>
-            <span>the rocks</span>
-          </div>
-          <div class="col row q-gutter-x-sm">
-            <span>Publisher:</span>
-            <span>the rocks</span>
-          </div>
-          <div class="col row q-gutter-x-sm items-center">
-            <span>Copies:</span>
-            <span>the rocks</span>
-            <span class="text-blue-9 text-subtitle1">(Available)</span>
-          </div>
-          <div class="col row q-gutter-x-sm">
-            <span>Value:</span>
-            <span>the rocks</span>
-          </div>
-          <div class="col row q-gutter-x-sm text-h2">
-            <span class="text-blue">Not Available</span>
-          </div>
-        </div>
+    <BookInfoComponent v-bind="bookInfo" />
+    <div class="column q-gutter-y-md bg-blue-2 q-mt-xl rounded-borders">
+      <span class="text-h4 text-weight-light text-blue-9 self-center q-mt-lg">More by this Author</span>
+      <div class="row q-gutter-x-md items-center q-pl-xl">
+        <AuthorBooksComponent v-for="book in authorBooks" :key="book.book_id" v-bind="book" class="cursor-pointer" @click="gotoBookInfo(book.book_id, book.title)"/>
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineComponent, ref, onMounted, onBeforeMount, watch } from 'vue';
 import { Platform } from 'quasar';
-import ThisAuthor from 'components/ThisAuthor.vue';
+import BookInfoComponent, { BookInfoInterface } from 'src/components/Books/BookInfoComponent.vue'
+import { api } from 'src/boot/axios';
+import { useRouter } from 'vue-router';
+import { useUserStore } from 'src/stores/user-store';
+import AuthorBooksComponent, { AuthorBooksInterface } from 'src/components/Author/AuthorBooksComponent.vue'
+import { SpinnerIos } from 'src/utils/loading'
 
-const ratingModel = ref(0);
+defineComponent({
+  name: 'BookInfoPage'
+});
+
+const router = useRouter()
+const bookInfo = ref<BookInfoInterface>([]);
+const authorBooks = ref<AuthorBooksInterface>([]);
+const userStore = useUserStore();
+
+const getBookInfo = async () => {
+  try {
+    const response = await api.post('/get/all/books/inventory', { limit: 1, book_id: router.currentRoute.value.query.book_id }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    });
+    bookInfo.value = response.data[0];
+
+    getAuthorBooks();
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getAuthorBooks = async () => {
+  try {
+    const response = await api.post('/get/books/author', { author_name: bookInfo.value.author_name }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    })
+
+    authorBooks.value = response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const gotoBookInfo = (book_id: number, book_title: string) => {
+  router.push({ name: 'book_info', params: { book_title: book_title.replace(/\s+/g, '+')}, query: { book_id }})
+}
+
+onMounted(() => {
+  getBookInfo();
+});
+
+onBeforeMount(() => {
+  SpinnerIos(true, 'Loading...')
+
+  setTimeout(() => {
+    SpinnerIos(false)
+  }, 1500);
+});
+
+watch(router.currentRoute, (newValue) => {
+  getBookInfo()
+})
 
 </script>

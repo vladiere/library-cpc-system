@@ -248,6 +248,7 @@ const form = ref({
   password: '',
   fullname: '',
   department: '',
+  role: '',
   id_number: null,
 });
 
@@ -291,6 +292,7 @@ const onUploadedImage = (data: any) => {
 
     form.value.fullname = fullname;
     form.value.department = dataArray[0];
+    form.value.role = role.value;
     form.value.id_number = dataArray[dataArray.length - 1]
 
 

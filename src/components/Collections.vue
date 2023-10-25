@@ -1,6 +1,6 @@
 <template>
   <div class="column q-gutter-y-md">
-    <span class="text-caption cursor-pointer"  @click="gotoLink('/userbooks')">
+    <span class="text-caption cursor-pointer q-ml-md" @click="gotoLink('/userbooks')">
       <q-icon name="arrow_back" size="1rem"/>
         My Books
     </span>

@@ -1,3 +1,10 @@
+<style lang="sass" scoped>
+.see-all
+  &:hover
+    color: #1565c0
+    text-decoration: underline
+</style>
+
 <template>
   <q-layout>
     <q-header class="bg-grey-2">
@@ -62,7 +69,7 @@
           >
             <span>My List</span>
             <span
-              class="text-caption see-all"
+              class="text-caption see-all cursor-pointer"
               @click="gotoLink('/userbooks/mylists')"
               >See All <q-icon name="navigate_next" size="1rem"
             /></span>

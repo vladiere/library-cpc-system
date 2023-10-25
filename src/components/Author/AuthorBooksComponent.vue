@@ -5,18 +5,19 @@ $desktop: 992px
 $large: 1200px
 
 .book-container
-  width: 400px
-  height: 38vh
+  width: 240px
+  height: 50vh
   border-radius: 5px
 
   .img-container
     position: relative
+    margin-top: 1em
 
     img
       width: 100%
       position: absolute
       height: 220px
-      max-width: 180px
+      max-width: 190px
       border-radius: 10px
       transition: 0.5s ease-in
 
@@ -30,15 +31,15 @@ $large: 1200px
 </style>
 
 <template>
-  <div :class="Platform.is.mobile ? 'row q-gutter-x-md q-pa-sm bg-blue-1 book-container q-mb-md' : 'row q-gutter-x-md q-pa-md book-container q-mb-md bg-blue-1'">
+  <div class="column q-mb-xl book-container">
     <div class="col img-container">
-      <img :src="checkIfImage(img_path)"/>
+      <img :src="checkIfImage(img_path)" />
     </div>
-    <div class="col column q-gutter-y-md text-capitalize">
-      <q-item-label lines="8" class="text-h6 text-blue-9">
+    <div class="q-pt-md column q-gutter-sm text-capitalize">
+      <q-item-label lines="2" class="text-h6 text-blue-9 text-weight-light">
         {{ title }}
       </q-item-label>
-      <div class="text-subtitle2">
+      <div class="text-subtitle1 text-grey-7">
         {{ author_name }}
       </div>
     </div>
@@ -46,33 +47,18 @@ $large: 1200px
 </template>
 
 <script setup lang="ts">
-import { Platform } from 'quasar'
 
-export interface AllBooksListInterface {
+export interface AuthorBooksInterface {
   author_name: string;
-  book_id: number;
-  book_status: string;
-  borrowed_copies: number;
-  copies: number;
-  cost_price: number;
-  edition: string;
-  publisher_name: string;
   title: string;
   img_path: string;
 }
 
-withDefaults(defineProps<AllBooksListInterface>(), {
-    author_name: '',
-    book_id: null,
-    book_status: '',
-    borrowed_copies: null,
-    copies: null,
-    cost_price: null,
-    edition: '',
-    publisher_name: '',
-    title: '',
-    img_path: ''
-});
+withDefaults(defineProps<AuthorBooksInterface>(), {
+  author_name: '',
+  title: '',
+  img_path: ''
+})
 
 const checkIfImage = (img: string | null) => {
   if (img) {
@@ -81,5 +67,4 @@ const checkIfImage = (img: string | null) => {
     return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
   }
 }
-
 </script>

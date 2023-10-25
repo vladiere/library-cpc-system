@@ -36,6 +36,11 @@
             />
           </q-list>
         </q-btn-dropdown>
+        <q-btn-dropdown color="white" dropdown-icon="mdi-bell-outline" flat dense rounded no-icon-animation>
+          <!-- <q-virtual-scroll :items="notifications" v-slot="{ item, index }" style="max-height: 300px"> -->
+          <!---->
+          <!-- </q-virtual-scroll> -->
+        </q-btn-dropdown>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
       <q-separator />
