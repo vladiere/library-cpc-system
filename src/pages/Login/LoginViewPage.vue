@@ -235,6 +235,7 @@ import { Platform, Notify } from 'quasar';
 import { useRouter } from 'vue-router';
 import { notApi } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
+import { socket } from 'src/utils/socket';
 
 defineComponent({
   name: 'LoginViewPage',
@@ -251,7 +252,7 @@ const form = ref({
 const submitForm = async () => {
   try {
     const response = await notApi.post('/user/login', { form: form.value });
-
+    socket.emit("user_connected", form.value.email);
     userStore.initAuthorize(response.data);
     router.push('/home');
   } catch (error: any) {

@@ -14,6 +14,7 @@
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
+import { socket } from 'src/utils/socket';
 
 export interface EssentialLinkProps {
   title: string;
@@ -37,6 +38,7 @@ const gotoRoute = async (link: string) => {
         }
       });
 
+      socket.emit("user_logout", userStore.refresh)
       userStore.logoutUser();
 
       router.push('/');

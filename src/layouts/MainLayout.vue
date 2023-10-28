@@ -38,8 +38,10 @@
         </q-btn-dropdown>
         <q-btn-dropdown color="white" dropdown-icon="mdi-bell-outline" flat dense rounded no-icon-animation>
           <!-- <q-virtual-scroll :items="notifications" v-slot="{ item, index }" style="max-height: 300px"> -->
-          <!---->
           <!-- </q-virtual-scroll> -->
+            <div v-if="notifications.length === 0" class="column items-center q-pa-md text-grey-7">
+              Empty notifications
+            </div>
         </q-btn-dropdown>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
@@ -153,6 +155,7 @@ interface UserData {
 const userData = ref<UserData>([]);
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
+const notifications = ref([])
 
 const decoded = jwt_decode(userStore.token);
 

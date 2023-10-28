@@ -29,7 +29,7 @@
               Add to collections
             </q-tooltip>
           </q-icon>
-          <q-btn :disable="borrowed_copies === 0" :label="borrowed_copies === 0 ? 'Not Available' : 'Reserve'" color="blue-9" padding="5px 20px" @click="handleClickActions('reserve', book_id)"/>
+          <q-btn :label="borrowed_copies === 0 ? 'Reserve' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)"/>
           <q-icon name="mdi-plus-box" size="3em" color="blue-9" class="cursor-pointer" @click="handleClickActions('add-list', book_id)">
             <q-tooltip :delay="300" class="bg-grey-10 text-grey-2">
               Add to list
@@ -54,7 +54,7 @@
             icon-selected="star"
             no-dimming
           />
-          <span class="text-h6">4.5</span>
+          <span class="text-h6 text-blue-9">4.5</span>
         </div>
         <div class="column q-gutter-y-md q-mt-lg-i text-h6 text-weight-light">
           <div class="col row q-gutter-x-sm">
@@ -76,6 +76,19 @@
         </div>
       </div>
     </div>
+    <q-dialog v-model="dialog.show" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+            <span class="q-ml-sm">{{ dialog.message }}<span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="Confirm" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 </template>
 
 <script setup lang="ts">
@@ -83,6 +96,8 @@ import { ref } from 'vue'
 import { useUserStore } from 'src/stores/user-store';
 import jwt_decode from 'jwt-decode';
 import { api } from 'src/boot/axios';
+import { socket } from 'src/utils/socket'
+
 
 export interface BookInfoInterface {
   book_id: number;
@@ -113,16 +128,27 @@ withDefaults(defineProps<BookInfoInterface>(), {
 const quality = ref(0);
 const userStore = useUserStore();
 const decoded = jwt_decode(userStore.token);
+const dialog = {
+  show: false,
+  message: '',
+}
 
-const handleClickActions = async (actions: string, book_id: number) => {
-  if (actions === 'reserve') {
-    const result = await api.post('/transaction/insert', { book_id: book_id, user_id: decoded.user_id, transaction_type: 'Reserved' }, {
+const handleClickActions = async (actions: string, book_id: number, copies?: number) => {
+  if (actions === 'action-btn') {
+    const transaction_type = copies.value === 0 ? 'Reserved' : 'Borrowed';
+    const response = await api.post('/transaction/insert', { book_id: book_id, user_id: decoded.user_id, transaction_type: transaction_type }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
       }
     });
+    socket.emit("notifications", decoded.user_id);
+    console.log(response);
+    if (response.data.status === 201) {
+      dialog.show = true;
+      dialog.value.message = response.data.message + '\n' + 'Do you want to check you books of borrowed history?';
+    } else if (response.data.status === 409) {
 
-    console.log(result);
+    }
   }
 }
 
