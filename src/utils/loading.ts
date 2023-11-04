@@ -35,17 +35,16 @@ export const SpinnerHourglass = (loading_state: boolean, message?: string) => {
   }
 };
 
-export const SpinnerIos = (loading_state: boolean, message?: string) => {
-  if (loading_state) {
-    Loading.show({
-      message: message,
-      spinner: QSpinnerIos,
-      spinnerColor: 'yellow',
-      spinnerSize: 120,
-      backgroundColor: 'grey-10',
-      messageColor: 'grey-11',
-    });
-  } else {
+export const SpinnerIos = (time_out: number, message?: string) => {
+  Loading.show({
+    message: message,
+    spinner: QSpinnerIos,
+    spinnerColor: 'yellow',
+    spinnerSize: 120,
+    backgroundColor: 'grey-10',
+    messageColor: 'grey-11',
+  });
+  setTimeout(() => {
     Loading.hide();
-  }
+  }, time_out);
 };

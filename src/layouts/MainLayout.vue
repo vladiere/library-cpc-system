@@ -36,13 +36,32 @@
             />
           </q-list>
         </q-btn-dropdown>
-        <q-btn-dropdown color="white" dropdown-icon="mdi-bell-outline" flat dense rounded no-icon-animation>
-          <!-- <q-virtual-scroll :items="notifications" v-slot="{ item, index }" style="max-height: 300px"> -->
-          <!-- </q-virtual-scroll> -->
+        <div class="row relative-position items-center q-gutter-x-xs cursor-pointer">
+          <q-badge v-if="unReadCounts > 0" color="negative" floating>{{ unReadCounts }}</q-badge>
+          <q-btn-dropdown
+            flat
+            rounded
+            dense
+            :dropdown-icon="unReadCounts > 0 ? 'mdi-bell-ring' : 'mdi-bell-outline'"
+            :color="unReadCounts > 0 ? 'warning' : undefined"
+            no-icon-animation
+          >
+            <q-virtual-scroll
+              style="max-height: 300px; overflow-x: hidden; max-width: 450px"
+              :items="notifications"
+              separator
+              v-slot="{ item, index }"
+            >
+              <ListNotifications :key="index" v-bind="item" />
+            </q-virtual-scroll>
             <div v-if="notifications.length === 0" class="column items-center q-pa-md text-grey-7">
               Empty notifications
             </div>
-        </q-btn-dropdown>
+            <div v-else class="bg-grey-3 column items-center q-pa-sm cursor-pointer" @click="handleNotifications">
+              Read All
+            </div>
+          </q-btn-dropdown>
+        </div>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
       <q-separator />
@@ -105,11 +124,7 @@
     </q-drawer>
 
     <q-page-container class="bg-grey-2">
-      <router-view v-slot="{ Component }">
-        <transition apper v-bind="backTransition">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <router-view />
       <FooterComponent />
       <!-- place QPageScroller at end of page -->
       <q-page-scroller
@@ -129,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onBeforeUnmount, onMounted } from 'vue';
 import { Platform } from 'quasar';
 import EssentialLink, {
   EssentialLinkProps,
@@ -137,11 +152,11 @@ import EssentialLink, {
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
 import FooterComponent from 'src/components/Footer/FooterComponent.vue';
-import { backTransition } from 'src/utils/transitions';
-import { SpinnerHourglass } from 'src/utils/loading';
+import ListNotifications, { NotificationsProps } from 'src/components/Notifications/ListNotifications.vue'
 import { api } from 'src/boot/axios';
 import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
+import { socket } from 'src/utils/socket';
 
 interface UserData {
   user_id: number;
@@ -155,8 +170,8 @@ interface UserData {
 const userData = ref<UserData>([]);
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
-const notifications = ref([])
-
+const notifications = ref<NotificationsProps>([]);
+const unReadCounts = ref(0);
 const decoded = jwt_decode(userStore.token);
 
 const getUserData = async () => {
@@ -247,20 +262,51 @@ const essentialLinks = ref<EssentialLinkProps[]>([
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value;
 }
+const getNotifications = async () => {
+  try {
+    const response = await api.post("/notifications/user", { user_id: decoded.user_id }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    });
+    notifications.value = [];
+    unReadCounts.value = response.data.length;
+    notifications.value = response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-const setLoadingScreen = () => {
-  SpinnerHourglass(true, 'Redirecting....')
-  setTimeout(() => {
-    SpinnerHourglass(false)
-  }, 1400);
+const handleNotifications = async () => {
+  try {
+    await api.post("/notifications/clear", { user_id: decoded.user_id, notification_id: 0 }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    });
+    notifications.value.filter((item: any) => item.status === 'read')
+    unReadCounts.value = 0;
+  } catch (error) {
+    throw error;
+  }
 }
 
 onBeforeMount(() => {
   rightDrawerOpen.value = false;
-  getUserData();
-
-  setLoadingScreen();
 })
 
+onMounted(() => {
+  getUserData();
+  getNotifications();
+
+  socket.on("notifications", (data) => {
+    getNotifications();
+  })
+})
+
+onBeforeUnmount(() => {
+  userData.value = [];
+  notifications.value = [];
+})
 
 </script>

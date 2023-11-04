@@ -33,7 +33,7 @@ routes.push(
     meta: { auth: true },
     children: [
       {
-        path: '',
+        path: '/home',
         name: 'home',
         meta: { auth: true },
         component: () => import('pages/Home/HomeViewPage.vue'),

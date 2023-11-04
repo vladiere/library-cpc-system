@@ -229,7 +229,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import Logo from '/src/assets/librarylogo.png';
 import { Platform, Notify } from 'quasar';
 import { useRouter } from 'vue-router';
@@ -272,4 +272,8 @@ const submitForm = async () => {
 const gotoLink = (link: string) => {
   router.push(link);
 };
+
+onMounted(() => {
+  socket.emit("new_visit");
+})
 </script>

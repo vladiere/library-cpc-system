@@ -1,4 +1,4 @@
-<style lang="sass" scoped>
+<style lang="sass">
 .my-card
   width: 100%
   max-width: 200px
@@ -19,6 +19,7 @@
 
   img
     height: 200px
+    border-radius: 15px
 </style>
 
 <template>
@@ -36,6 +37,7 @@
 <script setup lang="ts">
   import { defineComponent } from 'vue';
   import { Platform } from 'quasar'
+  import DefaultImg from 'src/assets/no-image-available.jpeg'
 
   defineComponent({
     name: 'BooksCard'
@@ -71,7 +73,7 @@ const checkIfImage = (img: string | null) => {
   if (img) {
     return `http://localhost:3000/images/${img}`
   } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
+    return DefaultImg
   }
 }
 </script>

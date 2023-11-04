@@ -67,14 +67,6 @@ onMounted(() => {
   getBookInfo();
 });
 
-onBeforeMount(() => {
-  SpinnerIos(true, 'Loading...')
-
-  setTimeout(() => {
-    SpinnerIos(false)
-  }, 1500);
-});
-
 watch(router.currentRoute, (newValue) => {
   getBookInfo()
 })

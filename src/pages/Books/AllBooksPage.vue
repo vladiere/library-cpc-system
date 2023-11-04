@@ -25,14 +25,22 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, ref, computed } from 'vue'
+import { defineComponent, defineAsyncComponent, onMounted, onUnmounted, ref, computed } from 'vue'
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
-import AllBooksComponent, { AllBooksListInterface } from 'src/components/Books/AllBooksComponent.vue'
+import { AllBooksListInterface } from 'components/Books/AllBooksComponent.vue'
 import { useRouter } from 'vue-router';
 
 defineComponent({
   name: 'AllBooksPage'
+});
+
+const AllBooksComponent = defineAsyncComponent({
+  loader: () => import('components/Books/AllBooksComponent.vue'),
+  loadingComponent: () => import('components/Loadings/AllBooksSkeleton.vue'),
+  delay: 2000,
+  timeout: 2000,
+  suspensible: true,
 });
 
 const userStore = useUserStore();
@@ -71,5 +79,9 @@ const gotoBookInfo = (book_id: number, book_title: string) => {
 
 onMounted(() => {
   getAllBooksList();
+});
+
+onUnmounted(() => {
+  booksData.value = [];
 })
 </script>

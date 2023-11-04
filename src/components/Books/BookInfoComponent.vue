@@ -1,5 +1,5 @@
 <style lang="sass" scoped>
-.q-mt-xl
+.q-mtt-xl
   margin-top: 6em
 
 .q-mt-lg-i
@@ -19,9 +19,15 @@
 </style>
 
 <template>
-  <div class="row q-gutter-x-xl q-mt-xl q-ml-xl">
+  <div class="row q-gutter-x-xl q-mtt-xl q-ml-xl">
       <div class="col column q-gutter-y-md left-container">
         <img :src="checkIfImage(img_path)" class="shadow-2"/>
+
+        <q-btn label="reserve" color="primary" :disable="borrowed_copies === 0">
+          <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">
+            Reserve this book
+          </q-tooltip>
+        </q-btn>
 
         <div class="row q-gutter-x-md justify-center">
           <q-icon name="mdi-bookmark-plus" size="3em" color="blue-9" class="cursor-pointer" @click="handleClickActions('add-collections', book_id)">
@@ -29,13 +35,14 @@
               Add to collections
             </q-tooltip>
           </q-icon>
-          <q-btn :label="borrowed_copies === 0 ? 'Reserve' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)"/>
+          <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)"/>
           <q-icon name="mdi-plus-box" size="3em" color="blue-9" class="cursor-pointer" @click="handleClickActions('add-list', book_id)">
             <q-tooltip :delay="300" class="bg-grey-10 text-grey-2">
               Add to list
             </q-tooltip>
           </q-icon>
         </div>
+
       </div>
       <div class="col column q-gutter-y-md">
         <span class="text-h4 text-capitalize text-blue-9 text-weight-light">{{ title }}</span>
@@ -68,10 +75,10 @@
           <div class="col row q-gutter-x-sm items-center">
             <span>Copies:</span>
             <span>{{ borrowed_copies}}</span>
-            <span class="text-blue-9 text-subtitle1">(Available)</span>
+            <span class="text-blue-9 text-subtitle1">{{ borrowed_copies !== 0 ? 'Available' : 'No Copies available'}}</span>
           </div>
-          <div v-if="borrowed_copies === 0" class="col row q-gutter-x-sm text-h2">
-            <span class="text-blue">Not Available</span>
+          <div v-if="borrowed_copies === 0" class="col row q-gutter-x-sm text-h3 text-weight-light">
+            <span class="text-blue">No more copies Available</span>
           </div>
         </div>
       </div>
@@ -80,12 +87,12 @@
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-            <span class="q-ml-sm">{{ dialog.message }}<span>
+            <span class="q-ml-sm">{{ dialog.message }}</span>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Confirm" color="primary" v-close-popup />
+          <q-btn flat label="Confirm" color="primary" @click="handleBtnActions('confirm')" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -97,6 +104,8 @@ import { useUserStore } from 'src/stores/user-store';
 import jwt_decode from 'jwt-decode';
 import { api } from 'src/boot/axios';
 import { socket } from 'src/utils/socket'
+import { Notify } from 'quasar'
+import { useRouter } from 'vue-router'
 
 
 export interface BookInfoInterface {
@@ -125,30 +134,42 @@ withDefaults(defineProps<BookInfoInterface>(), {
   img_path: '',
 });
 
+const router = useRouter()
 const quality = ref(0);
 const userStore = useUserStore();
 const decoded = jwt_decode(userStore.token);
-const dialog = {
+const dialog = ref({
   show: false,
   message: '',
-}
+})
 
 const handleClickActions = async (actions: string, book_id: number, copies?: number) => {
   if (actions === 'action-btn') {
-    const transaction_type = copies.value === 0 ? 'Reserved' : 'Borrowed';
+    const transaction_type = copies === 0 ? 'Held' : 'Borrowed';
     const response = await api.post('/transaction/insert', { book_id: book_id, user_id: decoded.user_id, transaction_type: transaction_type }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
       }
     });
+    console.log(decoded)
     socket.emit("notifications", decoded.user_id);
-    console.log(response);
     if (response.data.status === 201) {
-      dialog.show = true;
-      dialog.value.message = response.data.message + '\n' + 'Do you want to check you books of borrowed history?';
+      dialog.value.show = true;
+      dialog.value.message = response.data.message + ' Do you want to check your books of borrowed history?';
     } else if (response.data.status === 409) {
-
+      Notify.create({
+        message: response.data.message + ' Check your borrowed book history',
+        type: 'warning',
+        timeout: 2300,
+        position: 'top-right'
+      })
     }
+  }
+};
+
+const handleBtnActions = (btn_action?: string) => {
+  if ( btn_action === 'confirm') {
+    router.push('/userbooks')
   }
 }
 
