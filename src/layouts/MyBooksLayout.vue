@@ -1,99 +1,44 @@
 <style lang="sass" scoped>
-.see-all
+.chips-menu
+  padding: 5px 10px
+  border-radius: 10px
+  cursor: pointer
+  transition: 0.5s ease-in
+
   &:hover
-    color: #1565c0
-    text-decoration: underline
+    background-color: #1e88e5 !important
 </style>
 
 <template>
   <q-layout>
-    <q-header class="bg-grey-2">
-      <q-toolbar>
-        <q-btn
-          dense
-          flat
-          round
-          icon="sort"
-          color="grey-10"
-          @click="toggleLeftDrawer"
-        />
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      show-if-above
-      v-model="leftDrawerOpen"
-      side="left"
-      class="bg-grey-2"
-      bordered
-    >
-      <!-- drawer content -->
-      <div class="column q-mt-lg">
-        <div class="column text-subtitle1">
-          <div
-            class="column items-center content-center text-subtitle2 text-grey-9 q-py-sm"
-          >
-            Descartin, Lance Phillip B.
-            <span class="text-caption">ID: 20200800</span>
-          </div>
-          <q-separator color="grey-9" class="q-my-lg" />
-          <q-list dense padding>
-            <q-item
-              clickable
-              v-ripple
-              @click="gotoLink('/userbooks/collections')"
-            >
-              <q-item-section class="row justify-between">
-                My Collections
-              </q-item-section>
-              <q-item-section avatar>
-                <q-icon name="arrow_forward" />
-              </q-item-section>
-            </q-item>
-            <q-item
-              clickable
-              v-ripple
-              @click="gotoLink('/userbooks/borrowshistory')"
-            >
-              <q-item-section class="row justify-between">
-                Borrows History
-              </q-item-section>
-              <q-item-section avatar>
-                <q-icon name="arrow_forward" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <q-separator color="grey-9" class="q-my-lg" />
-          <div
-            class="row q-px-sm content-center justify-between bg-grey-4 text-subtitle2 text-grey-9"
-          >
-            <span>My List</span>
-            <span
-              class="text-caption see-all cursor-pointer"
-              @click="gotoLink('/userbooks/mylists')"
-              >See All <q-icon name="navigate_next" size="1rem"
-            /></span>
-          </div>
-          <div v-if="lists.length === 0" class="column content-center q-mt-sm">
-            <span class="text-subtitle1 text-grey-8">Empty List</span>
-          </div>
-          <div v-else class="column">
-            <q-list dense padding separator class="q-x-sm">
-              <q-item
-                v-for="list in lists"
-                :key="list.id"
-                clickable
-                :to="list.link"
-              >
-                <q-item-section>
-                  {{ list.title }}
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
+    <q-header class="bg-grey-2 column justify-center">
+      <div v-if="!Platform.is.mobile" class="q-mt-md row justify-center q-gutter-x-md relative-position">
+       <div :class="ifRoute === 'mybooks' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks')">
+          My Books
+        </div>
+       <div :class="ifRoute === 'user_collections' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/collections')">
+          My Collections
+        </div>
+        <div :class="ifRoute === 'user_borrow_history' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/borrowshistory')">
+          Borrows History
+        </div>
+        <div :class="ifRoute === 'mylists' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/mylists')">
+          My Lists
+        </div>
+        <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
+          Personalize Recommendation
         </div>
       </div>
-    </q-drawer>
+      <q-btn v-else class="self-start" flat no-caps icon="mdi-tune" label="Filters" color="grey-10" @click="showDialog = !showDialog"/>
+     </q-header>
+
+     <q-dialog
+        v-model="showDialog"
+        full-height
+        full-width
+      >
+      Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+     </q-dialog>
 
     <q-page-container>
       <router-view />
@@ -102,14 +47,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'MyBooksLayout',
 });
 
-const leftDrawerOpen = ref(false);
+const ifRoute = ref('');
+const showDialog = ref(false);
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
@@ -126,8 +73,11 @@ const gotoLink = (link: string) => {
   router.push(link);
 };
 
-const lists = ref<List[]>([
-  { id: 1, title: 'code complete', link: '/userbooks/mylists/lists' },
-  { id: 2, title: 'clean code', link: '/userbooks/mylists/lists' },
-]);
+onMounted(() => {
+  ifRoute.value = router.currentRoute.value.name
+})
+
+watch(() => router.currentRoute.value.name, (newRouteName, oldRouteName) => {
+  ifRoute.value = newRouteName
+})
 </script>

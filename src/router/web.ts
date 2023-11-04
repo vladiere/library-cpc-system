@@ -77,12 +77,6 @@ routes.push(
         component: () => import('pages/UserProfile/UserProfile.vue'),
       },
       {
-        path: '/recommendation',
-        name: 'recommendation',
-        meta: { auth: true },
-        component: () => import('pages/Recommendations/Recommendations.vue'),
-      },
-      {
         path: '/contribute',
         name: 'contribute',
         meta: { auth: true },
@@ -110,33 +104,40 @@ routes.push(
         children: [
           {
             path: '',
-            name: 'DisplayUserbooks',
+            name: 'mybooks',
             meta: { auth: true },
-            component: () => import('components/MyBooks.vue'),
+            component: () => import('pages/MyBooks/MyBooksPage.vue'),
           },
           {
-            path: '/userbooks/mylists',
+            path: 'mylists',
             meta: { auth: true },
             name: 'mylists',
             component: () => import('components/SeeAllLists.vue'),
           },
           {
-            path: '/userbooks/collections',
+            path: 'collections',
             meta: { auth: true },
             name: 'user_collections',
             component: () => import('components/Collections.vue'),
           },
           {
-            path: '/userbooks/borrowshistory',
+            path: 'borrowshistory',
             name: 'user_borrow_history',
             meta: { auth: true },
             component: () => import('components/BorrowsHistory.vue'),
           },
           {
-            path: '/userbooks/mylists/:list_name',
+            path: 'mylists/:list_name',
             meta: { auth: true },
             name: 'ListsName',
             component: () => import('components/MyList.vue'),
+          },
+          {
+            path: 'recommendation',
+            name: 'recommendation',
+            meta: { auth: true },
+            component: () =>
+              import('pages/Recommendations/Recommendations.vue'),
           },
         ],
       },

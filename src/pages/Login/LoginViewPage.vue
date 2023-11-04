@@ -23,7 +23,7 @@
 </style>
 
 <template>
-  <q-page>
+  <q-page class="bg-grey-2">
     <div
       :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
       :style="

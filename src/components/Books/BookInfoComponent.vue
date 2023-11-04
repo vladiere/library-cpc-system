@@ -151,7 +151,6 @@ const handleClickActions = async (actions: string, book_id: number, copies?: num
         Authorization: `Bearer ${userStore.token}`
       }
     });
-    console.log(decoded)
     socket.emit("notifications", decoded.user_id);
     if (response.data.status === 201) {
       dialog.value.show = true;

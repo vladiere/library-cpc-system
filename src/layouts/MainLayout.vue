@@ -36,7 +36,7 @@
             />
           </q-list>
         </q-btn-dropdown>
-        <div class="row relative-position items-center q-gutter-x-xs cursor-pointer">
+        <div class="relative-position ">
           <q-badge v-if="unReadCounts > 0" color="negative" floating>{{ unReadCounts }}</q-badge>
           <q-btn-dropdown
             flat
@@ -56,9 +56,6 @@
             </q-virtual-scroll>
             <div v-if="notifications.length === 0" class="column items-center q-pa-md text-grey-7">
               Empty notifications
-            </div>
-            <div v-else class="bg-grey-3 column items-center q-pa-sm cursor-pointer" @click="handleNotifications">
-              Read All
             </div>
           </q-btn-dropdown>
         </div>
@@ -217,11 +214,6 @@ const browseLinks: BrowseLinksProps[] = [
     title: 'Newly Added',
     icon: 'fas fa-burst',
     link: '/recent',
-  },
-  {
-    title: 'Recommendations',
-    icon: 'fas fa-lightbulb',
-    link: '/recommendation',
   },
   {
     title: 'Advance Search',
