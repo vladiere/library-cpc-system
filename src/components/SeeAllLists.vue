@@ -1,14 +1,5 @@
 <template>
   <div class="column">
-    <div class="row q-gutter-x-sm q-ml-sm">
-      <span
-        class="text-caption cursor-pointer"
-        @click="gotoLink('/userbooks')"
-      >
-        <q-icon name="arrow_back" size="1rem" />
-        My Books
-      </span>
-    </div>
     <div class="fit column q-gutter-y-md q-mt-md">
       <div class="row">
         <q-btn
@@ -74,7 +65,7 @@ interface List {
 }
 
 const router = useRouter();
-const prompt = ref(false)
+const prompt = ref(false);
 const newList = ref('');
 
 const lists = ref<List>([]);

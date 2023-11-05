@@ -1,17 +1,18 @@
 <template>
   <q-page padding>
-    <PendingBooksComponent />
+    <BorrowsHistoryComponent />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { defineComponent, defineAsyncComponent } from 'vue'
+
 defineComponent({
-   name: 'MyBooksPage'
+   name: 'HistoryBooksPage'
 });
 
-const PendingBooksComponent = defineAsyncComponent({
-  loader: () => import('components/MyBooks/PendingBooksComponent.vue'),
+const BorrowsHistoryComponent = defineAsyncComponent({
+  loader: () => import('components/MyBooks/BorrowsHistoryComponent.vue'),
   loadingComponent: () => import('components/Loaders/BooksCardSkeleton.vue'),
   suspensible: false
 });

@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div v-if="myBooks.length === 0" class="q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light">
+    <div v-if="myBooks.length === 0" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
       No recent pending status
     </div>
     <div class="row q-gutter-md">

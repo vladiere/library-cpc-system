@@ -47,7 +47,7 @@
             no-icon-animation
           >
             <q-virtual-scroll
-              style="max-height: 300px; overflow-x: hidden; max-width: 450px"
+              style="max-height: 300px; overflow-x: hidden; max-width: 450px; padding-bottom: 32px"
               :items="notifications"
               separator
               v-slot="{ item, index }"
@@ -56,6 +56,9 @@
             </q-virtual-scroll>
             <div v-if="notifications.length === 0" class="column items-center q-pa-md text-grey-7">
               Empty notifications
+            </div>
+            <div v-if="notifications.length > 0" class="column absolute-bottom">
+              <q-btn flat dense no-caps label="Read All" class="self-center" @click="clearMyNotifications"/>
             </div>
           </q-btn-dropdown>
         </div>
@@ -262,21 +265,21 @@ const getNotifications = async () => {
       }
     });
     notifications.value = [];
-    unReadCounts.value = response.data.length;
     notifications.value = response.data;
+    unReadCounts.value = notifications.value.filter((item: any) => item.status === 'unread').length;
   } catch (error) {
     throw error;
   }
 }
 
-const handleNotifications = async () => {
+const clearMyNotifications = async () => {
   try {
     await api.post("/notifications/clear", { user_id: decoded.user_id, notification_id: 0 }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
       }
     });
-    notifications.value.filter((item: any) => item.status === 'read')
+    notifications.value.filter((item: any) => item.status = 'read')
     unReadCounts.value = 0;
   } catch (error) {
     throw error;

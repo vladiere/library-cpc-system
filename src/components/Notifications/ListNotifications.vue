@@ -1,7 +1,7 @@
 <template>
   <q-list class="text-capitalize">
     <q-item clickable v-ripple :class="status === 'unread' ? 'text-bold' : ''" class="column">
-      <q-item-section side top :class="status === 'unread' ? 'text-grey-10' : ''">
+      <q-item-section side top :class="status === 'unread' ? 'text-grey-10' : 'text-bold'">
         <q-item-label >{{ notification_date }}</q-item-label>
       </q-item-section>
       <q-item-section>

@@ -20,6 +20,7 @@
         </q-tooltip>
       </q-img>
     </div>
+
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import EmptyBox from 'assets/empty-folder.png'
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
 import jwt_decode from 'jwt-decode';
+import { Platform } from 'quasar';
 
 const userStore = useUserStore();
 const myBooks = ref([]);

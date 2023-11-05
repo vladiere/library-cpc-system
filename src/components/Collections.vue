@@ -1,9 +1,5 @@
 <template>
-  <div class="column q-gutter-y-md">
-    <span class="text-caption cursor-pointer q-ml-md" @click="gotoLink('/userbooks')">
-      <q-icon name="arrow_back" size="1rem"/>
-        My Books
-    </span>
+  <div class="column q-gutter-y-md q-mt-xl">
     <div v-if="bookCollections.length === 0" class="fit column items-center content-center q-pb-md" >
       <q-img :src="ManNothing" style="width: 10rem;"/>
         <span class="text-h6 text-grey-9">You do not have any Book Collections here</span>

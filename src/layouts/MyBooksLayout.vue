@@ -34,10 +34,25 @@
 
      <q-dialog
         v-model="showDialog"
-        full-height
         full-width
       >
-      Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+      <div class="q-mt-md column justify-center q-gutter-y-sm relative-position">
+       <div :class="ifRoute === 'mybooks' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks')">
+          My Books
+        </div>
+       <div :class="ifRoute === 'user_collections' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/collections')">
+          My Collections
+        </div>
+        <div :class="ifRoute === 'user_borrow_history' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/borrowshistory')">
+          Borrows History
+        </div>
+        <div :class="ifRoute === 'mylists' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/mylists')">
+          My Lists
+        </div>
+        <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
+          Personalize Recommendation
+        </div>
+      </div>
      </q-dialog>
 
     <q-page-container>

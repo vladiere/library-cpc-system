@@ -112,7 +112,7 @@ routes.push(
             path: 'mylists',
             meta: { auth: true },
             name: 'mylists',
-            component: () => import('components/SeeAllLists.vue'),
+            component: () => import('pages/MyLists/MyListsPage.vue'),
           },
           {
             path: 'collections',
@@ -124,13 +124,7 @@ routes.push(
             path: 'borrowshistory',
             name: 'user_borrow_history',
             meta: { auth: true },
-            component: () => import('components/BorrowsHistory.vue'),
-          },
-          {
-            path: 'mylists/:list_name',
-            meta: { auth: true },
-            name: 'ListsName',
-            component: () => import('components/MyList.vue'),
+            component: () => import('pages/HistoryBooks/HistoryBooksPage.vue'),
           },
           {
             path: 'recommendation',
