@@ -11,9 +11,5 @@ defineComponent({
    name: 'HistoryBooksPage'
 });
 
-const BorrowsHistoryComponent = defineAsyncComponent({
-  loader: () => import('components/MyBooks/BorrowsHistoryComponent.vue'),
-  loadingComponent: () => import('components/Loaders/BooksCardSkeleton.vue'),
-  suspensible: false
-});
+const BorrowsHistoryComponent = defineAsyncComponent(() => import('components/MyBooks/BorrowsHistoryComponent.vue'))
 </script>

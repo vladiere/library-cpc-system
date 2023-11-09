@@ -19,43 +19,22 @@
 </style>
 
 <template>
-  <div class="row q-gutter-x-xl q-mtt-xl q-ml-xl">
-      <div class="col column q-gutter-y-md left-container">
+  <div :class="!Platform.is.mobile ? 'row q-gutter-x-xl q-mtt-xl q-ml-xl' : 'column q-gutter-y-sm items-center q-mt-lg'">
+      <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md left-container' : ''">
         <img :src="checkIfImage(img_path)" class="shadow-2"/>
-
-        <q-btn label="reserve" color="primary" :disable="borrowed_copies === 0">
-          <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">
-            Reserve this book
-          </q-tooltip>
-        </q-btn>
-
-        <div class="row q-gutter-x-md justify-center">
-          <q-icon name="mdi-bookmark-plus" size="3em" color="blue-9" class="cursor-pointer" @click="handleClickActions('add-collections', book_id)">
-            <q-tooltip :delay="300" class="bg-grey-10 text-grey-2">
-              Add to collections
-            </q-tooltip>
-          </q-icon>
-          <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)"/>
-          <q-icon name="mdi-plus-box" size="3em" color="blue-9" class="cursor-pointer" @click="handleClickActions('add-list', book_id)">
-            <q-tooltip :delay="300" class="bg-grey-10 text-grey-2">
-              Add to list
-            </q-tooltip>
-          </q-icon>
-        </div>
-
       </div>
-      <div class="col column q-gutter-y-md">
-        <span class="text-h4 text-capitalize text-blue-9 text-weight-light">{{ title }}</span>
-        <span class="text-h6 text-capitalize q-mt-lg text-weight-light">
+      <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md' : 'col column q-gutter-y-sm'">
+        <span :class="!Platform.is.mobile ? 'text-h4 text-capitalize text-blue-9 text-weight-light' : 'text-h6 text-capitalize text-blue-9 text-weight-light'">{{ title }}</span>
+        <span :class="!Platform.is.mobile ? 'text-h6 text-capitalize q-mt-lg text-weight-light' : 'text-subtitle1 text-weight-light text-capitalize'">
           by
           <span class="text-underline">{{ author_name }}</span>
         </span>
-        <div class="row q-gutter-x-md">
+        <div :class="!Platform.is.mobile ? 'row q-gutter-x-md' : 'row q-gutter-x-sm'">
           <q-rating
             name="quality"
             v-model="quality"
             max="5"
-            size="2em"
+            :size="!Platform.is.mobile ? '2em' : '20px'"
             color="blue-9"
             icon="star_border"
             icon-selected="star"
@@ -63,7 +42,7 @@
           />
           <span class="text-h6 text-blue-9">4.5</span>
         </div>
-        <div class="column q-gutter-y-md q-mt-lg-i text-h6 text-weight-light">
+        <div :class="!Platform.is.mobile ? 'column q-gutter-y-md q-mt-lg-i text-h6 text-weight-light' : 'column q-gutter-y-sm text-subtitle1 text-weight-light'">
           <div class="col row q-gutter-x-sm">
             <span>Edition:</span>
             <span>{{ edition ? edition : '--' }}</span>
@@ -80,6 +59,18 @@
           <div v-if="borrowed_copies === 0" class="col row q-gutter-x-sm text-h3 text-weight-light">
             <span class="text-blue">No more copies Available</span>
           </div>
+        </div>
+
+        <div class="row q-gutter-x-md">
+        <q-btn label="reserve" color="primary" :disable="borrowed_copies === 0">
+          <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">
+            Reserve this book
+          </q-tooltip>
+        </q-btn>
+
+        <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)">
+          <q-tooltip class="bg-grey-10 text-grey-2">{{ borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
+        </q-btn>
         </div>
       </div>
     </div>
@@ -104,7 +95,7 @@ import { useUserStore } from 'src/stores/user-store';
 import jwt_decode from 'jwt-decode';
 import { api } from 'src/boot/axios';
 import { socket } from 'src/utils/socket'
-import { Notify } from 'quasar'
+import { Notify, Platform } from 'quasar'
 import { useRouter } from 'vue-router'
 
 

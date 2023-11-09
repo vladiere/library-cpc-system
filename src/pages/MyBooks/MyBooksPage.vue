@@ -5,14 +5,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, defineAsyncComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+import { SpinnerIos } from 'src/utils/loading';
+
 defineComponent({
    name: 'MyBooksPage'
 });
 
 const PendingBooksComponent = defineAsyncComponent({
   loader: () => import('components/MyBooks/PendingBooksComponent.vue'),
-  loadingComponent: () => import('components/Loaders/BooksCardSkeleton.vue'),
+  delay: 500,
   suspensible: false
 });
 </script>

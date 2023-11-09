@@ -16,14 +16,8 @@
        <div :class="ifRoute === 'mybooks' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks')">
           My Books
         </div>
-       <div :class="ifRoute === 'user_collections' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/collections')">
-          My Collections
-        </div>
         <div :class="ifRoute === 'user_borrow_history' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/borrowshistory')">
           Borrows History
-        </div>
-        <div :class="ifRoute === 'mylists' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/mylists')">
-          My Lists
         </div>
         <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
           Personalize Recommendation
@@ -40,14 +34,8 @@
        <div :class="ifRoute === 'mybooks' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks')">
           My Books
         </div>
-       <div :class="ifRoute === 'user_collections' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/collections')">
-          My Collections
-        </div>
         <div :class="ifRoute === 'user_borrow_history' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/borrowshistory')">
           Borrows History
-        </div>
-        <div :class="ifRoute === 'mylists' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/mylists')">
-          My Lists
         </div>
         <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
           Personalize Recommendation
@@ -56,7 +44,7 @@
      </q-dialog>
 
     <q-page-container>
-      <router-view />
+      <router-view v-if="!isRouteLoading"/>
     </q-page-container>
   </q-layout>
 </template>
@@ -65,16 +53,15 @@
 import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Platform } from 'quasar';
+import { SpinnerFacebook } from 'src/utils/loading';
 
 defineComponent({
   name: 'MyBooksLayout',
 });
 
 const ifRoute = ref('');
+const isRouteLoading = ref(false);
 const showDialog = ref(false);
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-};
 
 interface List {
   id: number;
@@ -94,5 +81,15 @@ onMounted(() => {
 
 watch(() => router.currentRoute.value.name, (newRouteName, oldRouteName) => {
   ifRoute.value = newRouteName
+})
+
+watch(() => router.currentRoute.value, (to, from) => {
+  isRouteLoading.value = true;
+  SpinnerFacebook(isRouteLoading.value, 'Loading...');
+
+  setTimeout(() => {
+    isRouteLoading.value = false;
+    SpinnerFacebook(isRouteLoading.value);
+  }, 1200);
 })
 </script>

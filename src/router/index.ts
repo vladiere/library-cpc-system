@@ -8,6 +8,7 @@ import {
 
 import routes from './routes';
 import { useUserStore } from 'src/stores/user-store';
+import { SpinnerFacebook } from 'src/utils/loading';
 
 /*
  * If not building with SSR mode, you can
@@ -37,11 +38,15 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to: any, from: any, next: any) => {
+    SpinnerFacebook(true, 'Loading...');
     if (to.meta.auth && !userStore.isAuthenticated) {
+      SpinnerFacebook(false);
       next({ name: 'login' });
     } else if (!to.meta.auth && userStore.isAuthenticated) {
+      SpinnerFacebook(false);
       next('/home');
     } else {
+      SpinnerFacebook(false);
       next();
     }
   });

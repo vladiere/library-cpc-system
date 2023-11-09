@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR lFr">
-    <q-header reveal elevated class="bg-blue-12">
+    <q-header elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title class="row items-center">
           <q-img avatar :src="LibraryLogo" style="width: 2rem" />
@@ -124,8 +124,8 @@
     </q-drawer>
 
     <q-page-container class="bg-grey-2">
-      <router-view />
-      <FooterComponent />
+      <router-view v-if="!isRouteLoading" />
+      <FooterComponent v-if="!isRouteLoading"/>
       <!-- place QPageScroller at end of page -->
       <q-page-scroller
         position="bottom-right"
@@ -144,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, onBeforeUnmount, onMounted } from 'vue';
+import { ref, onBeforeMount, onBeforeUnmount, onMounted, watch } from 'vue';
 import { Platform } from 'quasar';
 import EssentialLink, {
   EssentialLinkProps,
@@ -157,6 +157,8 @@ import { api } from 'src/boot/axios';
 import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
 import { socket } from 'src/utils/socket';
+import { SpinnerFacebook } from 'src/utils/loading';
+import { useRouter } from 'vue-router';
 
 interface UserData {
   user_id: number;
@@ -170,9 +172,11 @@ interface UserData {
 const userData = ref<UserData>([]);
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
+const isRouteLoading = ref(false);
 const notifications = ref<NotificationsProps>([]);
 const unReadCounts = ref(0);
 const decoded = jwt_decode(userStore.token);
+const router = useRouter();
 
 const getUserData = async () => {
   try {
@@ -286,6 +290,16 @@ const clearMyNotifications = async () => {
   }
 }
 
+const routeLoading = () => {
+  isRouteLoading.value = true;
+  SpinnerFacebook(isRouteLoading.value, 'Loading...');
+
+  setTimeout(() => {
+    isRouteLoading.value = false;
+    SpinnerFacebook(isRouteLoading.value)
+  }, 1000);
+}
+
 onBeforeMount(() => {
   rightDrawerOpen.value = false;
 })
@@ -297,11 +311,17 @@ onMounted(() => {
   socket.on("notifications", (data) => {
     getNotifications();
   })
+
+  routeLoading();
 })
 
 onBeforeUnmount(() => {
   userData.value = [];
   notifications.value = [];
+})
+
+watch(() => router.currentRoute.value, (to, from) => {
+  routeLoading();
 })
 
 </script>

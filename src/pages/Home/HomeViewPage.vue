@@ -6,7 +6,7 @@
           <span :class="Platform.is.mobile ? 'text-h6 text-blue-9 self-center' : 'text-h4 text-blue-9 self-center'">All Books available at CPC Library</span>
           <q-btn icon-right="mdi-chevron-double-right" flat rounded text-color="blue-9" label="See all books list" no-caps to="book/collections" />
         </div>
-        <div class="row q-gutter-x-md justify-center q-mb-md">
+        <div class="row q-gutter-x-md justify-center q-mb-md home-div">
           <BooksCard v-for="books in allBooks" :key="books.book_id" v-bind="books" />
         </div>
       </div>

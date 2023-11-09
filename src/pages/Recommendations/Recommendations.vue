@@ -11,13 +11,13 @@
   <q-page>
     <div class="row justify-center q-gutter-sm q-pt-md">
       <q-intersection
-        v-for="index in 20"
+        v-for="index in 10"
         :key="index"
         transition="scale"
         :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img src="https://cdn.quasar.dev/img/mountains.jpg" />
+          <q-img :src="`https://picsum.photos/1200/800?random=${index}`" />
 
           <q-card-section>
             <div class="text-subtitle1">The book #{{ index }}</div>

@@ -1,52 +1,33 @@
 <style lang="sass" scoped>
-$mobile: 576px
-$tablet: 768px
-$desktop: 992px
-$large: 1200px
-
-.book-container
-  width: 240px
-  height: 50vh
-  border-radius: 5px
-
-  .img-container
-    position: relative
-    margin-top: 1em
-
-    img
-      width: 100%
-      position: absolute
-      height: 220px
-      max-width: 190px
-      border-radius: 10px
-      transition: 0.5s ease-in
-
-      &:hover
-        bottom: 5%
-        box-shadow: 12px 15px 48px 1px rgba(66, 68, 90, 1)
-
-    @media (max-width: $mobile)
-      img
-        height: 180px
+.my-card
+  height: 290px
+  width: 220px
+  border-radius: 40px
+  transition: all 0.5s cubic-bezier(0.79, 0.33, 0.14, 0.53)
+  img
+    height: calc(100% - 80px)
+  &:hover
+    border-radius: 5px
+    box-shadow: 0px 0px 15px -1px rgba(0, 0, 0, 1)
+.my-card-mobile
+  height: 200px
+  width: 150px
+  img
+    height: calc(100% - 80px)
 </style>
 
 <template>
-  <div class="column q-mb-xl book-container">
-    <div class="col img-container">
-      <img :src="checkIfImage(img_path)" />
-    </div>
-    <div class="q-pt-md column q-gutter-sm text-capitalize">
-      <q-item-label lines="2" class="text-h6 text-blue-9 text-weight-light">
-        {{ title }}
-      </q-item-label>
-      <div class="text-subtitle1 text-grey-7">
-        {{ author_name }}
-      </div>
-    </div>
-  </div>
+   <q-card :class="!Platform.is.mobile ? 'my-card cursor-pointer' : 'my-card-mobile cursor-pointer'">
+     <img :src="checkIfImage(img_path)">
+
+     <q-card-section>
+       <q-item-label lines="2" class="text-subtitle1 text-weight-light">{{ title }}</q-item-label>
+     </q-card-section>
+   </q-card>
 </template>
 
 <script setup lang="ts">
+import { Platform } from 'quasar';
 
 export interface AuthorBooksInterface {
   author_name: string;

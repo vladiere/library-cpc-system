@@ -1,52 +1,18 @@
-<style lang="sass" scoped>
-$mobile: 576px
-$tablet: 768px
-$desktop: 992px
-$large: 1200px
-
-.book-container
-  width: 400px
-  height: 38vh
-  border-radius: 5px
-
-  .img-container
-    position: relative
-
-    img
-      width: 100%
-      position: absolute
-      height: 220px
-      max-width: 180px
-      border-radius: 10px
-      transition: 0.5s ease-in
-
-      &:hover
-        bottom: 5%
-        box-shadow: 12px 15px 48px 1px rgba(66, 68, 90, 1)
-
-    @media (max-width: $mobile)
-      img
-        height: 180px
-</style>
 
 <template>
-  <div :class="Platform.is.mobile ? 'row q-gutter-x-md q-pa-sm bg-blue-1 book-container q-mb-md' : 'row q-gutter-x-md q-pa-md book-container q-mb-md bg-blue-1'">
-    <div class="col img-container">
-      <img :src="checkIfImage(img_path)"/>
-    </div>
-    <div class="col column q-gutter-y-md text-capitalize">
-      <q-item-label lines="8" class="text-h6 text-blue-9">
-        {{ title }}
-      </q-item-label>
-      <div class="text-subtitle2">
-        {{ author_name }}
-      </div>
-    </div>
-  </div>
+  <q-card :class="!Platform.is.mobile ? 'q-ma-sm my-book-card cursor-pointer' : ' onmobile-book-card cursor-pointer'">
+    <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" />
+    <q-card-section>
+      <q-item-label lines="2" :class="!Platform.is.mobile ? 'text-subtitle1' : ''">{{ title ? title : 'no book title available' }}</q-item-label>
+      <q-item-label lines="1" class="text-caption">{{ author_name ? author_name : 'no author available' }}</q-item-label>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
-import { Platform } from 'quasar'
+import { Platform, format } from 'quasar'
+
+const { capitalize } = format;
 
 export interface AllBooksListInterface {
   author_name: string;
@@ -62,7 +28,7 @@ export interface AllBooksListInterface {
 }
 
 withDefaults(defineProps<AllBooksListInterface>(), {
-    author_name: '',
+    author_name: 'not available',
     book_id: null,
     book_status: '',
     borrowed_copies: null,
@@ -70,7 +36,7 @@ withDefaults(defineProps<AllBooksListInterface>(), {
     cost_price: null,
     edition: '',
     publisher_name: '',
-    title: '',
+    title: 'not available',
     img_path: ''
 });
 
@@ -79,6 +45,14 @@ const checkIfImage = (img: string | null) => {
     return `http://localhost:3000/images/${img}`
   } else {
     return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
+  }
+}
+
+const titleAndAuthor = (title: string, author: string) => {
+  if (title && author) {
+    return capitalize(title) + " by " + capitalize(author);
+  } else {
+    return "Not title and author available";
   }
 }
 

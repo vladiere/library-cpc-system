@@ -1,26 +1,45 @@
+<style lang="sass" scoped >
+.on-notmobile
+  height: 295px
+  width: 260px
+.on-notmobile-card
+  height: 295px
+  width: 250px
+  img
+    height: calc(100% - 95px)
+.on-mobile
+  height: 235px
+  width: 170px
+.on-mobile-card
+  height: 235px
+  width: 170px
+  img
+    height: calc(100% - 95px)
+</style>
+
 <template>
-  <div class="q-mt-md column q-gutter-y-md q-px-md">
-    <div v-if="myBooks.length === 0" class="fit column items-center content-center q-pb-md" >
-      <q-img :src="EmptyBox" style="width: 10rem;"/>
-      <span class="text-h6 text-grey-9">You do not have any History records here</span>
-    </div>
-    <div class="row q-gutter-md">
-      <q-img
+    <div class="row q-gutter-sm q-pt-md text-capitalize">
+      <q-intersection
         v-for="item in myBooks"
-        :key="item.user_id"
-        :src="checkIfImage(item.img_path)"
-        fit="fill"
-        :style="Platform.is.mobile ? 'height: 180px; max-width: 150px; border-radius: 10px' : 'height: 280px; max-width: 210px; border-radius: 10px'"
+        :key="item"
+        transition="scale"
+        :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
       >
-        <div class="absolute-bottom text-h6 flex flex-center text-bold text-amber-2">
-          {{ item.status }}
-        </div>
-        <q-tooltip class="bg-grey-10 text-grey-2 text-capitalize" :delay="300">
-          {{ item.title }}
-        </q-tooltip>
-      </q-img>
+        <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card' : 'q-ma-sm on-mobile-card'">
+          <img :src="checkIfImage(item.img_path)" />
+
+          <q-card-section>
+            <q-item-label lines="1" class="text-subtitle1">{{ item.title }}</q-item-label>
+            <q-item-label lines="1" class="text-caption">by: {{ item.author_name }}</q-item-label>
+            <div class="row justify-center text-bold text-h6">{{ item.transaction_type }}</div>
+          </q-card-section>
+        </q-card>
+      </q-intersection>
     </div>
 
+  <div v-if="myBooks.length === 0" class="fit column items-center content-center q-pb-md" >
+    <q-img :src="EmptyBox" style="width: 10rem;"/>
+    <span class="text-h6 text-grey-9">You do not have any History records here</span>
   </div>
 </template>
 
@@ -41,7 +60,7 @@ const getMyBooksTransaction = async () => {
   try {
     const response = await api.post("/user/get/borrowed/books",
     {
-      option: 'Approved',
+      option: 'all',
       user_id: decoded.user_id
     }, {
       headers: {
@@ -60,6 +79,14 @@ const checkIfImage = (img: string | null) => {
     return `http://localhost:3000/images/${img}`
   } else {
     return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
+  }
+}
+
+const checkStatusAndTransactionType = (transaction_status: string, transaction_type: string) => {
+  if (transaction_status === 'Pending') {
+    return transaction_status;
+  } else if (transaction_status === 'Active'){
+    return transaction_type;
   }
 }
 

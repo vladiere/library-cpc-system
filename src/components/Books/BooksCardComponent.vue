@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="sass" scoped>
 .my-card
   width: 100%
   max-width: 200px
@@ -7,11 +7,13 @@
     width: 170px
     height: 210px
     border-radius: 15px
-    transition: 300ms ease
+    transition: all 0.5s cubic-bezier(0.79, 0.33, 0.14, 0.53)
+    object-fit: cover
+    transform: scale(1.01)
 
     &:hover
-      width: 180px
-      height: 220px
+      border-radius: 50px 5px 50px 5px
+      box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
 
 .mobile-card
   width: 100%
@@ -20,11 +22,13 @@
   img
     height: 200px
     border-radius: 15px
+    object-fit: cover
+    transform: scale(1.01)
 </style>
 
 <template>
   <q-card :class="Platform.is.mobile ? 'mobile-card bg-transparent column items-center' : 'my-card bg-transparent column items-center'" flat square>
-      <img :src="checkIfImage(img_path)" >
+      <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" >
 
       <q-card-section class="text-capitalize">
         <q-item-label lines="2" :class="Platform.is.mobile ? 'text-subtitle1 text-blue-9' : 'text-h6 text-blue-9'">{{ title }}</q-item-label>
@@ -36,12 +40,14 @@
 
 <script setup lang="ts">
   import { defineComponent } from 'vue';
-  import { Platform } from 'quasar'
+  import { Platform, format } from 'quasar'
   import DefaultImg from 'src/assets/no-image-available.jpeg'
 
   defineComponent({
     name: 'BooksCard'
-  })
+  });
+
+  const { capitalize } = format;
 
   export interface AllBooksInterface {
     author_name: string;
@@ -74,6 +80,14 @@ const checkIfImage = (img: string | null) => {
     return `http://localhost:3000/images/${img}`
   } else {
     return DefaultImg
+  }
+}
+
+const titleAndAuthor = (title: string, author: string) => {
+  if (title && author) {
+    return capitalize(title) + " by " + capitalize(author);
+  } else {
+    return "Not title and author available";
   }
 }
 </script>

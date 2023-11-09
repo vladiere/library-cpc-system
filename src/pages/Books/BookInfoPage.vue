@@ -3,8 +3,8 @@
     <BookInfoComponent v-bind="bookInfo" />
     <div class="column q-gutter-y-md bg-blue-2 q-mt-xl rounded-borders">
       <span class="text-h4 text-weight-light text-blue-9 self-center q-mt-lg">More by this Author</span>
-      <div class="row q-gutter-x-md items-center q-pl-xl">
-        <AuthorBooksComponent v-for="book in authorBooks" :key="book.book_id" v-bind="book" class="cursor-pointer" @click="gotoBookInfo(book.book_id, book.title)"/>
+      <div :class="!Platform.is.mobile ? 'row q-gutter-x-md items-center q-pl-xl text-capitalize q-my-lg' : 'row q-gutter-md text-capitalize justify-center q-my-lg'">
+        <AuthorBooksComponent v-for="book in authorBooks" :key="book.book_id" v-bind="book" @click="gotoBookInfo(book.book_id, book.title)"/>
       </div>
     </div>
   </q-page>
@@ -60,7 +60,7 @@ const getAuthorBooks = async () => {
 };
 
 const gotoBookInfo = (book_id: number, book_title: string) => {
-  router.push({ name: 'book_info', params: { book_title: book_title.replace(/\s+/g, '+')}, query: { book_id }})
+  router.push({ name: 'book_info', query: { book_id }})
 }
 
 onMounted(() => {
