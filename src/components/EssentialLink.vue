@@ -32,21 +32,21 @@ const userStore = useUserStore();
 const gotoRoute = async (link: string) => {
   if (link === 'logout') {
     try {
-      await api.post('/user/logout', {refreshToken: userStore.refresh as string}, {
+      await api.post('/user/logout', { refreshToken: userStore.refresh }, {
         headers: {
-          Authorization: `Bearer ${userStore.token as string}`
+          Authorization: `Bearer ${userStore.token}`
         }
       });
 
-      socket.emit("user_logout", userStore.refresh)
+      socket.emit('user_logout', userStore.refresh)
       userStore.logoutUser();
 
       router.push('/');
-    } catch(error:any) {
-      throw new Error(error);
+    } catch(error) {
+      throw error;
     }
   } else {
-    router.push(link);
+    await router.push(link);
   }
 };
 

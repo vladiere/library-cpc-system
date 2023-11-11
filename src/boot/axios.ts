@@ -34,8 +34,8 @@ const refreshToken = async () => {
     });
 
     return response.data[0];
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -44,7 +44,7 @@ api.interceptors.request.use(
   async (config) => {
     const currentDate = new Date();
 
-    const decodedToken: any = jwt_decode(userStore.token as string);
+    const decodedToken: unknown = jwt_decode(userStore.token as string);
     if (decodedToken.exp * 1000 < currentDate.getTime()) {
       const data = await refreshToken();
       config.headers['Authorization'] = `Bearer ${data.accessToken}`;

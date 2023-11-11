@@ -23,7 +23,7 @@
 </style>
 
 <template>
-  <q-page class="bg-grey-2">
+  <q-page class="bg-grey-3">
     <div
       :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
       :style="
@@ -252,10 +252,10 @@ const form = ref({
 const submitForm = async () => {
   try {
     const response = await notApi.post('/user/login', { form: form.value });
-    socket.emit("user_connected", form.value.email);
+    socket.emit('user_connected', form.value.email);
     userStore.initAuthorize(response.data);
     router.push('/home');
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error.response.data.message) {
       Notify.create({
         message: error.response.data.message,
@@ -274,6 +274,6 @@ const gotoLink = (link: string) => {
 };
 
 onMounted(() => {
-  socket.emit("new_visit");
+  socket.emit('new_visit');
 })
 </script>

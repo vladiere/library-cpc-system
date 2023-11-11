@@ -37,7 +37,7 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach((to: any, from: any, next: any) => {
+  Router.beforeEach((to: unknown, from: unknown, next: unknown) => {
     SpinnerFacebook(true, 'Loading...');
     if (to.meta.auth && !userStore.isAuthenticated) {
       SpinnerFacebook(false);

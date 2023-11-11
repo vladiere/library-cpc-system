@@ -1,14 +1,14 @@
 <template>
   <div
     :class="
-      $q.platform.is.mobile
+      Platform.is.mobile
         ? 'text-capitalize'
         : 'q-ml-sm q-mt-xl text-capitalize'
     "
   >
     <span
       :class="
-        $q.platform.is.mobile ? 'text-subtitle1 q-ml-sm' : 'text-h5 q-mb-md'
+        Platform.is.mobile ? 'text-subtitle1 q-ml-sm' : 'text-h5 q-mb-md'
       "
       style="text-decoration: underline"
       >Trending Books</span
@@ -23,15 +23,15 @@
     <q-carousel
       v-else
       v-model="activeIndex"
-      :arrows="!$q.platform.is.mobile"
-      :swipeable="$q.platform.is.mobile"
+      :arrows="!Platform.is.mobile"
+      :swipeable="Platform.is.mobile"
       transition-prev="slide-prev"
       transition-next="slide-next"
-      :control-color="!$q.platform.is.mobile ? 'dark' : ''"
-      :control-type="!$q.platform.is.mobile ? 'regular' : undefined"
-      :prev_icon="!$q.platform.is.mobile ? 'arrow_left' : ''"
-      :height="$q.platform.is.mobile ? '160px' : '300px'"
-      :next_icon="!$q.platform.is.mobile ? 'arrow_right' : ''"
+      :control-color="!Platform.is.mobile ? 'dark' : ''"
+      :control-type="!Platform.is.mobile ? 'regular' : undefined"
+      :prev_icon="!Platform.is.mobile ? 'arrow_left' : ''"
+      :height="Platform.is.mobile ? '160px' : '300px'"
+      :next_icon="!Platform.is.mobile ? 'arrow_right' : ''"
       class="bg-grey-2"
     >
       <q-carousel-slide
@@ -39,7 +39,7 @@
         :name="index"
         :key="index"
         :class="
-          $q.platform.is.mobile
+          Platform.is.mobile
             ? 'flex q-pa-none q-ma-none q-ml-xs'
             : 'flex q-pa-none q-ma-none '
         "
@@ -49,23 +49,23 @@
           :src="bookRecommend.imageUrl"
           fit="fill"
           class="cursor-pointer"
-          :width="$q.platform.is.mobile ? '32%' : '20%'"
-          :height="$q.platform.is.mobile ? '160px' : '300px'"
+          :width="Platform.is.mobile ? '32%' : '20%'"
+          :height="Platform.is.mobile ? '160px' : '300px'"
           :key="bookRecommend.id"
           @click="navigateToBookInfo"
         >
           <div class="absolute-bottom text-center column">
             <span
-              :class="$q.platform.is.mobile ? '' : 'text-subtitle1 text-grey-2'"
+              :class="Platform.is.mobile ? '' : 'text-subtitle1 text-grey-2'"
               >{{ bookRecommend.title }}</span
             >
             <q-btn
               :label="bookRecommend.book_stat"
               color="blue-grey-8"
               text-color="text-grey-2"
-              :padding="$q.platform.is.mobile ? '2px 4px' : '5px 10px'"
+              :padding="Platform.is.mobile ? '2px 4px' : '5px 10px'"
               dense
-              :size="$q.platform.is.mobile ? 'xs' : ''"
+              :size="Platform.is.mobile ? 'xs' : ''"
             />
           </div>
         </q-img>
@@ -78,7 +78,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import ManEmpty from 'assets/man-empty.png';
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'RecommendBooks',
@@ -89,7 +89,6 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-const $q = useQuasar();
 const activeIndex = ref(0);
 
 interface RecommendBook {

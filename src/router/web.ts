@@ -80,7 +80,19 @@ routes.push(
         path: '/contribute',
         name: 'contribute',
         meta: { auth: true },
-        component: () => import('pages/Contribute/ContributePage.vue'),
+        component: () => import('layouts/ContributionLayout.vue'),
+        children: [
+          {
+            path: '',
+            name: 'home-contribution',
+            component: () => import('pages/Contribute/ContributePage.vue'),
+          },
+          {
+            path: 'list',
+            name: 'list-contribution',
+            component: () => import('pages/Contribute/ListContributionPage.vue')
+          },
+        ]
       },
       {
         path: '/instructor',
@@ -108,12 +120,6 @@ routes.push(
             meta: { auth: true },
             component: () => import('pages/MyBooks/MyBooksPage.vue'),
           },
-          // {
-          //   path: 'mylists',
-          //   meta: { auth: true },
-          //   name: 'mylists',
-          //   component: () => import('pages/MyLists/MyListsPage.vue'),
-          // },
           {
             path: 'collections',
             meta: { auth: true },

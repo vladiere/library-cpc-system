@@ -55,7 +55,9 @@ const getAllBooks = async () => {
   }
 }
 
-getAllBooks();
+onMounted(async () => {
+  getAllBooks();
+})
 
 onUnmounted(() => allBooks.value = []);
 </script>

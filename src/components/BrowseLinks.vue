@@ -15,10 +15,6 @@
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
-defineComponent({
-  name: 'BrowseLinks',
-});
-
 export interface BrowseLinksProps {
   title: string;
   caption?: string;
@@ -33,11 +29,11 @@ withDefaults(defineProps<BrowseLinksProps>(), {
 
 const router = useRouter();
 
-const gotoRoute = (link: string) => {
+const gotoRoute = async (link: string) => {
   if (link === 'instructor_recommend') {
-    router.push({ name: 'InstructorRecommendations', query: { q: 'all' } });
+    await router.push({ name: 'InstructorRecommendations', query: { q: 'all' } });
   } else {
-    router.push(link);
+    await router.push(link);
   }
 };
 </script>

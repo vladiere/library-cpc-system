@@ -10,7 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import { Platform, format } from 'quasar'
+import { Platform, format } from 'quasar';
+import DefaultImg from 'src/assets/no-image-available.jpeg';
+import { linkimg } from 'src/utils/links';
 
 const { capitalize } = format;
 
@@ -24,7 +26,7 @@ export interface AllBooksListInterface {
   edition: string;
   publisher_name: string;
   title: string;
-  img_path: string;
+  img_path: string | null;
 }
 
 withDefaults(defineProps<AllBooksListInterface>(), {
@@ -41,19 +43,11 @@ withDefaults(defineProps<AllBooksListInterface>(), {
 });
 
 const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
-  }
+  return img ? linkimg + img : DefaultImg;
 }
 
 const titleAndAuthor = (title: string, author: string) => {
-  if (title && author) {
-    return capitalize(title) + " by " + capitalize(author);
-  } else {
-    return "Not title and author available";
-  }
+  return (title && author) ? capitalize(title) + ' by ' + capitalize(author) : 'No title and author available';
 }
 
 </script>

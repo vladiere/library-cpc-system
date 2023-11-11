@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', {
     refresh: '',
   }),
   actions: {
-    initAuthorize(tokens: any) {
+    initAuthorize(tokens: unknown) {
       this.token = tokens.accessToken;
       this.refresh = tokens.refreshToken;
       this.authorize = true;

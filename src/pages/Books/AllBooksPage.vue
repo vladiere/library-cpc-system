@@ -116,20 +116,12 @@ const paginatedBooksList = computed(() => {
   return booksData.value.slice(start, end);
 });
 
-const gotoBookInfo = (book_id: number, book_title: string) => {
+const gotoBookInfo = (book_id: number) => {
   router.push({ path: '/book/info', query: { book_id } })
 }
 
-const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
-  }
-}
-
-onMounted(() => {
-  getAllBooksList();
+onMounted(async () => {
+  await getAllBooksList();
 });
 
 onUnmounted(() => {

@@ -1,12 +1,12 @@
 <template>
   <q-page padding>
     <div
-      :class="$q.platform.is.mobile ? '' : 'row q-px-xl x-py-md q-gutter-x-md'"
+      :class="Platform.is.mobile ? '' : 'row q-px-xl x-py-md q-gutter-x-md'"
     >
       <span class="text-h5 text-bold">Categories </span>
       <span class="text-caption">Dewey Decimal Classification</span>
     </div>
-    <q-list separator :class="$q.platform.is.mobile ? '' : 'q-pa-xl'">
+    <q-list separator :class="Platform.is.mobile ? '' : 'q-pa-xl'">
       <q-item
         clickable
         v-for="category in categories"
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
 import { defineComponent, ref } from 'vue';
 
 defineComponent({
@@ -35,7 +35,6 @@ interface Subject {
   link: string;
 }
 
-const $q = useQuasar();
 
 const categories = ref<Subject[]>([
   {

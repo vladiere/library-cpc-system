@@ -22,6 +22,9 @@
         <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
           Personalize Recommendation
         </div>
+        <div :class="ifRoute === 'contributions' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/contribute/list')">
+          My Contributions
+        </div>
       </div>
       <q-btn v-else class="self-start" flat no-caps icon="mdi-tune" label="Filters" color="grey-10" @click="showDialog = !showDialog"/>
      </q-header>
@@ -62,13 +65,6 @@ defineComponent({
 const ifRoute = ref('');
 const isRouteLoading = ref(false);
 const showDialog = ref(false);
-
-interface List {
-  id: number;
-  title: string;
-  link: string;
-}
-
 const router = useRouter();
 
 const gotoLink = (link: string) => {
@@ -79,17 +75,17 @@ onMounted(() => {
   ifRoute.value = router.currentRoute.value.name
 })
 
-watch(() => router.currentRoute.value.name, (newRouteName, oldRouteName) => {
+watch(() => router.currentRoute.value.name, (newRouteName) => {
   ifRoute.value = newRouteName
 })
 
-watch(() => router.currentRoute.value, (to, from) => {
+watch(() => router.currentRoute.value, () => {
   isRouteLoading.value = true;
   SpinnerFacebook(isRouteLoading.value, 'Loading...');
 
   setTimeout(() => {
     isRouteLoading.value = false;
     SpinnerFacebook(isRouteLoading.value);
-  }, 1200);
+  }, 1000);
 })
 </script>

@@ -97,6 +97,8 @@ import { api } from 'src/boot/axios';
 import { socket } from 'src/utils/socket'
 import { Notify, Platform } from 'quasar'
 import { useRouter } from 'vue-router'
+import DefaultImg from 'src/assets/no-image-available.jpeg'
+import { linkimg } from 'src/utils/links';
 
 
 export interface BookInfoInterface {
@@ -109,7 +111,7 @@ export interface BookInfoInterface {
   copies: number;
   borrowed_copies: number;
   book_status: string;
-  img_path: string;
+  img_path: string | null;
 }
 
 withDefaults(defineProps<BookInfoInterface>(), {
@@ -142,7 +144,7 @@ const handleClickActions = async (actions: string, book_id: number, copies?: num
         Authorization: `Bearer ${userStore.token}`
       }
     });
-    socket.emit("notifications", decoded.user_id);
+    socket.emit('notifications', decoded.user_id);
     if (response.data.status === 201) {
       dialog.value.show = true;
       dialog.value.message = response.data.message + ' Do you want to check your books of borrowed history?';
@@ -164,10 +166,6 @@ const handleBtnActions = (btn_action?: string) => {
 }
 
 const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
-  }
+  return img ? linkimg + img : DefaultImg;
 }
 </script>

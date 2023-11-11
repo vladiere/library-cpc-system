@@ -28,11 +28,12 @@
 
 <script setup lang="ts">
 import { Platform } from 'quasar';
+import DefaultImg from 'src/assets/no-image-available.jpeg'
 
 export interface AuthorBooksInterface {
   author_name: string;
   title: string;
-  img_path: string;
+  img_path: string | null;
 }
 
 withDefaults(defineProps<AuthorBooksInterface>(), {
@@ -42,10 +43,6 @@ withDefaults(defineProps<AuthorBooksInterface>(), {
 })
 
 const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
-  }
+  return img ? `http://localhost:3000/images/${img}` : DefaultImg;
 }
 </script>

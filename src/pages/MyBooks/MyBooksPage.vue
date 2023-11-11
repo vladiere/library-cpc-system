@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { SpinnerIos } from 'src/utils/loading';
 
 defineComponent({
    name: 'MyBooksPage'

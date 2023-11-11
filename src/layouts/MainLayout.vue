@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh LpR lFr">
+  <q-layout view="hHr lpR lFr">
     <q-header elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title class="row items-center">
@@ -46,23 +46,27 @@
             :color="unReadCounts > 0 ? 'warning' : undefined"
             no-icon-animation
           >
+          <q-list separator>
             <q-virtual-scroll
-              style="max-height: 300px; overflow-x: hidden; max-width: 450px; padding-bottom: 32px"
+              style="max-height: 300px; overflow-x: hidden; max-width: 450px"
               :items="notifications"
               separator
               v-slot="{ item, index }"
             >
               <ListNotifications :key="index" v-bind="item" />
             </q-virtual-scroll>
-            <div v-if="notifications.length === 0" class="column items-center q-pa-md text-grey-7">
+          </q-list>
+            <div v-if="notifications.length === 0" class="column items-center q-pa-md q-pt-md text-grey-7">
               Empty notifications
             </div>
-            <div v-if="notifications.length > 0" class="column absolute-bottom">
-              <q-btn flat dense no-caps label="Read All" class="self-center" @click="clearMyNotifications"/>
+            <div v-if="notifications.length > 0" class="column absolute-top-right">
+              <q-btn flat dense no-caps icon="mdi-broom" class="self-center" @click="clearMyNotifications">
+                <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">Clear notifications</q-tooltip>
+              </q-btn>
             </div>
           </q-btn-dropdown>
         </div>
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-btn dense flat round icon="menu" @click="rightDrawerOpen = !rightDrawerOpen" />
       </q-toolbar>
       <q-separator />
     </q-header>
@@ -71,7 +75,6 @@
       v-model="rightDrawerOpen"
       side="right"
       bordered
-      overlay
       elevated
       class="bg-grey-2"
     >
@@ -144,21 +147,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, onBeforeUnmount, onMounted, watch } from 'vue';
+import { ref, onBeforeMount, defineAsyncComponent, onBeforeUnmount, onMounted, watch } from 'vue';
 import { Platform } from 'quasar';
 import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
-import FooterComponent from 'src/components/Footer/FooterComponent.vue';
-import ListNotifications, { NotificationsProps } from 'src/components/Notifications/ListNotifications.vue'
+import ListNotifications, { NotificationsProps } from 'components/Notifications/ListNotifications.vue'
 import { api } from 'src/boot/axios';
 import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
 import { socket } from 'src/utils/socket';
-import { SpinnerFacebook } from 'src/utils/loading';
 import { useRouter } from 'vue-router';
+import { SpinnerFacebook } from 'src/utils/loading';
 
 interface UserData {
   user_id: number;
@@ -166,45 +168,24 @@ interface UserData {
   id_number: number;
   department: string;
   email_address: string;
-  img_path: string;
+  img_path: string | null;
 }
 
 const userData = ref<UserData>([]);
+const router = useRouter();
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
 const isRouteLoading = ref(false);
 const notifications = ref<NotificationsProps>([]);
 const unReadCounts = ref(0);
 const decoded = jwt_decode(userStore.token);
-const router = useRouter();
 
-const getUserData = async () => {
-  try {
-    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    })
-
-    userData.value = response.data[0];
-
-    essentialLinks.value.push(
-    {
-      title: 'Profile',
-      icon: 'fas fa-user',
-      link: `/profile/${userData.value.fullname.replace(/\s+/g, '')}`
-    },
-    {
-      title: 'Settings',
-      icon: 'chat',
-      link: `/settings/${userData.value.email_address}`,
-    },)
-
-  } catch (error: any) {
-    throw new Error(error)
-  }
-}
-
+const FooterComponent = defineAsyncComponent({
+  loader: () => import('components/Footer/FooterComponent.vue'),
+  delay: 500,
+  timeout: 2300,
+  suspensible: false
+});
 
 const browseLinks: BrowseLinksProps[] = [
   {
@@ -258,19 +239,43 @@ const essentialLinks = ref<EssentialLinkProps[]>([
 ]);
 
 
-const toggleRightDrawer = () => {
-  rightDrawerOpen.value = !rightDrawerOpen.value;
+const getUserData = async () => {
+  try {
+    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    })
+
+    userData.value = response.data[0];
+
+    essentialLinks.value.push(
+    {
+      title: 'Profile',
+      icon: 'fas fa-user',
+      link: `/profile/${userData.value.fullname.replace(/\s+/g, '')}`
+    },
+    {
+      title: 'Settings',
+      icon: 'chat',
+      link: `/settings/${userData.value.email_address}`,
+    },)
+
+  } catch (error) {
+    throw error
+  }
 }
+
 const getNotifications = async () => {
   try {
-    const response = await api.post("/notifications/user", { user_id: decoded.user_id }, {
+    const response = await api.post('/notifications/user', { user_id: decoded.user_id }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
       }
     });
     notifications.value = [];
     notifications.value = response.data;
-    unReadCounts.value = notifications.value.filter((item: any) => item.status === 'unread').length;
+    unReadCounts.value = notifications.value.filter((item: unknown) => item.status === 'unread').length;
   } catch (error) {
     throw error;
   }
@@ -278,41 +283,38 @@ const getNotifications = async () => {
 
 const clearMyNotifications = async () => {
   try {
-    await api.post("/notifications/clear", { user_id: decoded.user_id, notification_id: 0 }, {
+    await api.post('/notifications/clear', { user_id: decoded.user_id, notification_id: 0 }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
       }
     });
-    notifications.value.filter((item: any) => item.status = 'read')
+    notifications.value.filter((item: unknown) => item.status = 'read')
     unReadCounts.value = 0;
   } catch (error) {
     throw error;
   }
 }
 
-const routeLoading = () => {
+const routeLoading = async () => {
   isRouteLoading.value = true;
   SpinnerFacebook(isRouteLoading.value, 'Loading...');
-
-  setTimeout(() => {
+  await setTimeout(() => {
     isRouteLoading.value = false;
-    SpinnerFacebook(isRouteLoading.value)
-  }, 1000);
+    SpinnerFacebook(isRouteLoading.value);
+  }, 1200);
 }
 
-onBeforeMount(() => {
-  rightDrawerOpen.value = false;
-})
+onMounted( async () => {
+  await getUserData();
+  await getNotifications();
 
-onMounted(() => {
-  getUserData();
-  getNotifications();
 
-  socket.on("notifications", (data) => {
-    getNotifications();
+  await socket.on('new_notification', async (data) => {
+    if (data) {
+      await getNotifications();
+    }
   })
 
-  routeLoading();
 })
 
 onBeforeUnmount(() => {
@@ -320,8 +322,8 @@ onBeforeUnmount(() => {
   notifications.value = [];
 })
 
-watch(() => router.currentRoute.value, (to, from) => {
+watch(() => router.currentRoute.value, () => {
   routeLoading();
+  rightDrawerOpen.value = false;
 })
-
 </script>

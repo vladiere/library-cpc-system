@@ -45,12 +45,13 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import EmptyBox from 'assets/empty-folder.png'
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
 import jwt_decode from 'jwt-decode';
 import { Platform } from 'quasar';
+import DefaultImg from 'src/assets/no-image-available.jpeg'
+import { linkimg } from 'src/utils/links';
 
 const userStore = useUserStore();
 const myBooks = ref([]);
@@ -58,7 +59,7 @@ const decoded = jwt_decode(userStore.token);
 
 const getMyBooksTransaction = async () => {
   try {
-    const response = await api.post("/user/get/borrowed/books",
+    const response = await api.post('/user/get/borrowed/books',
     {
       option: 'all',
       user_id: decoded.user_id
@@ -75,23 +76,11 @@ const getMyBooksTransaction = async () => {
 }
 
 const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
-  }
+  return img ? linkimg + img : DefaultImg;
 }
 
-const checkStatusAndTransactionType = (transaction_status: string, transaction_type: string) => {
-  if (transaction_status === 'Pending') {
-    return transaction_status;
-  } else if (transaction_status === 'Active'){
-    return transaction_type;
-  }
-}
-
-onMounted(() => {
-  getMyBooksTransaction();
+onMounted(async () => {
+  await getMyBooksTransaction();
 })
 
 onBeforeUnmount(() => {

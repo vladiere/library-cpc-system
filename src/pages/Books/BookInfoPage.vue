@@ -11,17 +11,28 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref, onMounted, onBeforeMount, watch } from 'vue';
+import { defineComponent, ref, onMounted, watch, defineAsyncComponent } from 'vue';
 import { Platform } from 'quasar';
-import BookInfoComponent, { BookInfoInterface } from 'src/components/Books/BookInfoComponent.vue'
+import { BookInfoInterface } from 'components/Books/BookInfoComponent.vue'
 import { api } from 'src/boot/axios';
 import { useRouter } from 'vue-router';
 import { useUserStore } from 'src/stores/user-store';
-import AuthorBooksComponent, { AuthorBooksInterface } from 'src/components/Author/AuthorBooksComponent.vue'
-import { SpinnerIos } from 'src/utils/loading'
+import { AuthorBooksInterface } from 'components/Author/AuthorBooksComponent.vue'
 
 defineComponent({
   name: 'BookInfoPage'
+});
+
+const BookInfoComponent = defineAsyncComponent({
+  loader: () => import('components/Books/BookInfoComponent.vue'),
+  delay: 500,
+  suspensible: false
+});
+
+const AuthorBooksComponent = defineAsyncComponent({
+  loader: () => import('components/Author/AuthorBooksComponent.vue'),
+  delay: 500,
+  suspensible: false
 });
 
 const router = useRouter()
@@ -39,7 +50,6 @@ const getBookInfo = async () => {
     bookInfo.value = response.data[0];
 
     getAuthorBooks();
-
   } catch (error) {
     throw error;
   }
@@ -59,16 +69,18 @@ const getAuthorBooks = async () => {
   }
 };
 
-const gotoBookInfo = (book_id: number, book_title: string) => {
+const gotoBookInfo = (book_id: number) => {
   router.push({ name: 'book_info', query: { book_id }})
 }
 
-onMounted(() => {
-  getBookInfo();
+onMounted(async () => {
+  await getBookInfo();
 });
 
 watch(router.currentRoute, (newValue) => {
-  getBookInfo()
+  if (newValue) {
+    getBookInfo()
+  }
 })
 
 </script>

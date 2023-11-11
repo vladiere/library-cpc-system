@@ -107,14 +107,7 @@ const userStore = useUserStore();
 const card = ref(false)
 const decoded = jwt_decode(userStore.token);
 const userData = ref<UserData>([]);
-const accountProfile = ref({
-  id: 1,
-  student_id: 20200800,
-  name: 'Descartin, Lance Phillip b.',
-  picture: 'https://cdn-icons-png.flaticon.com/128/1144/1144760.png',
-  email: 'vladiere@vlad.gg',
-  department: 'BSIT',
-});
+
 
 const getUserData = async () => {
   try {

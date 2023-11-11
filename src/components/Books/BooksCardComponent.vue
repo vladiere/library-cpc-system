@@ -42,6 +42,7 @@
   import { defineComponent } from 'vue';
   import { Platform, format } from 'quasar'
   import DefaultImg from 'src/assets/no-image-available.jpeg'
+  import { linkimg } from 'src/utils/links';
 
   defineComponent({
     name: 'BooksCard'
@@ -59,7 +60,7 @@
     edition: string;
     publisher_name: string;
     title: string;
-    img_path: string;
+    img_path: string | null;
   }
 
   withDefaults(defineProps<AllBooksInterface>(), {
@@ -76,18 +77,10 @@
   });
 
 const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return DefaultImg
-  }
+  return img ? linkimg + img : DefaultImg;
 }
 
 const titleAndAuthor = (title: string, author: string) => {
-  if (title && author) {
-    return capitalize(title) + " by " + capitalize(author);
-  } else {
-    return "Not title and author available";
-  }
+  return (title && author) ? capitalize(title) + ' by ' + capitalize(author) : 'No title and author name available';
 }
 </script>

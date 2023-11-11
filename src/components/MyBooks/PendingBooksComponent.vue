@@ -28,6 +28,9 @@ import { Platform } from 'quasar';
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
 import jwt_decode from 'jwt-decode';
+import { linkimg } from 'src/utils/links';
+import DefaultImg from 'src/assets/no-image-available.jpeg'
+
 
 const userStore = useUserStore();
 const myBooks = ref([]);
@@ -35,7 +38,7 @@ const decoded = jwt_decode(userStore.token);
 
 const getMyBooksTransaction = async () => {
   try {
-    const response = await api.post("/user/get/borrowed/books",
+    const response = await api.post('/user/get/borrowed/books',
     {
       option: 'Pending',
       user_id: decoded.user_id
@@ -53,15 +56,11 @@ const getMyBooksTransaction = async () => {
 
 
 const checkIfImage = (img: string | null) => {
-  if (img) {
-    return `http://localhost:3000/images/${img}`
-  } else {
-    return 'https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg'
-  }
+  return img ? linkimg + img : DefaultImg;
 }
 
-onMounted(() => {
-  getMyBooksTransaction();
+onMounted(async () => {
+  await getMyBooksTransaction();
 });
 
 onBeforeUnmount(() => {
