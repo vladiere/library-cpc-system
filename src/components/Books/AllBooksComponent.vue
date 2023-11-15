@@ -5,6 +5,11 @@
     <q-card-section>
       <q-item-label lines="2" :class="!Platform.is.mobile ? 'text-subtitle1' : ''">{{ title ? title : 'no book title available' }}</q-item-label>
       <q-item-label lines="1" class="text-caption">{{ author_name ? author_name : 'no author available' }}</q-item-label>
+      <q-item-label lines="1" class="text-caption row items-center" >
+         <q-icon size="1.5em" name="mdi-star" color="orange-9" v-for="count in calculateLogRating(total_checkedout)" :key="count" />
+         <q-icon size="1.5em" name="mdi-star-outline" color="orange-9" v-if="calculateLogRating(total_checkedout) === 0" />
+        {{ calculateLogRating(total_checkedout) }}
+      </q-item-label>
     </q-card-section>
   </q-card>
 </template>
@@ -27,6 +32,7 @@ export interface AllBooksListInterface {
   publisher_name: string;
   title: string;
   img_path: string | null;
+  total_checkedout: number;
 }
 
 withDefaults(defineProps<AllBooksListInterface>(), {
@@ -39,8 +45,13 @@ withDefaults(defineProps<AllBooksListInterface>(), {
     edition: '',
     publisher_name: '',
     title: 'not available',
-    img_path: ''
+    img_path: '',
+    total_checkedout: null
 });
+
+const calculateLogRating = (downloadCount: number) => {
+  return Math.ceil(Math.log10(downloadCount + 1));
+}
 
 const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;

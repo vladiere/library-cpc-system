@@ -71,7 +71,7 @@ routes.push(
         component: () => import('pages/Trending/TrendingPage.vue'),
       },
       {
-        path: '/profile/:account',
+        path: '/profile',
         name: 'UserProfile',
         meta: { auth: true },
         component: () => import('pages/UserProfile/UserProfile.vue'),
@@ -91,6 +91,11 @@ routes.push(
             path: 'list',
             name: 'list-contribution',
             component: () => import('pages/Contribute/ListContributionPage.vue')
+          },
+          {
+            path: 'all',
+            name: 'all-contribution',
+            component: () => import('pages/Contribute/AllContributionsPage.vue')
           },
         ]
       },
@@ -142,7 +147,7 @@ routes.push(
         ],
       },
       {
-        path: '/settings/:email',
+        path: '/settings',
         name: 'settings',
         meta: { auth: true },
         component: () => import('pages/Settings/PageSettings.vue'),

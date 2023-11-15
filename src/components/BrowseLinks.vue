@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 export interface BrowseLinksProps {

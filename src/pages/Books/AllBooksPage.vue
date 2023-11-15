@@ -12,7 +12,7 @@
     box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
   img
     height: calc(100% - 85px)
-    object-fit: cover
+    object-fit: fill
 
 .book-item-mobile
   height: 220px
@@ -68,12 +68,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, defineAsyncComponent, onMounted, onUnmounted, ref, computed } from 'vue';
-import { api } from 'src/boot/axios';
-import { useUserStore } from 'src/stores/user-store';
+import { defineComponent, defineAsyncComponent, onMounted, ref, computed } from 'vue';
 import { AllBooksListInterface } from 'components/Books/AllBooksComponent.vue';
 import { useRouter } from 'vue-router';
 import { Platform } from 'quasar';
+import { useBooksStore } from 'stores/books-store';
 
 defineComponent({
   name: 'AllBooksPage'
@@ -86,29 +85,12 @@ const AllBooksComponent = defineAsyncComponent({
   suspensible: false
 });
 
-const userStore = useUserStore();
+const bookStore = useBooksStore();
 const current = ref(1);
 const itemsPerPage = !Platform.is.mobile ? 25 : 10;
 const booksData = ref<AllBooksListInterface>([]);
 const totalPages = computed(() => Math.ceil(booksData.value.length / itemsPerPage));
 const router = useRouter();
-
-
-const getAllBooksList = async () => {
-  try {
-
-    const response = await api.post('/get/all/books/inventory', { limit: 0 }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    });
-
-    booksData.value = response.data;
-
-  } catch (error) {
-    throw error;
-  }
-};
 
 const paginatedBooksList = computed(() => {
   const start = (current.value - 1) * itemsPerPage;
@@ -121,10 +103,6 @@ const gotoBookInfo = (book_id: number) => {
 }
 
 onMounted(async () => {
-  await getAllBooksList();
+  booksData.value = bookStore.getAllBooks;
 });
-
-onUnmounted(() => {
-  booksData.value = [];
-})
 </script>

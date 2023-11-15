@@ -49,7 +49,7 @@ const getUserContributions = async () => {
   }
 }
 
-onMounted(() => {
-  getUserContributions();
+onMounted(async () => {
+  await getUserContributions();
 })
 </script>

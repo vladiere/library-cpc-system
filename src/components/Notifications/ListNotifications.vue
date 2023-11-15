@@ -10,9 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import { format } from 'quasar';
-
-const { capitalize } = format;
 
 export interface NotificationsProps {
   notification_id: number;

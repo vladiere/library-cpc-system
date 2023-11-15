@@ -273,7 +273,7 @@ const gotoLink = (link: string) => {
   router.push(link);
 };
 
-onMounted(() => {
-  socket.emit('new_visit');
+onMounted(async () => {
+  await socket.emit('new_visit');
 })
 </script>

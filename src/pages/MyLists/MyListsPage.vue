@@ -143,8 +143,8 @@ const getMyLists = async () => {
 }
 
 
-onMounted(() => {
-  getMyLists();
+onMounted(async () => {
+  await getMyLists();
 })
 
 onBeforeUnmount(() => {

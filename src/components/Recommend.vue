@@ -1,13 +1,13 @@
 <template>
   <div
     :class="
-      $q.platform.is.mobile
+      Platform.is.mobile
         ? 'text-capitalize q-mt-lg'
         : 'q-ml-sm q-mt-md text-capitalize'
     "
   >
     <span
-      :class="$q.platform.is.mobile ? '' : 'text-h5 q-mb-md'"
+      :class="Platform.is.mobile ? '' : 'text-h5 q-mb-md'"
       style="text-decoration: underline"
       >Books Recommended base in your search
     </span>
@@ -21,15 +21,15 @@
     <q-carousel
       v-else
       v-model="activeIndex"
-      :arrows="!$q.platform.is.mobile"
-      :swipeable="$q.platform.is.mobile"
+      :arrows="!Platform.is.mobile"
+      :swipeable="Platform.is.mobile"
       transition-prev="slide-prev"
       transition-next="slide-next"
-      :control-color="!$q.platform.is.mobile ? 'dark' : ''"
-      :control-type="!$q.platform.is.mobile ? 'regular' : ''"
-      :prev_icon="!$q.platform.is.mobile ? 'arrow_left' : ''"
-      :height="$q.platform.is.mobile ? '160px' : '300px'"
-      :next_icon="!$q.platform.is.mobile ? 'arrow_right' : ''"
+      :control-color="!Platform.is.mobile ? 'dark' : ''"
+      :control-type="!Platform.is.mobile ? 'regular' : ''"
+      :prev_icon="!Platform.is.mobile ? 'arrow_left' : ''"
+      :height="Platform.is.mobile ? '160px' : '300px'"
+      :next_icon="!Platform.is.mobile ? 'arrow_right' : ''"
       class="bg-grey-2"
     >
       <q-carousel-slide
@@ -37,7 +37,7 @@
         :name="index"
         :key="index"
         :class="
-          $q.platform.is.mobile
+          Platform.is.mobile
             ? 'flex q-pa-none q-ma-none q-ml-xs'
             : 'flex q-pa-none q-ma-none '
         "
@@ -47,25 +47,17 @@
           :src="bookRecommend.imageUrl"
           fit="fill"
           class="cursor-pointer"
-          :width="$q.platform.is.mobile ? '32%' : '20%'"
-          :height="$q.platform.is.mobile ? '160px' : '300px'"
+          :width="Platform.is.mobile ? '32%' : '20%'"
+          :height="Platform.is.mobile ? '160px' : '300px'"
           :key="bookRecommend.id"
           @click="navigateToBookInfo"
         >
           <div class="absolute-bottom text-center column">
             <span
-              :class="$q.platform.is.mobile ? '' : 'text-subtitle1 text-grey-2'"
+              :class="Platform.is.mobile ? '' : 'text-subtitle1 text-grey-2'"
               >{{ bookRecommend.title }}</span
             >
-            <q-btn
-              :label="bookRecommend.book_stat"
-              color="blue-grey-8"
-              text-color="text-grey-2"
-              :padding="$q.platform.is.mobile ? '2px 4px' : '5px 10px'"
-              dense
-              :size="$q.platform.is.mobile ? 'xs' : ''"
-            />
-          </div>
+           </div>
         </q-img>
       </q-carousel-slide>
     </q-carousel>
@@ -76,14 +68,13 @@
 import { defineComponent, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import ManEmpty from 'assets/man-empty.png';
-import { useQuasar } from 'quasar';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'RecommendBooks',
 });
 
 const router = useRouter();
-const $q = useQuasar();
 const activeIndex = ref(0);
 
 interface RecommendBook {
@@ -101,7 +92,7 @@ interface RecommendBook {
 const recommendBooks = ref<RecommendBook[]>([
   {
     id: 1,
-    imageUrl: 'https://picsum.photos/200/300?random=1',
+    imageUrl: 'https://picsum.photos/1200/300?random=1',
     title: 'The one',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -113,7 +104,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 2,
-    imageUrl: 'https://picsum.photos/200/300?random=2',
+    imageUrl: 'https://picsum.photos/1200/300?random=2',
     title: 'The two',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -125,7 +116,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 3,
-    imageUrl: 'https://picsum.photos/200/300?random=3',
+    imageUrl: 'https://picsum.photos/1200/300?random=3',
     title: 'The three',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -137,7 +128,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 4,
-    imageUrl: 'https://picsum.photos/200/300?random=4',
+    imageUrl: 'https://picsum.photos/1200/300?random=4',
     title: 'The four',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -149,7 +140,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 5,
-    imageUrl: 'https://picsum.photos/200/300?random=5',
+    imageUrl: 'https://picsum.photos/1200/300?random=5',
     title: 'the five',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -161,7 +152,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 6,
-    imageUrl: 'https://picsum.photos/200/300?random=6',
+    imageUrl: 'https://picsum.photos/1200/300?random=6',
     title: 'the six',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -173,7 +164,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 7,
-    imageUrl: 'https://picsum.photos/200/300?random=7',
+    imageUrl: 'https://picsum.photos/1200/300?random=7',
     title: 'the seven',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
@@ -185,7 +176,7 @@ const recommendBooks = ref<RecommendBook[]>([
   },
   {
     id: 8,
-    imageUrl: 'https://picsum.photos/200/300?random=8',
+    imageUrl: 'https://picsum.photos/1200/300?random=8',
     title: 'the eight',
     description:
       'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',

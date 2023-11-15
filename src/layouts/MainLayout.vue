@@ -92,7 +92,7 @@
           </q-avatar>
           <div class="column">
             <span class="text-subtitle1 text-capitalize">{{ userData.fullname }}</span>
-            <span class="text-caption text-uppercase">{{ userData.department}}</span>
+            <span class="text-caption text-uppercase">{{ userData.department }}</span>
           </div>
         </q-item-label>
         <q-separator />
@@ -147,45 +147,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, defineAsyncComponent, onBeforeUnmount, onMounted, watch } from 'vue';
+import { ref, defineAsyncComponent, onBeforeUnmount, onMounted, watch } from 'vue';
 import { Platform } from 'quasar';
-import EssentialLink, {
-  EssentialLinkProps,
-} from 'components/EssentialLink.vue';
-import BrowseLinks, { BrowseLinksProps } from 'components/BrowseLinks.vue';
+import { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
-import ListNotifications, { NotificationsProps } from 'components/Notifications/ListNotifications.vue'
+import { NotificationsProps } from 'components/Notifications/ListNotifications.vue'
 import { api } from 'src/boot/axios';
 import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
-import { socket } from 'src/utils/socket';
 import { useRouter } from 'vue-router';
 import { SpinnerFacebook } from 'src/utils/loading';
+import books from 'src/utils/Books/books';
+import users from 'src/utils/Users/users';
+import IUser from 'src/interface/users';
 
-interface UserData {
-  user_id: number;
-  fullname: string;
-  id_number: number;
-  department: string;
-  email_address: string;
-  img_path: string | null;
-}
+const FooterComponent = defineAsyncComponent({
+  loader: () => import('components/Footer/FooterComponent.vue'),
+  delay: 200,
+  timeout: 2300,
+  suspensible: false
+});
 
-const userData = ref<UserData>([]);
+const EssentialLink = defineAsyncComponent({
+  loader: () => import('components/EssentialLink.vue'),
+  delay: 250,
+  timeout: 2300,
+  suspensible: false
+});
+
+const BrowseLinks = defineAsyncComponent({
+  loader: () => import('components/BrowseLinks.vue'),
+  delay: 300,
+  timeout: 2300,
+  suspensible: false
+});
+
+const ListNotifications = defineAsyncComponent({
+  loader: () => import('components/Notifications/ListNotifications.vue'),
+  delay: 350,
+  timeout: 2300,
+  suspensible: false
+});
+
+
 const router = useRouter();
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
 const isRouteLoading = ref(false);
 const notifications = ref<NotificationsProps>([]);
 const unReadCounts = ref(0);
-const decoded = jwt_decode(userStore.token);
-
-const FooterComponent = defineAsyncComponent({
-  loader: () => import('components/Footer/FooterComponent.vue'),
-  delay: 500,
-  timeout: 2300,
-  suspensible: false
+const userData = ref({
+  fullname: '',
+  department: '',
 });
+const decoded = jwt_decode(userStore.token)
 
 const browseLinks: BrowseLinksProps[] = [
   {
@@ -232,39 +248,22 @@ const essentialLinks = ref<EssentialLinkProps[]>([
     link: '/userbooks',
   },
   {
+    title: 'Profile',
+    icon: 'fas fa-user',
+    link: '/profile'
+  },
+  {
+    title: 'Settings',
+    icon: 'chat',
+    link: '/settings',
+  },
+  {
     title: 'Logout',
     icon: 'logout',
     link: 'logout',
   },
 ]);
 
-
-const getUserData = async () => {
-  try {
-    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    })
-
-    userData.value = response.data[0];
-
-    essentialLinks.value.push(
-    {
-      title: 'Profile',
-      icon: 'fas fa-user',
-      link: `/profile/${userData.value.fullname.replace(/\s+/g, '')}`
-    },
-    {
-      title: 'Settings',
-      icon: 'chat',
-      link: `/settings/${userData.value.email_address}`,
-    },)
-
-  } catch (error) {
-    throw error
-  }
-}
 
 const getNotifications = async () => {
   try {
@@ -301,25 +300,22 @@ const routeLoading = async () => {
   await setTimeout(() => {
     isRouteLoading.value = false;
     SpinnerFacebook(isRouteLoading.value);
-  }, 1200);
+  }, 1100);
+}
+
+const setFullnameDepartment = async () => {
+  await userStore.getUserData.map((item: unknown) => {
+    userData.value.fullname = item.fullname;
+    userData.value.department = item.department;
+  })
 }
 
 onMounted( async () => {
-  await getUserData();
+  await users.getUserdata();
   await getNotifications();
-
-
-  await socket.on('new_notification', async (data) => {
-    if (data) {
-      await getNotifications();
-    }
-  })
-
-})
-
-onBeforeUnmount(() => {
-  userData.value = [];
-  notifications.value = [];
+  await books.getAllBooks();
+  await books.getUserContributions();
+  await setFullnameDepartment();
 })
 
 watch(() => router.currentRoute.value, () => {
