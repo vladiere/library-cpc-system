@@ -147,7 +147,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent, onBeforeUnmount, onMounted, watch } from 'vue';
+import { ref, defineAsyncComponent, onMounted, watch } from 'vue';
 import { Platform } from 'quasar';
 import { EssentialLinkProps } from 'components/EssentialLink.vue';
 import { BrowseLinksProps } from 'components/BrowseLinks.vue';
@@ -158,9 +158,7 @@ import jwt_decode from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
 import { useRouter } from 'vue-router';
 import { SpinnerFacebook } from 'src/utils/loading';
-import books from 'src/utils/Books/books';
 import users from 'src/utils/Users/users';
-import IUser from 'src/interface/users';
 
 const FooterComponent = defineAsyncComponent({
   loader: () => import('components/Footer/FooterComponent.vue'),
@@ -219,11 +217,11 @@ const browseLinks: BrowseLinksProps[] = [
     icon: 'fas fa-burst',
     link: '/recent',
   },
-  {
-    title: 'Advance Search',
-    icon: 'fas fa-magnifying-glass',
-    link: '/advancesearch',
-  },
+  //{
+   // title: 'Advance Search',
+  //  icon: 'fas fa-magnifying-glass',
+  //  link: '/advancesearch',
+  //},
   {
     title: 'Contribute',
     icon: 'fas fa-book',
@@ -304,6 +302,7 @@ const routeLoading = async () => {
 }
 
 const setFullnameDepartment = async () => {
+  await users.getUserdata();
   await userStore.getUserData.map((item: unknown) => {
     userData.value.fullname = item.fullname;
     userData.value.department = item.department;
@@ -311,10 +310,7 @@ const setFullnameDepartment = async () => {
 }
 
 onMounted( async () => {
-  await users.getUserdata();
   await getNotifications();
-  await books.getAllBooks();
-  await books.getUserContributions();
   await setFullnameDepartment();
 })
 

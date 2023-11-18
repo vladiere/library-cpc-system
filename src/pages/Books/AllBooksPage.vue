@@ -1,9 +1,9 @@
 <style lang="sass" >
 .book-item
-  height: 320px
+  height: 350px
   width: 240px
 .my-book-card
-  height: 320px
+  height: 350px
   width: 240px
   transform: scale(1.01)
   transition: 0.5s ease
@@ -12,7 +12,7 @@
     box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
   img
     height: calc(100% - 85px)
-    object-fit: fill
+    object-fit: cover
 
 .book-item-mobile
   height: 220px
@@ -36,19 +36,33 @@
 
     <q-separator size="2px" width="95%" class="self-center"/>
 
-    <div :class="!Platform.is.mobile ? 'self-start q-ml-xl row q-gutter-x-md q-my-md' : 'self-start row q-gutter-x-xs q-my-sm q-ml-sm'">
-      <span class="text-subtitle1 text-blue-9">Pages</span>
-      <q-pagination
-        v-model="current"
-        :max="totalPages"
-        :max-pages="!Platform.is.mobile ? 8 : 4"
-        direction-links
-        boundary-links
-        icon-first="mdi-page-first"
-        icon-last="mdi-page-last"
-        icon-prev="mdi-chevron-left"
-        icon-next="mdi-chevron-right"
-      />
+    <div :class="!Platform.is.mobile ? 'q-ml-xl row q-gutter-x-md q-my-md justify-between' : 'column items-center q-gutter-y-xs q-my-sm'">
+      <div class="row content-center">
+        <span class="text-subtitle1 text-blue-9">Pages</span>
+        <q-pagination
+          v-model="current"
+          :max="totalPages"
+          :max-pages="!Platform.is.mobile ? 8 : 4"
+          direction-links
+          boundary-links
+          icon-first="mdi-page-first"
+          icon-last="mdi-page-last"
+          icon-prev="mdi-chevron-left"
+          icon-next="mdi-chevron-right"
+        />
+      </div>
+      <q-input
+        placeholder="Search"
+        outlined
+        class="q-mr-xl"
+        dense
+        v-model="filter"
+        rounded
+        >
+        <template v-slot:append>
+          <q-icon name="mdi-magnify" />
+        </template>
+      </q-input>
     </div>
 
     <q-separator size="2px" width="95%" class="self-center"/>
@@ -57,7 +71,7 @@
       <q-intersection
         v-for="item in paginatedBooksList"
         :key="item.book_id"
-        transition="rotate"
+        transition="scale"
         :class="!Platform.is.mobile ? 'book-item' : 'book-item-mobile'"
         @click="gotoBookInfo(item.book_id)"
       >
@@ -73,6 +87,7 @@ import { AllBooksListInterface } from 'components/Books/AllBooksComponent.vue';
 import { useRouter } from 'vue-router';
 import { Platform } from 'quasar';
 import { useBooksStore } from 'stores/books-store';
+import books from 'src/utils/Books/books';
 
 defineComponent({
   name: 'AllBooksPage'
@@ -87,7 +102,7 @@ const AllBooksComponent = defineAsyncComponent({
 
 const bookStore = useBooksStore();
 const current = ref(1);
-const itemsPerPage = !Platform.is.mobile ? 25 : 10;
+const itemsPerPage = !Platform.is.mobile ? 15 : 10;
 const booksData = ref<AllBooksListInterface>([]);
 const totalPages = computed(() => Math.ceil(booksData.value.length / itemsPerPage));
 const router = useRouter();
@@ -103,6 +118,12 @@ const gotoBookInfo = (book_id: number) => {
 }
 
 onMounted(async () => {
-  booksData.value = bookStore.getAllBooks;
+  if (bookStore.getAllBooks.length === 0 && bookStore.getAllEBooks.length === 0) {
+    books.getAllContributorsBooks();
+    booksData.value = bookStore.getBooks;
+  }
+
+  booksData.value = bookStore.getBooks;
+  console.log(bookStore.getBooksById(2592));
 });
 </script>

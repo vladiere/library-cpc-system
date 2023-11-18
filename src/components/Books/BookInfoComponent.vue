@@ -14,20 +14,29 @@
     height: 420px
     border-radius: 5px
 
+.onmobile
+  width: 100%
+  max-width: 280px
+
+  img
+    width: 100%
+    height: 280px
+    border-radius: 5px
+
 .text-underline
   text-decoration: underline
 </style>
 
 <template>
   <div :class="!Platform.is.mobile ? 'row q-gutter-x-xl q-mtt-xl q-ml-xl' : 'column q-gutter-y-sm items-center q-mt-lg'">
-      <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md left-container' : ''">
+      <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md left-container' : 'onmobile'">
         <img :src="checkIfImage(img_path)" class="shadow-2"/>
       </div>
       <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md' : 'col column q-gutter-y-sm'">
         <span :class="!Platform.is.mobile ? 'text-h4 text-capitalize text-blue-9 text-weight-light' : 'text-h6 text-capitalize text-blue-9 text-weight-light'">{{ title }}</span>
         <span :class="!Platform.is.mobile ? 'text-h6 text-capitalize q-mt-lg text-weight-light' : 'text-subtitle1 text-weight-light text-capitalize'">
           by
-          <span class="text-underline">{{ author_name }}</span>
+          <span class="text-underline">{{ author_name || 'No author available' }}</span>
         </span>
         <div :class="!Platform.is.mobile ? 'row q-gutter-x-md' : 'row q-gutter-x-sm'">
           <q-rating
@@ -77,7 +86,6 @@
     <q-dialog v-model="dialog.show" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
             <span class="q-ml-sm">{{ dialog.message }}</span>
         </q-card-section>
 

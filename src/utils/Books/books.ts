@@ -5,33 +5,24 @@ import { useUserStore } from 'src/stores/user-store';
 const bookStore = useBooksStore();
 const userStore = useUserStore();
 
-const getAllBooks = async () => {
+const getAllContributorsBooks = async () => {
   try {
-    const response = await api.post('/get/all/books/inventory', { limit: 0 }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    })
-    bookStore.initBooks(response.data);
-  } catch (error) {
-    throw error;
-  }
-}
-
-const getUserContributions = async () => {
-  try {
-    const response = await api.post('/user/book/contribute/list', { user_id: 0, limit: 0 }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    });
-    bookStore.initEBooks(response.data);
+    if (bookStore.getAllBooks.length === 0 && bookStore.getAllEBooks.length === 0) {
+      const response = await api.get('/contributorsbooks/all', {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`
+        }
+      });
+      bookStore.initEBooks(response.data[0]);
+      bookStore.initAllEBooks(response.data[1]);
+      bookStore.initBooks(response.data[2]);
+      bookStore.initAllBooks(response.data[3]);
+    }
   } catch (error) {
     throw error;
   }
 }
 
 export default {
-  getAllBooks,
-  getUserContributions,
+  getAllContributorsBooks,
 }

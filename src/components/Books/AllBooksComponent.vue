@@ -1,16 +1,17 @@
 
 <template>
-  <q-card :class="!Platform.is.mobile ? 'q-ma-sm my-book-card cursor-pointer' : ' onmobile-book-card cursor-pointer'">
+  <q-card :class="!Platform.is.mobile ? 'q-ma-sm my-book-card cursor-pointer relative-position' : 'relative-position onmobile-book-card cursor-pointer'">
     <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" />
     <q-card-section>
       <q-item-label lines="2" :class="!Platform.is.mobile ? 'text-subtitle1' : ''">{{ title ? title : 'no book title available' }}</q-item-label>
       <q-item-label lines="1" class="text-caption">{{ author_name ? author_name : 'no author available' }}</q-item-label>
-      <q-item-label lines="1" class="text-caption row items-center" >
+
+    </q-card-section>
+    <div class="absolute-top-right q-ma-sm text-subtitle1 row items-center" >
          <q-icon size="1.5em" name="mdi-star" color="orange-9" v-for="count in calculateLogRating(total_checkedout)" :key="count" />
          <q-icon size="1.5em" name="mdi-star-outline" color="orange-9" v-if="calculateLogRating(total_checkedout) === 0" />
         {{ calculateLogRating(total_checkedout) }}
-      </q-item-label>
-    </q-card-section>
+      </div>
   </q-card>
 </template>
 

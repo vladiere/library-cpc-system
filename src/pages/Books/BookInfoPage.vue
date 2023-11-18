@@ -3,8 +3,13 @@
     <BookInfoComponent v-bind="bookInfo" />
     <div class="column q-gutter-y-md bg-blue-2 q-mt-xl rounded-borders">
       <span class="text-h4 text-weight-light text-blue-9 self-center q-mt-lg">More by this Author</span>
-      <div :class="!Platform.is.mobile ? 'row q-gutter-x-md items-center q-pl-xl text-capitalize q-my-lg' : 'row q-gutter-md text-capitalize justify-center q-my-lg'">
-        <AuthorBooksComponent v-for="book in authorBooks" :key="book.book_id" v-bind="book" @click="gotoBookInfo(book.book_id, book.title)"/>
+      <div :class="!Platform.is.mobile ? 'row q-gutter-md items-center q-pl-xl text-capitalize q-my-lg' : 'row q-gutter-md text-capitalize justify-center q-my-lg'">
+        <AuthorBooksComponent
+          v-for="book in authorBooks"
+          :key="book.book_id"
+          v-bind="book"
+          @click="gotoBookInfo(book.book_id, book.title)"
+        />
       </div>
     </div>
   </q-page>

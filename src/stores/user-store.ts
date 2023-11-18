@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', {
       this.token = '';
       this.authorize = false;
       this.users = [];
-    },
+  },
   },
   getters: {
     isAuthenticated: (state) => state.authorize,

@@ -31,8 +31,8 @@
       <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" >
 
       <q-card-section class="text-capitalize">
-        <q-item-label lines="2" :class="Platform.is.mobile ? 'text-subtitle1 text-blue-9' : 'text-h6 text-blue-9'">{{ title }}</q-item-label>
-        <div class="text-subtitle2 text-weight-light">{{ author_name }}</div>
+        <q-item-label lines="2" :class="Platform.is.mobile ? 'text-subtitle1 text-blue-9' : 'text-subtitle1 text-blue-9'">{{ title }}</q-item-label>
+        <div class="text-body text-weight-light">{{ author_name || 'N/A' }}</div>
       </q-card-section>
 
     </q-card>
