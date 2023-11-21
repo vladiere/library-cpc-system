@@ -103,7 +103,7 @@ routes.push(
         path: '/instructor',
         name: 'Intructor',
         meta: { auth: true },
-        component: () => import('layouts/IntructorRecommendLayout.vue'),
+        component: () => import('layouts/InstructorRecommendLayout.vue'),
         children: [
           {
             path: 'recommend',

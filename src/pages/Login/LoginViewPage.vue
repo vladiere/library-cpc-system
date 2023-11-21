@@ -23,7 +23,7 @@
 </style>
 
 <template>
-  <q-page class="bg-grey-3">
+  <q-page class="bg-grey-2">
     <div
       :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
       :style="
@@ -140,16 +140,16 @@
                 style="border-radius: 8px"
               />
 
-              <span
-                @click="gotoLink('/forgot-password')"
-                :class="
-                  Platform.is.mobile
-                    ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer'
-                    : 'text-subtitle1 text-dark cursor-pointer'
-                "
-                style="text-decoration: none"
-                >Forgot Password?</span
-              >
+              <!-- <span -->
+              <!--   @click="gotoLink('/forgot-password')" -->
+              <!--   :class=" -->
+              <!--     Platform.is.mobile -->
+              <!--       ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer' -->
+              <!--       : 'text-subtitle1 text-dark cursor-pointer' -->
+              <!--   " -->
+              <!--   style="text-decoration: none" -->
+              <!--   >Forgot Password?</span -->
+              <!-- > -->
             </div>
           </q-form>
         </div>

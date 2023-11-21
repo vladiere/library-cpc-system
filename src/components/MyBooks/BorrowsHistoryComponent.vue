@@ -44,46 +44,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import EmptyBox from 'assets/empty-folder.png'
-import { api } from 'src/boot/axios';
-import { useUserStore } from 'src/stores/user-store';
-import jwt_decode from 'jwt-decode';
 import { Platform } from 'quasar';
 import DefaultImg from 'src/assets/no-image-available.jpeg'
 import { linkimg } from 'src/utils/links';
+import { useMybookStore } from 'stores/mybooks-store';
+import { IHistorybook } from 'src/utils/interface/transaction';
 
-const userStore = useUserStore();
-const myBooks = ref([]);
-const decoded = jwt_decode(userStore.token);
-
-const getMyBooksTransaction = async () => {
-  try {
-    const response = await api.post('/user/get/borrowed/books',
-    {
-      option: 'all',
-      user_id: decoded.user_id
-    }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    });
-    myBooks.value = [];
-    myBooks.value = response.data;
-  } catch (error) {
-    throw error;
-  }
-}
+const myBooks = ref<IHistorybook>([]);
+const mybookStore = useMybookStore();
 
 const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
 }
 
-onMounted(async () => {
-  await getMyBooksTransaction();
+onMounted(() => {
+  myBooks.value = mybookStore.getTransactionBook;
 })
 
-onBeforeUnmount(() => {
-  myBooks.value = [];
-})
 </script>

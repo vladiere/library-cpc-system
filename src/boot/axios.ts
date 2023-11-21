@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
 
 declare module '@vue/runtime-core' {
@@ -30,7 +30,7 @@ const userStore = useUserStore();
 const refreshToken = async () => {
   try {
     const response = await api.post('/refresh/user/tokens', {
-      refreshToken: userStore.refresh as string,
+      refreshToken: userStore.refresh,
     });
 
     return response.data[0];
@@ -44,7 +44,7 @@ api.interceptors.request.use(
   async (config) => {
     const currentDate = new Date();
 
-    const decodedToken: unknown = jwt_decode(userStore.token as string);
+    const decodedToken: unknown = jwtDecode(userStore.token);
     if (decodedToken.exp * 1000 < currentDate.getTime()) {
       const data = await refreshToken();
       config.headers['Authorization'] = `Bearer ${data.accessToken}`;

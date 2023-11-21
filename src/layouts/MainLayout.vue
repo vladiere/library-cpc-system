@@ -3,7 +3,7 @@
     <q-header elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title class="row items-center">
-          <q-img avatar :src="LibraryLogo" style="width: 2rem" />
+          <q-img avatar :src="LibraryLogo" style="width: 2rem; border-radius: 50%"/>
           <span
             :class="
               Platform.is.mobile
@@ -75,7 +75,7 @@
       v-model="rightDrawerOpen"
       side="right"
       bordered
-      elevated
+      :width="270"
       class="bg-grey-2"
     >
       <q-list dense>
@@ -91,7 +91,7 @@
             <q-img :src="userData.img_path || 'https://cdn-icons-png.flaticon.com/128/1144/1144760.png'" fit="contain" />
           </q-avatar>
           <div class="column">
-            <span class="text-subtitle1 text-capitalize">{{ userData.fullname }}</span>
+            <span class="text-subtitle2 text-capitalize">{{ userData.fullname }}</span>
             <span class="text-caption text-uppercase">{{ userData.department }}</span>
           </div>
         </q-item-label>
@@ -154,7 +154,7 @@ import { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
 import { NotificationsProps } from 'components/Notifications/ListNotifications.vue'
 import { api } from 'src/boot/axios';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
 import { useRouter } from 'vue-router';
 import { SpinnerFacebook } from 'src/utils/loading';
@@ -199,7 +199,7 @@ const userData = ref({
   fullname: '',
   department: '',
 });
-const decoded = jwt_decode(userStore.token)
+const decoded = jwtDecode(userStore.token)
 
 const browseLinks: BrowseLinksProps[] = [
   {

@@ -12,8 +12,8 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { api } from 'src/boot/axios';
-import { useUserStore } from 'src/stores/user-store';
+import { api } from 'boot/axios';
+import { useUserStore } from 'stores/user-store';
 import { socket } from 'src/utils/socket';
 
 export interface EssentialLinkProps {
@@ -29,24 +29,31 @@ const props = withDefaults(defineProps<EssentialLinkProps>(), {
 const router = useRouter();
 const userStore = useUserStore();
 
-const gotoRoute = async (link: string) => {
-  if (link === 'logout') {
-    try {
-      await api.post('/user/logout', { refreshToken: userStore.refresh }, {
-        headers: {
-          Authorization: `Bearer ${userStore.token}`
-        }
-      });
+const userLogout = async () => {
+  try {
+    const response = await api.post('/user/logout', { refreshToken: userStore.refresh }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    });
 
+    if (response.status) {
       socket.emit('user_logout', userStore.refresh)
       userStore.logoutUser();
-
       router.push('/');
-    } catch(error) {
-      throw error;
+    } else {
+      throw new Error(response);
     }
+  } catch(error) {
+    throw error;
+  }
+}
+
+const gotoRoute = async (link: string) => {
+  if (link === 'logout') {
+    await userLogout();
   } else {
-    await router.push(link);
+    router.push(link);
   }
 };
 

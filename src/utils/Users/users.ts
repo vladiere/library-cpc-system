@@ -1,18 +1,22 @@
 import { api } from 'boot/axios';
 import { useUserStore } from 'stores/user-store';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const userStore = useUserStore();
-const decoded = jwt_decode(userStore.token);
 
 const getUserdata = async () => {
   try {
-    const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
-      headers: {
-        authorization: `Bearer ${userStore.token}`
-      }
-    });
-    userStore.initUser(response.data);
+    if (userStore.getUserData.length === 0 ) {
+      console.log('initialized')
+      const decoded = jwtDecode(userStore.token);
+
+      const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {
+        headers: {
+          authorization: `Bearer ${userStore.token}`
+        }
+      });
+      userStore.initUser(response.data);
+    }
   } catch (error) {
     throw error
   }

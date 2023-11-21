@@ -43,11 +43,14 @@
         <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
           Personalize Recommendation
         </div>
+        <div :class="ifRoute === 'contributions' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/contribute/list')">
+          My Contributions
+        </div>
       </div>
      </q-dialog>
 
     <q-page-container>
-      <router-view v-if="!isRouteLoading"/>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
@@ -56,7 +59,7 @@
 import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Platform } from 'quasar';
-import { SpinnerFacebook } from 'src/utils/loading';
+import mybooks from 'src/utils/Books/mybooks';
 
 defineComponent({
   name: 'MyBooksLayout',
@@ -71,8 +74,9 @@ const gotoLink = (link: string) => {
   router.push(link);
 };
 
-onMounted(() => {
+onMounted(async() => {
   ifRoute.value = router.currentRoute.value.name
+  await mybooks.getTransactionPendingAndBooks();
 })
 
 watch(() => router.currentRoute.value.name, (newRouteName) => {
@@ -81,11 +85,5 @@ watch(() => router.currentRoute.value.name, (newRouteName) => {
 
 watch(() => router.currentRoute.value, () => {
   isRouteLoading.value = true;
-  SpinnerFacebook(isRouteLoading.value, 'Loading...');
-
-  setTimeout(() => {
-    isRouteLoading.value = false;
-    SpinnerFacebook(isRouteLoading.value);
-  }, 1000);
 })
 </script>

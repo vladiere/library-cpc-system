@@ -1,69 +1,64 @@
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 250px
+.on-notmobile
+  height: 300px
+  width: 290px
+.on-mobile
+  height: 230px
+  width: 165px
+</style>
+
 <template>
   <div class="q-pa-md">
     <div v-if="myBooks.length === 0" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
       No recent pending status
     </div>
-    <div class="row q-gutter-md">
-      <q-img
-        v-for="item in myBooks"
-        :key="item.user_id"
-        :src="checkIfImage(item.img_path)"
-        fit="fill"
-        :style="Platform.is.mobile ? 'height: 180px; max-width: 150px; border-radius: 10px' : 'height: 280px; max-width: 210px; border-radius: 10px'"
+    <div class="row justify-center q-gutter-sm q-mt-lg">
+      <q-intersection
+        v-for="index in myBooks"
+        :key="index"
+        transition="scale"
+        :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
       >
-        <div class="absolute-full text-h6 flex flex-center text-bold text-amber-2">
-          {{ item.status }}
-        </div>
-        <q-tooltip class="bg-grey-10 text-grey-2 text-capitalize" :delay="300">
-          {{ item.title }}
-        </q-tooltip>
-      </q-img>
+        <q-card flat bordered>
+          <q-img :src="checkIfImage(img_path)" />
+
+          <q-card-section>
+            <div class="text-subtitle1">{{ wordFormatter(index.title) }}</div>
+            <div class="text-caption text-uppercase text-orange-10">{{ index.status }}</div>
+         </q-card-section>
+        </q-card>
+      </q-intersection>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
-import { Platform } from 'quasar';
-import { api } from 'src/boot/axios';
-import { useUserStore } from 'src/stores/user-store';
-import jwt_decode from 'jwt-decode';
+import { onMounted, ref } from 'vue';
+import { Platform, format } from 'quasar';
 import { linkimg } from 'src/utils/links';
-import DefaultImg from 'src/assets/no-image-available.jpeg'
+import DefaultImg from 'src/assets/no-image-available.jpeg';
+import { useMybookStore } from 'stores/mybooks-store';
+import { IPending } from 'src/utils/interface/transaction';
 
-
-const userStore = useUserStore();
-const myBooks = ref([]);
-const decoded = jwt_decode(userStore.token);
-
-const getMyBooksTransaction = async () => {
-  try {
-    const response = await api.post('/user/get/borrowed/books',
-    {
-      option: 'Pending',
-      user_id: decoded.user_id
-    }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    });
-    myBooks.value = [];
-    myBooks.value = response.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
+const myBooks = ref<IPending>([]);
+const bookStore = useMybookStore();
 
 const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
 }
 
-onMounted(async () => {
-  await getMyBooksTransaction();
+const wordFormatter = (word_title: stirng) => format.capitalize(word_title);
+
+onMounted(() => {
+  bookStore.getTransactionPending.map((item: unknown) => {
+    if (item.status === 'Pending') {
+      myBooks.value = item;
+    }
+  });
 });
 
-onBeforeUnmount(() => {
-  myBooks.value = [];
-})
 </script>

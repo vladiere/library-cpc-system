@@ -19,7 +19,7 @@
 import { defineComponent, onMounted, defineAsyncComponent, ref } from 'vue';
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { UserContributionProps } from 'components/Contribute/UserContributionComponent.vue';
 
 defineComponent({
@@ -34,7 +34,7 @@ const UserContributionComponent = defineAsyncComponent({
 
 const contributionList = ref<UserContributionProps>([]);
 const userStore = useUserStore();
-const decoded = jwt_decode(userStore.token);
+const decoded = jwtDecode(userStore.token);
 
 const getUserContributions = async () => {
   try {

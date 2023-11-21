@@ -1,3 +1,12 @@
+<style lang="sass" scoped>
+.on-mobile
+  height: 200px
+  max-width: 150px
+.on-notmobile
+  height: 240px
+  max-width: 200px
+</style>
+
 <template>
   <div class="column q-gutter-y-md q-ml-md">
     <span class="text-h6 text-grey-9 self-center"
@@ -11,41 +20,24 @@
         <q-img :src="ManEmpty" style="width: 15rem" />
         <span class="text-grey-9">There are no books in this shelf</span>
       </div>
-      <q-scroll-area
-        v-else
-        :thumb-style="thumbStyle"
-        :bar-style="barStyle"
-        style="height: 70vh; max-width: 100%"
-      >
-        <div
-          :class="
-            $q.platform.is.mobile ? '' : 'row justify-center text-capitalize'
-          "
+      <div class="row justify-center q-gutter-sm">
+        <q-intersection
+          v-for="myBook in myBooks"
+          :key="myBook.id"
+          :class=" Platform.is.mobile ? 'q-ma-sm on-mobile' : 'on-notmobile q-ma-md cursor-pointer rounded-borders ' "
+          transition="scale"
         >
           <q-img
-            v-for="myBook in myBooks"
-            :key="myBook.id"
-            :src="myBook.link"
-            spinner-color="white"
-            style="height: 200px; max-width: 150px"
-            :class="
-              $q.platform.is.mobile
-                ? 'q-ma-sm'
-                : 'q-ma-md cursor-pointer rounded-borders'
-            "
-            @click="gotoLink('/book')"
-          >
-            <div
-              class="absolute-bottom text-subtitle1 text-capitalize text-center"
+              :src="myBook.link"
+              spinner-color="primary"
             >
-              {{ myBook.title }}
-              <q-badge align="middle" color="blue-7" class="q-px-md q-py-sm">
-                By. {{ myBook.recommendedBy }}
-              </q-badge>
-            </div>
-          </q-img>
-        </div>
-      </q-scroll-area>
+              <div class="absolute-bottom column text-subtitle1 text-center" >
+                {{ myBook.title }}
+                <span class="text-caption">by: {{ myBook.recommendedBy }}</span>
+              </div>
+            </q-img>
+        </q-intersection>
+      </div>
     </div>
   </div>
 </template>
@@ -54,6 +46,7 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ManEmpty from 'assets/man-empty.png';
+import { Platform } from 'quasar';
 
 defineComponent({
   name: 'MyBooksPage',
@@ -67,22 +60,6 @@ interface MyBook {
   title: string;
   recommendedBy: string;
 }
-
-const thumbStyle = ref({
-  right: '4px',
-  borderRadius: '5px',
-  backgroundColor: '#027be3',
-  width: '5px',
-  opacity: 0.75,
-});
-
-const barStyle = ref({
-  right: '2px',
-  borderRadius: '9px',
-  backgroundColor: '#027be3',
-  width: '9px',
-  opacity: 0.2,
-});
 
 const myBooks = ref<MyBook[]>([
   {

@@ -44,7 +44,7 @@
 import { defineComponent, defineAsyncComponent, onMounted, onBeforeUnmount, ref } from 'vue';
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
-import jwt_decoded from 'jwt-decode';
+import { jwtDecoded } from 'jwt-decode';
 import { Notify } from 'quasar';
 import { AllListProps } from 'components/Lists/AllListsComponent.vue';
 import { SpinnerIos } from 'src/utils/loading'
@@ -71,7 +71,7 @@ const errorMap = ref({
   }
 })
 const userStore = useUserStore();
-const decoded = jwt_decoded(userStore.token);
+const decoded = jwtDecoded(userStore.token);
 const currentDate = new Date();
 const allList = ref<AllListProps>([]);
 const newList = ref({

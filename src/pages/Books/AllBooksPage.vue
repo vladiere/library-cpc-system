@@ -12,7 +12,7 @@
     box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
   img
     height: calc(100% - 85px)
-    object-fit: cover
+    object-fit: fill
 
 .book-item-mobile
   height: 220px
@@ -28,7 +28,7 @@
 </style>
 
 <template>
-  <q-page class="column" >
+  <q-page class="column q-mb-xl" >
     <div :class="!Platform.is.mobile ? 'column items-center q-my-xl q-gutter-y-md' : 'column items-center q-my-md q-gutter-y-sm'">
       <span :class="!Platform.is.mobile ? 'text-h3 text-weight-thin text-blue-9' : 'text-h4 text-weight-thin text-blue-9'">CPC Books we love</span>
       <span class="text-h6 text-weight-regualr text-blue-9">Favorite Reads!</span>
@@ -51,32 +51,35 @@
           icon-next="mdi-chevron-right"
         />
       </div>
-      <q-input
-        placeholder="Search"
-        outlined
-        class="q-mr-xl"
-        dense
-        v-model="filter"
-        rounded
-        >
-        <template v-slot:append>
-          <q-icon name="mdi-magnify" />
-        </template>
-      </q-input>
+        <q-input
+          placeholder="Search Book or Author"
+          outlined
+          :class="!Platform.is.mobile ? 'q-mr-xl' : ''"
+          dense
+          v-model="filter"
+          rounded
+          >
+          <template v-slot:append>
+            <q-icon name="mdi-magnify" />
+          </template>
+        </q-input>
     </div>
 
     <q-separator size="2px" width="95%" class="self-center"/>
 
-    <div :class="!Platform.is.mobile ? 'row q-gutter-lg justify-center text-capitalize q-mt-md' : 'row q-gutter-md justify-center text-capitalize q-mt-sm'">
+    <div :class="!Platform.is.mobile ? 'row q-gutter-lg justify-center q-mt-md' : 'row q-gutter-md justify-center q-mt-sm'">
       <q-intersection
         v-for="item in paginatedBooksList"
         :key="item.book_id"
         transition="scale"
-        :class="!Platform.is.mobile ? 'book-item' : 'book-item-mobile'"
+        :class="!Platform.is.mobile ? 'book-item text-capitalize' : 'book-item-mobile text-capitalize'"
         @click="gotoBookInfo(item.book_id)"
       >
         <AllBooksComponent v-bind="item" @click="gotoBookInfo(item.book_id)"/>
       </q-intersection>
+      <div v-if="filteredBooksList.length === 0" class="q-mt-xl flex flex-center text-center text-h6 text-weight-light text-grey-8">
+        Apologies, but the books you were searching for could not be found.
+      </div>
    </div>
   </q-page>
 </template>
@@ -106,11 +109,22 @@ const itemsPerPage = !Platform.is.mobile ? 15 : 10;
 const booksData = ref<AllBooksListInterface>([]);
 const totalPages = computed(() => Math.ceil(booksData.value.length / itemsPerPage));
 const router = useRouter();
+const filter = ref('')
 
 const paginatedBooksList = computed(() => {
   const start = (current.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return booksData.value.slice(start, end);
+  return filteredBooksList.value.slice(start, end);
+});
+
+const filteredBooksList = computed(() => {
+  const searchTerm = filter.value.toLowerCase();
+  return booksData.value.filter((book) => {
+    return (
+      book.title.toLowerCase().includes(searchTerm) ||
+      book.author_name.toLowerCase().includes(searchTerm)
+    );
+  });
 });
 
 const gotoBookInfo = (book_id: number) => {
@@ -118,12 +132,7 @@ const gotoBookInfo = (book_id: number) => {
 }
 
 onMounted(async () => {
-  if (bookStore.getAllBooks.length === 0 && bookStore.getAllEBooks.length === 0) {
-    books.getAllContributorsBooks();
-    booksData.value = bookStore.getBooks;
-  }
-
-  booksData.value = bookStore.getBooks;
-  console.log(bookStore.getBooksById(2592));
+  await books.getAllContributorsBooks();
+  booksData.value = await bookStore.getBooks;
 });
 </script>

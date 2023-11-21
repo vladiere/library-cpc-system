@@ -38,8 +38,17 @@ export const useBooksStore = defineStore('books', {
   getters: {
     getAllBooks: (state) =>  state.books,
     getBooks: (state) =>  state.allBooks,
-
     getAllEBooks: (state) => state.ebooks,
     getEBooks: (state) => state.allEBooks,
+
+    getBookById: (state) => (book_id: number) => {
+      return state.allBooks.find((book: unknown) => book.book_id === book_id);
+    },
+    getBookAuthor: (state) => (author_name: string) => {
+      return state.allBooks.filter((book: unknown) => book.author_name === author_name);
+    },
+    getBookByTitle: (state) => (book_title: string) => {
+      return state.allBooks.find((book: unknown) => book.title === book_title);
+    }
   },
 });

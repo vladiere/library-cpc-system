@@ -3,13 +3,11 @@
     :class="
       Platform.is.mobile
         ? 'text-capitalize q-mt-lg'
-        : 'q-ml-sm q-mt-md text-capitalize'
+        : 'q-ml-sm q-mt-md '
     "
   >
-    <span
-      :class="Platform.is.mobile ? '' : 'text-h5 q-mb-md'"
-      style="text-decoration: underline"
-      >Books Recommended base in your search
+    <span :class="Platform.is.mobile ? '' : 'text-h5 q-mb-md'" style="text-decoration: underline" >
+      Books recommended based on your previous borrowing history.
     </span>
     <div
       v-if="recommendBooks.length === 0"

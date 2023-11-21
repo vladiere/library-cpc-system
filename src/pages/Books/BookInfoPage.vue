@@ -19,10 +19,9 @@
 import { defineComponent, ref, onMounted, watch, defineAsyncComponent } from 'vue';
 import { Platform } from 'quasar';
 import { BookInfoInterface } from 'components/Books/BookInfoComponent.vue'
-import { api } from 'src/boot/axios';
 import { useRouter } from 'vue-router';
-import { useUserStore } from 'src/stores/user-store';
 import { AuthorBooksInterface } from 'components/Author/AuthorBooksComponent.vue'
+import { useBooksStore } from 'stores/books-store';
 
 defineComponent({
   name: 'BookInfoPage'
@@ -43,32 +42,12 @@ const AuthorBooksComponent = defineAsyncComponent({
 const router = useRouter()
 const bookInfo = ref<BookInfoInterface>([]);
 const authorBooks = ref<AuthorBooksInterface>([]);
-const userStore = useUserStore();
+const bookStore = useBooksStore();
 
 const getBookInfo = async () => {
   try {
-    const response = await api.post('/get/all/books/inventory', { limit: 1, book_id: router.currentRoute.value.query.book_id }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    });
-    bookInfo.value = response.data[0];
-
-    getAuthorBooks();
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getAuthorBooks = async () => {
-  try {
-    const response = await api.post('/get/books/author', { author_name: bookInfo.value.author_name }, {
-      headers: {
-        Authorization: `Bearer ${userStore.token}`
-      }
-    })
-
-    authorBooks.value = response.data;
+    bookInfo.value = await bookStore.getBookById(parseInt(router.currentRoute.value.query.book_id));
+    authorBooks.value = await bookStore.getBookAuthor(bookInfo.value.author_name);
   } catch (error) {
     throw error;
   }

@@ -21,11 +21,11 @@
 import { linkfile } from 'src/utils/links';
 import { format } from 'quasar';
 import { useUserStore } from 'src/stores/user-store';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const { capitalize } = format;
 const userStore = useUserStore();
-const decoded = jwt_decode(userStore.token);
+const decoded = jwtDecode(userStore.token);
 
 export interface UserContributionProps {
   author_fullname: string;

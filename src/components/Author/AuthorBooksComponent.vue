@@ -31,7 +31,7 @@ import { Platform } from 'quasar';
 import DefaultImg from 'src/assets/no-image-available.jpeg'
 
 export interface AuthorBooksInterface {
-  author_name: string;
+  author_name: string | null;
   title: string;
   img_path: string | null;
 }

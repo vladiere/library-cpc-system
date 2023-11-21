@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-grey-4 text-dark column q-pa-md q-mt-xl q-gutter-y-md">
+  <div class="bg-blue-1 text-dark column q-pa-md q-mt-xl q-gutter-y-md">
     <div class="self-center q-mb-lg">
       <q-toolbar-title>
         <q-avatar>

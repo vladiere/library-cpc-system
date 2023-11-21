@@ -3,7 +3,7 @@
     <div class=" q-pa-md bg-blue-2 q-gutter-md q-pb-lg" :style="!Platform.is.mobile ? 'margin: 2em 10em 0px 10rem' : ''">
       <div class="row justify-between">
         <div class="column ">
-          <q-img :src="img ? img : 'https://picsum.photos/id/209/1200/820'" fit="cover" height="300px" :width="!Platform.is.mobile ? '350px' : '300px'"/>
+          <q-img :src="img_path ? img_path : 'https://picsum.photos/id/209/1200/820'" fit="cover" height="300px" :width="!Platform.is.mobile ? '350px' : '300px'"/>
         </div>
         <div :class="!Platform.is.mobile ? 'column text-body q-mr-md' : ''">
           <div class="column">
@@ -30,7 +30,6 @@
           </div>
         </div>
        </div>
-      <RecommendedBook  class="q-mt-xl" :count="5"/>
     </div>
   </q-page>
 </template>
@@ -42,13 +41,6 @@ import { useUserStore } from 'stores/user-store';
 
 defineComponent({
   name: 'UserProfilePage',
-});
-
-const RecommendedBook = defineAsyncComponent({
-  loader: () => import('components/Recommend.vue'),
-  delay: 300,
-  timeout: 2400,
-  suspensible: false
 });
 
 const userStore = useUserStore();
@@ -65,11 +57,11 @@ const userData = ref({
 });
 
 const setUserProfile = async () => {
+  console.log(userStore.getUserData);
   await userStore.getUserData.map((item: unknown) => {
     userData.value.fullname = item.fullname;
     userData.value.created_at = item.created_at;
     userData.value.updated_at = item.updated_at;
-    console.log(item);
   })
 }
 

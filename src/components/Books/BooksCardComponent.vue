@@ -8,7 +8,7 @@
     height: 210px
     border-radius: 15px
     transition: all 0.5s cubic-bezier(0.79, 0.33, 0.14, 0.53)
-    object-fit: cover
+    object-fit: fill
     transform: scale(1.01)
 
     &:hover
@@ -22,13 +22,13 @@
   img
     height: 200px
     border-radius: 15px
-    object-fit: cover
+    object-fit: fill
     transform: scale(1.01)
 </style>
 
 <template>
-  <q-card :class="Platform.is.mobile ? 'mobile-card bg-transparent column items-center' : 'my-card bg-transparent column items-center'" flat square>
-      <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" >
+  <q-card :class="Platform.is.mobile ? 'mobile-card column items-center' : 'my-card column items-center'" flat square>
+      <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" class="shadow-2" >
 
       <q-card-section class="text-capitalize">
         <q-item-label lines="2" :class="Platform.is.mobile ? 'text-subtitle1 text-blue-9' : 'text-subtitle1 text-blue-9'">{{ title }}</q-item-label>

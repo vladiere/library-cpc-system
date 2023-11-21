@@ -11,7 +11,7 @@
          <q-icon size="1.5em" name="mdi-star" color="orange-9" v-for="count in calculateLogRating(total_checkedout)" :key="count" />
          <q-icon size="1.5em" name="mdi-star-outline" color="orange-9" v-if="calculateLogRating(total_checkedout) === 0" />
         {{ calculateLogRating(total_checkedout) }}
-      </div>
+    </div>
   </q-card>
 </template>
 

@@ -38,18 +38,10 @@
           by
           <span class="text-underline">{{ author_name || 'No author available' }}</span>
         </span>
-        <div :class="!Platform.is.mobile ? 'row q-gutter-x-md' : 'row q-gutter-x-sm'">
-          <q-rating
-            name="quality"
-            v-model="quality"
-            max="5"
-            :size="!Platform.is.mobile ? '2em' : '20px'"
-            color="blue-9"
-            icon="star_border"
-            icon-selected="star"
-            no-dimming
-          />
-          <span class="text-h6 text-blue-9">4.5</span>
+        <div :class="!Platform.is.mobile ? 'row q-gutter-x-md items-center text-h6' : 'row q-gutter-x-sm items-center'">
+          <q-icon size="1.5em" name="mdi-star" color="orange-9" v-for="count in calculateLogRating(total_checkedout)" :key="count" />
+          <q-icon size="1.5em" name="mdi-star-outline" color="orange-9" v-if="calculateLogRating(total_checkedout) === 0" />
+          {{ calculateLogRating(total_checkedout) }}
         </div>
         <div :class="!Platform.is.mobile ? 'column q-gutter-y-md q-mt-lg-i text-h6 text-weight-light' : 'column q-gutter-y-sm text-subtitle1 text-weight-light'">
           <div class="col row q-gutter-x-sm">
@@ -71,14 +63,18 @@
         </div>
 
         <div class="row q-gutter-x-md">
-        <q-btn label="reserve" color="primary" :disable="borrowed_copies === 0">
-          <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">
+        <q-btn label="reserve" color="primary" :disable="borrowed_copies === 0" @click="handleClickActions('reserve', book_id)">
+          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">
             Reserve this book
           </q-tooltip>
         </q-btn>
 
         <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)">
-          <q-tooltip class="bg-grey-10 text-grey-2">{{ borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
+          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase">{{ borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
+        </q-btn>
+
+        <q-btn flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege === 'instructor'">
+          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">add to your recommendations</q-tooltip>
         </q-btn>
         </div>
       </div>
@@ -100,7 +96,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useUserStore } from 'src/stores/user-store';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { api } from 'src/boot/axios';
 import { socket } from 'src/utils/socket'
 import { Notify, Platform } from 'quasar'
@@ -120,6 +116,7 @@ export interface BookInfoInterface {
   borrowed_copies: number;
   book_status: string;
   img_path: string | null;
+  total_checkedout: number;
 }
 
 withDefaults(defineProps<BookInfoInterface>(), {
@@ -133,20 +130,19 @@ withDefaults(defineProps<BookInfoInterface>(), {
   borrowed_copies: null,
   book_status: '',
   img_path: '',
+  total_checkedout: null,
 });
 
 const router = useRouter()
-const quality = ref(0);
 const userStore = useUserStore();
-const decoded = jwt_decode(userStore.token);
+const decoded = jwtDecode(userStore.token);
 const dialog = ref({
   show: false,
   message: '',
-})
+});
 
-const handleClickActions = async (actions: string, book_id: number, copies?: number) => {
-  if (actions === 'action-btn') {
-    const transaction_type = copies === 0 ? 'Held' : 'Borrowed';
+const sendTransaction = async (book_id: number, transaction_type: string) => {
+  try {
     const response = await api.post('/transaction/insert', { book_id: book_id, user_id: decoded.user_id, transaction_type: transaction_type }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
@@ -164,8 +160,25 @@ const handleClickActions = async (actions: string, book_id: number, copies?: num
         position: 'top-right'
       })
     }
+  } catch (error) {
+    throw error;
   }
+}
+
+const handleClickActions = async (actions: string, book_id: number, copies?: number) => {
+  let transaction_type = '';
+  if (actions === 'action-btn') {
+    transaction_type = copies === 0 ? 'Held' : 'Borrowed';
+  } else if (actions === 'reserve') {
+    transaction_type = 'Reserved';
+  }
+
+  sendTransaction(book_id,transaction_type);
 };
+
+const calculateLogRating = (downloadCount: number) => {
+  return Math.ceil(Math.log10(downloadCount + 1));
+}
 
 const handleBtnActions = (btn_action?: string) => {
   if ( btn_action === 'confirm') {

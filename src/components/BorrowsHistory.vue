@@ -70,13 +70,13 @@ import { useRouter } from 'vue-router'
 import EmptyBox from 'assets/empty-folder.png'
 import { api } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { linkimg } from 'src/utils/links';
 import DefaultImg from 'src/assets/no-image-available.jpeg'
 
 const userStore = useUserStore();
 const myBooks = ref([]);
-const decoded = jwt_decode(userStore.token);
+const decoded = jwtDecode(userStore.token);
 
 const getMyBooksTransaction = async () => {
   try {

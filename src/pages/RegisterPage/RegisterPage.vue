@@ -15,7 +15,7 @@
         width="20%"
         style="border-radius: 50%"
       />
-      <q-btn flat label="Back to login" icon="mdi-chevron-left" to="/"/>
+      <q-btn flat dense label="Back to login" icon="mdi-chevron-left" to="/"/>
       <q-stepper
         header-nav
         class="full-width q-mt-md"
