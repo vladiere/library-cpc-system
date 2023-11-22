@@ -74,8 +74,10 @@ const booksTimeout = async () => {
 }
 
 onMounted(async () => {
+  if (allBooks.value.length === 0 || contributionList.value.lenght === 0) {
+    await books.getAllContributorsBooks();
+  }
   await booksTimeout();
-  await books.getAllContributorsBooks();
 })
 
 </script>

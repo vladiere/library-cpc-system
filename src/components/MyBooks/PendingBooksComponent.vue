@@ -42,6 +42,7 @@ import { Platform, format } from 'quasar';
 import { linkimg } from 'src/utils/links';
 import DefaultImg from 'src/assets/no-image-available.jpeg';
 import { useMybookStore } from 'stores/mybooks-store';
+import mybooks from 'src/utils/Books/mybooks';
 import { IPending } from 'src/utils/interface/transaction';
 
 const myBooks = ref<IPending>([]);
@@ -53,7 +54,12 @@ const checkIfImage = (img: string | null) => {
 
 const wordFormatter = (word_title: stirng) => format.capitalize(word_title);
 
-onMounted(() => {
+onMounted(async() => {
+  console.log(bookStore.getTransactionPending)
+  if (myBooks.value.lenght === 0) {
+    await mybooks.getTransactionPendingAndBooks();
+  }
+
   bookStore.getTransactionPending.map((item: unknown) => {
     if (item.status === 'Pending') {
       myBooks.value = item;

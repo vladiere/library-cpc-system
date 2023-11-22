@@ -51,6 +51,7 @@ import DefaultImg from 'src/assets/no-image-available.jpeg'
 import { linkimg } from 'src/utils/links';
 import { useMybookStore } from 'stores/mybooks-store';
 import { IHistorybook } from 'src/utils/interface/transaction';
+import mybooks from 'src/utils/Books/mybooks';
 
 const myBooks = ref<IHistorybook>([]);
 const mybookStore = useMybookStore();
@@ -59,7 +60,10 @@ const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
 }
 
-onMounted(() => {
+onMounted(async() => {
+  if (myBooks.value.length === 0) {
+    await mybooks.getTransactionPendingAndBooks();
+  }
   myBooks.value = mybookStore.getTransactionBook;
 })
 

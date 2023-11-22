@@ -20,7 +20,7 @@
           Borrows History
         </div>
         <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
-          Personalize Recommendation
+          {{ decode.privilege === 'instructor' ? 'My recommendation' : 'Personalize recommendation'}}
         </div>
         <div :class="ifRoute === 'contributions' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/contribute/list')">
           My Contributions
@@ -41,7 +41,7 @@
           Borrows History
         </div>
         <div :class="ifRoute === 'recommendation' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks/recommendation')">
-          Personalize Recommendation
+          {{ decode.privilege === 'instructor' ? 'My recommendation' : 'Personalize recommendation'}}
         </div>
         <div :class="ifRoute === 'contributions' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/contribute/list')">
           My Contributions
@@ -60,6 +60,8 @@ import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Platform } from 'quasar';
 import mybooks from 'src/utils/Books/mybooks';
+import { jwtDecode } from 'jwt-decode';
+import { useUserStore } from 'stores/user-store';
 
 defineComponent({
   name: 'MyBooksLayout',
@@ -68,7 +70,9 @@ defineComponent({
 const ifRoute = ref('');
 const isRouteLoading = ref(false);
 const showDialog = ref(false);
+const userStore = useUserStore();
 const router = useRouter();
+const decode = jwtDecode(userStore.token);
 
 const gotoLink = (link: string) => {
   router.push(link);

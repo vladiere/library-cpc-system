@@ -22,6 +22,7 @@ import { BookInfoInterface } from 'components/Books/BookInfoComponent.vue'
 import { useRouter } from 'vue-router';
 import { AuthorBooksInterface } from 'components/Author/AuthorBooksComponent.vue'
 import { useBooksStore } from 'stores/books-store';
+import books from 'src/utils/Books/books';
 
 defineComponent({
   name: 'BookInfoPage'
@@ -46,6 +47,9 @@ const bookStore = useBooksStore();
 
 const getBookInfo = async () => {
   try {
+    if (bookInfo.value.length === 0) {
+      await books.getAllContributorsBooks();
+    }
     bookInfo.value = await bookStore.getBookById(parseInt(router.currentRoute.value.query.book_id));
     authorBooks.value = await bookStore.getBookAuthor(bookInfo.value.author_name);
   } catch (error) {

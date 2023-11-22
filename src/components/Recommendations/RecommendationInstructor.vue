@@ -10,6 +10,9 @@
 <template>
   <q-page>
     <div class="row justify-center q-gutter-sm q-mt-lg">
+      <div class="flex flex-center text-weight-light text-h4 text-blue-8" v-if="recommendationInstructor.length === 0">
+        Sorry, no recommendations are currently available.
+      </div>
       <q-intersection
         v-for="item in recommendationInstructor"
         :key="item.recomendation_id"
@@ -17,11 +20,11 @@
         :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img :src="`https://picsum.photos/1200/800?random=${index}`" spinner-color="primary" />
+          <q-img :src="checkIfImage(img_path)" spinner-color="primary" />
 
           <q-card-section>
-            <q-item-label lines="2" class="text-subtitle1 text-capitalize">{{ item.title }}</q-item-label>
-            <div class="text-caption">by John Doe</div>
+            <q-item-label lines="1" class="text-subtitle1 text-capitalize">{{ item.title }}</q-item-label>
+            <div class="text-caption">by {{ wordFormatter(item.author_name) }}</div>
             <div class="row ">
               <q-btn
                 flat
@@ -44,33 +47,35 @@
 
 <script setup lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { Platform } from 'quasar';
-import { jwtDecode } from 'jwt-decode';
-import { useUserStore } from 'stores/user-store';
+import { Platform, format } from 'quasar';
 import recommendations from 'src/utils/Books/recommendation';
 import { IRecommendedInstructor, IRecommendPersonal } from 'src/utils/recommendation';
 import { useRecommendationStore } from 'stores/recommendation-store';
+import DefaultImg from 'src/assets/no-image-available.jpeg'
+import { linkimg } from 'src/utils/links';
+
 
 
 defineComponent({
   name: 'RecommendationPage',
 });
 
-const userStore = useUserStore();
 const recommendationStore = useRecommendationStore();
-const decoded = jwtDecode(userStore.token);
 const recommendationInstructor = ref<IRecommendedInstructor>([]);
-const recommendationPersonal = ref<IRecommendPersonal>([]);
+
+const wordFormatter = (word: string) => {
+  return format.capitalize(word);
+}
+
+const checkIfImage = (img: string | null) => {
+  return img ? linkimg + img : DefaultImg;
+}
 
 onMounted(async() => {
-  if (recommendationInstructor.value.length === 0 || recommendationPersonal.value.lenght === 0) {
+  if (recommendationInstructor.value.length === 0) {
     await recommendations.getAllRecommendations();
   }
 
-  if (decoded.privilege === 'instructor') {
-    recommendationInstructor.value = await recommendationStore.getRecommendations;
-  } else if (decoded.privilege === 'student') {
-    recommendationPersonal.value = await recommendationStore.getRecommendations;
-  }
+  recommendationInstructor.value = await recommendationStore.getRecommendations;
 });
 </script>

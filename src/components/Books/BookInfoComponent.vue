@@ -28,34 +28,39 @@
 </style>
 
 <template>
-  <div :class="!Platform.is.mobile ? 'row q-gutter-x-xl q-mtt-xl q-ml-xl' : 'column q-gutter-y-sm items-center q-mt-lg'">
+  <div :class="!Platform.is.mobile ? 'row q-mt-xl q-ml-xl q-pl-xl' : 'q-ml-lg'">
+    <q-btn icon="mdi-backspace" to="/book/collections" color="primary" flat>
+      <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">return to the previous page</q-tooltip>
+    </q-btn>
+  </div>
+  <div :class="!Platform.is.mobile ? 'row q-gutter-x-xl q-mt-lg q-ml-xl' : 'column q-gutter-y-sm items-center q-mt-md'">
       <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md left-container' : 'onmobile'">
-        <img :src="checkIfImage(img_path)" class="shadow-2"/>
+        <img :src="checkIfImage(props.img_path)" class="shadow-2"/>
       </div>
       <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md' : 'col column q-gutter-y-sm'">
-        <span :class="!Platform.is.mobile ? 'text-h4 text-capitalize text-blue-9 text-weight-light' : 'text-h6 text-capitalize text-blue-9 text-weight-light'">{{ title }}</span>
+        <span :class="!Platform.is.mobile ? 'text-h4 text-capitalize text-blue-9 text-weight-light' : 'text-h6 text-capitalize text-blue-9 text-weight-light'">{{ props.title }}</span>
         <span :class="!Platform.is.mobile ? 'text-h6 text-capitalize q-mt-lg text-weight-light' : 'text-subtitle1 text-weight-light text-capitalize'">
           by
-          <span class="text-underline">{{ author_name || 'No author available' }}</span>
+          <span class="text-underline">{{ props.author_name || 'No author available' }}</span>
         </span>
         <div :class="!Platform.is.mobile ? 'row q-gutter-x-md items-center text-h6' : 'row q-gutter-x-sm items-center'">
           <q-icon size="1.5em" name="mdi-star" color="orange-9" v-for="count in calculateLogRating(total_checkedout)" :key="count" />
           <q-icon size="1.5em" name="mdi-star-outline" color="orange-9" v-if="calculateLogRating(total_checkedout) === 0" />
-          {{ calculateLogRating(total_checkedout) }}
+          {{ calculateLogRating(props.total_checkedout) }}
         </div>
         <div :class="!Platform.is.mobile ? 'column q-gutter-y-md q-mt-lg-i text-h6 text-weight-light' : 'column q-gutter-y-sm text-subtitle1 text-weight-light'">
           <div class="col row q-gutter-x-sm">
             <span>Edition:</span>
-            <span>{{ edition ? edition : '--' }}</span>
+            <span>{{ props.edition ? props.edition : '--' }}</span>
           </div>
           <div class="col row q-gutter-x-sm">
             <span>Publisher:</span>
-            <span class="text-capitalize">{{ publisher_name }}</span>
+            <span class="text-capitalize">{{ props.publisher_name }}</span>
           </div>
           <div class="col row q-gutter-x-sm items-center">
             <span>Copies:</span>
-            <span>{{ borrowed_copies}}</span>
-            <span class="text-blue-9 text-subtitle1">{{ borrowed_copies !== 0 ? 'Available' : 'No Copies available'}}</span>
+            <span>{{ props.borrowed_copies}}</span>
+            <span class="text-blue-9 text-subtitle1">{{ props.borrowed_copies !== 0 ? 'Available' : 'No Copies available'}}</span>
           </div>
           <div v-if="borrowed_copies === 0" class="col row q-gutter-x-sm text-h3 text-weight-light">
             <span class="text-blue">No more copies Available</span>
@@ -63,17 +68,17 @@
         </div>
 
         <div class="row q-gutter-x-md">
-        <q-btn label="reserve" color="primary" :disable="borrowed_copies === 0" @click="handleClickActions('reserve', book_id)">
+        <q-btn label="reserve" color="primary" :disable="props.borrowed_copies === 0" @click="handleClickActions('reserve', props.book_id)">
           <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">
             Reserve this book
           </q-tooltip>
         </q-btn>
 
-        <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', book_id, borrowed_copies)">
-          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase">{{ borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
+        <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', props.book_id, props.borrowed_copies)">
+          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase">{{ props.borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
         </q-btn>
 
-        <q-btn flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege === 'instructor'">
+        <q-btn flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege === 'instructor'" @click="handleAddRecommendation(props.book_id)">
           <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">add to your recommendations</q-tooltip>
         </q-btn>
         </div>
@@ -103,6 +108,7 @@ import { Notify, Platform } from 'quasar'
 import { useRouter } from 'vue-router'
 import DefaultImg from 'src/assets/no-image-available.jpeg'
 import { linkimg } from 'src/utils/links';
+import { useMybookStore } from 'stores/mybooks-store';
 
 
 export interface BookInfoInterface {
@@ -119,7 +125,7 @@ export interface BookInfoInterface {
   total_checkedout: number;
 }
 
-withDefaults(defineProps<BookInfoInterface>(), {
+const props = withDefaults(defineProps<BookInfoInterface>(), {
   book_id: null,
   author_name: '',
   title: '',
@@ -135,11 +141,30 @@ withDefaults(defineProps<BookInfoInterface>(), {
 
 const router = useRouter()
 const userStore = useUserStore();
+const mybookStore = useMybookStore();
 const decoded = jwtDecode(userStore.token);
 const dialog = ref({
   show: false,
   message: '',
 });
+
+const addNewTransactionPending = (book_id: number, transaction_type: string) => {
+  if (mybookStore.getTransactionPending.length === 0) {
+    mybookStore.addTransactionPending({
+      pending_transaction_id: 1,
+      user_id: decoded.user_id,
+      fullname: userStore.getUserData.fullname,
+      transaction_type: transaction_type,
+      status: 'Pending',
+      request_date: Date.now(),
+      approve_date: '',
+      img_path: props.img_path
+    })
+  } else {
+    const latestPending = mybookStore.getTransactionPending[mybookStore.getTransactionPending.length - 1];
+    console.log(latestPendingId, latestPendingId[0].pending_transaction_id);
+  }
+}
 
 const sendTransaction = async (book_id: number, transaction_type: string) => {
   try {
@@ -150,16 +175,60 @@ const sendTransaction = async (book_id: number, transaction_type: string) => {
     });
     socket.emit('notifications', decoded.user_id);
     if (response.data.status === 201) {
+      addNewTransactionPending(book_id,transaction_type);
       dialog.value.show = true;
       dialog.value.message = response.data.message + ' Do you want to check your books of borrowed history?';
     } else if (response.data.status === 409) {
       Notify.create({
         message: response.data.message + ' Check your borrowed book history',
         type: 'warning',
+        progress: true,
         timeout: 2300,
-        position: 'top-right'
+        position: 'top'
       })
     }
+  } catch (error) {
+    throw error;
+  }
+}
+
+const addTomyRecommendations = async (book_id: number) => {
+  try {
+    const response = await api.post('/instructor/add/recommendations', { user_id: decoded.user_id, book_id: book_id }, {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`
+      }
+    });
+    console.log(response);
+    if (response.status === 200) {
+      if (response.data.status === 201) {
+        Notify.create({
+          message: response.data.message,
+          type: 'positive',
+          position: 'top',
+          progress: true,
+          timeout: 2300
+        });
+      } else if (response.data.status === 409) {
+        Notify.create({
+          message: response.data.message,
+          type: 'warning',
+          position: 'top',
+          progress: true,
+          timeout: 2300
+        });
+      }
+    } else {
+      throw new Error(response);
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+const handleAddRecommendation = async (book_id: number) => {
+  try {
+    await addTomyRecommendations(book_id);
   } catch (error) {
     throw error;
   }

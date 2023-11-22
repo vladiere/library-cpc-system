@@ -142,7 +142,7 @@ routes.push(
             name: 'recommendation',
             meta: { auth: true },
             component: () =>
-              import('pages/Recommendations/Recommendations.vue'),
+              import('pages/Recommendations/RecommendationPage.vue'),
           },
         ],
       },
