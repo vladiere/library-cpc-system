@@ -1,6 +1,5 @@
 <style lang="sass" scoped>
-.on-notmobile
-  height: 335px
+.on-notmobile height: 335px
   width: 300px
 .on-mobile
   height: 235px
@@ -31,7 +30,7 @@
                 icon="mdi-information-outline"
                 color="dark"
                 round
-                to="/book"
+                :to="`/book/info?books_id=${item.book_id}`"
               >
                 <q-tooltip class="bg-grey-8 text-grey-3"
                   >Book Information</q-tooltip
