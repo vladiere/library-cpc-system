@@ -18,7 +18,9 @@ export const useMybookStore = defineStore('mybooks', {
       this.transaction_book = transaction_book;
     },
     addTransactionPending (new_transaction) {
-      this.transaction_pending.push(new_transaction);
+      if (this.transaction_pending.length <= 5) {
+        this.transaction_pending.push(new_transaction);
+      }
     },
     clearTransactions () {
       this.transaction_pending = [];

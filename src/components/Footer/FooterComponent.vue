@@ -1,6 +1,6 @@
 <template>
   <div class="bg-blue-1 text-dark column q-pa-md q-mt-xl q-gutter-y-md">
-    <div class="self-center q-mb-lg">
+    <div class="self-center q-mb-xl">
       <q-toolbar-title>
         <q-avatar>
           <img :src="AppLogo" />
@@ -24,7 +24,7 @@
         <span>CPC Library Establish in July 2020</span>
       </div>
       <div class="col column">
-        <div class="row q-gutter-x-sm">
+        <div class="row q-gutter-x-sm q-mt-lg">
           <span class="text-bold">Address: </span>
           <span>Cordova, Poblacion, 6017, Cebu</span>
         </div>
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div class="col self-center">
+    <div class="col self-center q-mt-xl">
       <span class="text-bold">© 2023 CPC Library. All Rights Reserved.</span>
     </div>
   </div>

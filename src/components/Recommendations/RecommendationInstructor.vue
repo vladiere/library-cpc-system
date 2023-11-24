@@ -31,7 +31,7 @@
                 icon="mdi-information-outline"
                 color="dark"
                 round
-                :to="`/book/info?books_id=${item.book_id}`"
+                :to="`/book/info?book_id=${item.book_id}`"
               >
                 <q-tooltip class="bg-grey-8 text-grey-3"
                   >Book Information</q-tooltip

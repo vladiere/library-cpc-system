@@ -1,12 +1,12 @@
 <style lang="sass" scoped >
 .on-notmobile
-  height: 295px
+  max-height: 400px
   width: 260px
 .on-notmobile-card
-  height: 295px
+  max-height: 400px
   width: 250px
   img
-    height: calc(100% - 95px)
+    height: calc(100% - 60px)
 .on-mobile
   height: 235px
   width: 170px
@@ -25,22 +25,32 @@
         transition="scale"
         :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
       >
-        <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card' : 'q-ma-sm on-mobile-card'">
-          <img :src="checkIfImage(item.img_path)" />
+        <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card q-py-sm' : 'q-ma-sm on-mobile-card'">
+          <img :src="checkIfImage(item.img_path)" class="q-mb-sm" />
 
-          <q-card-section>
-            <q-item-label lines="1" class="text-subtitle1">{{ item.title }}</q-item-label>
-            <q-item-label lines="1" class="text-caption">by: {{ item.author_name }}</q-item-label>
-            <div class="row justify-center text-bold text-h6">{{ item.transaction_type }}</div>
-          </q-card-section>
+            <q-expansion-item
+              icon="mdi-information-variant"
+              dense
+              dense-toggle
+              label="Show more"
+            >
+              <q-card class="q-px-sm">
+                <q-card-section>
+                  <q-separator class="q-mb-md"/>
+                  <q-item-label lines="2" class="text-subtitle1">{{ item.title }}</q-item-label>
+                  <q-item-label lines="1" class="text-caption">by: {{ item.author_name }}</q-item-label>
+                  <q-item-label lines="1" class="text-caption">Due date: {{ item.due_date }}</q-item-label>
+                  <div class="row justify-center text-h6 text-weight-light text-blue-8">{{ item.transaction_type }}</div>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
         </q-card>
       </q-intersection>
     </div>
 
-  <div v-if="myBooks.length === 0" class="fit column items-center content-center q-pb-md" >
-    <q-img :src="EmptyBox" style="width: 10rem;"/>
-    <span class="text-h6 text-grey-9">You do not have any History records here</span>
-  </div>
+  <div v-if="myBooks.length === 0" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
+      You do not have any History records here
+    </div>
 </template>
 
 <script setup lang="ts">

@@ -149,7 +149,7 @@ const dialog = ref({
 });
 
 const addNewTransactionPending = (book_id: number, transaction_type: string) => {
-  if (mybookStore.getTransactionPending.length === 0) {
+
     mybookStore.addTransactionPending({
       pending_transaction_id: 1,
       user_id: decoded.user_id,
@@ -160,10 +160,6 @@ const addNewTransactionPending = (book_id: number, transaction_type: string) => 
       approve_date: '',
       img_path: props.img_path
     })
-  } else {
-    const latestPending = mybookStore.getTransactionPending[mybookStore.getTransactionPending.length - 1];
-    console.log(latestPendingId, latestPendingId[0].pending_transaction_id);
-  }
 }
 
 const sendTransaction = async (book_id: number, transaction_type: string) => {
@@ -178,12 +174,12 @@ const sendTransaction = async (book_id: number, transaction_type: string) => {
       addNewTransactionPending(book_id,transaction_type);
       dialog.value.show = true;
       dialog.value.message = response.data.message + ' Do you want to check your books of borrowed history?';
-    } else if (response.data.status === 409) {
+    } else {
       Notify.create({
         message: response.data.message + ' Check your borrowed book history',
         type: 'warning',
         progress: true,
-        timeout: 2300,
+        timeout: 3100,
         position: 'top'
       })
     }

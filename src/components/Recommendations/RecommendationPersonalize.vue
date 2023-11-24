@@ -10,9 +10,9 @@
 <template>
   <q-page>
     <div class="row justify-center q-gutter-sm q-mt-lg">
-      <div class="flex flex-center text-weight-light text-h4 text-blue-8" v-if="recommendationPersonal.length === 0">
-        Sorry, no recommendations are currently available.
-      </div>
+      <div v-if="recommendationPersonal.length === 0" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
+      Sorry, no recommendations are currently available.
+    </div>
       <q-intersection
         v-for="item in recommendationPersonal"
         :key="item.recomendation_id"

@@ -15,7 +15,6 @@ const getTransactionPendingAndBooks = async () => {
           Authorization: `Bearer ${userStore.token}`
         }
       });
-      console.log(response.data);
       mybookStore.initTransactions(response.data.transaction_pending, response.data.transaction_book);
     }
   } catch (error) {

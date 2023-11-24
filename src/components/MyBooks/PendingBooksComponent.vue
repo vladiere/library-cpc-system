@@ -1,13 +1,12 @@
 <style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 250px
 .on-notmobile
-  height: 300px
-  width: 290px
-.on-mobile
-  height: 230px
-  width: 165px
+  max-height: 400px
+  width: 260px
+.on-notmobile-card
+  max-height: 400px
+  width: 250px
+  img
+    height: calc(100% - 60px)
 </style>
 
 <template>
@@ -17,17 +16,17 @@
     </div>
     <div class="row justify-center q-gutter-sm q-mt-lg">
       <q-intersection
-        v-for="index in myBooks"
-        :key="index"
+        v-for="item in myBooks"
+        :key="item"
         transition="scale"
         :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img :src="checkIfImage(img_path)" />
+          <q-img :src="checkIfImage(item.img_path)" />
 
           <q-card-section>
-            <div class="text-subtitle1">{{ wordFormatter(index.title) }}</div>
-            <div class="text-caption text-uppercase text-orange-10">{{ index.status }}</div>
+            <div class="text-subtitle1">{{ wordFormatter(item.title) }}</div>
+            <div class="text-caption text-uppercase text-orange-10">{{ item.status }}</div>
          </q-card-section>
         </q-card>
       </q-intersection>
@@ -55,14 +54,13 @@ const checkIfImage = (img: string | null) => {
 const wordFormatter = (word_title: stirng) => format.capitalize(word_title);
 
 onMounted(async() => {
-  console.log(bookStore.getTransactionPending)
-  if (myBooks.value.lenght === 0) {
+  if (myBooks.value.length === 0) {
     await mybooks.getTransactionPendingAndBooks();
   }
 
-  bookStore.getTransactionPending.map((item: unknown) => {
+  bookStore.getTransactionPending.forEach((item: unknown) => {
     if (item.status === 'Pending') {
-      myBooks.value = item;
+      myBooks.value.push(item);
     }
   });
 });
