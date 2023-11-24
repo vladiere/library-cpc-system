@@ -37,6 +37,10 @@ export const useRecommendationStore = defineStore('recommendation', {
         this.personalize[personalize_index].recommendation_status = new_statue;
       }
     },
+    clearAll () {
+      this.recommendation = [];
+      this.personalize = [];
+    },
     // setVisibility ()
   }
 });

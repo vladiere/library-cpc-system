@@ -34,6 +34,12 @@ export const useBooksStore = defineStore('books', {
     clearAllEBooks() {
       this.allEBooks = [];
     },
+    clearAll () {
+      this.allEBooks = [];
+      this.allBooks = [];
+      this.ebooks = [];
+      this.books = [];
+    }
   },
   getters: {
     getAllBooks: (state) =>  state.books,

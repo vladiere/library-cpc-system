@@ -15,6 +15,9 @@ import { useRouter } from 'vue-router';
 import { api } from 'boot/axios';
 import { useUserStore } from 'stores/user-store';
 import { socket } from 'src/utils/socket';
+import { useBooksStore } from 'stores/books-store';
+import { useMybookStore } from 'stores/mybooks-store';
+import { useRecommendationStore } from 'stores/recommendation-store';
 
 export interface EssentialLinkProps {
   title: string;
@@ -28,6 +31,9 @@ const props = withDefaults(defineProps<EssentialLinkProps>(), {
 
 const router = useRouter();
 const userStore = useUserStore();
+const bookStore = useBooksStore();
+const mybooksStore = useMybookStore();
+const recommendationStore = useRecommendationStore();
 
 const userLogout = async () => {
   try {
@@ -40,6 +46,9 @@ const userLogout = async () => {
     if (response.status) {
       socket.emit('user_logout', userStore.refresh)
       userStore.logoutUser();
+      bookStore.clearAll();
+      mybooksStore.clearTransactions();
+      recommendationStore.clearAll();
       router.push('/');
     } else {
       throw new Error(response);

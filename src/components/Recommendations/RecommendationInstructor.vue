@@ -1,5 +1,6 @@
 <style lang="sass" scoped>
-.on-notmobile height: 335px
+.on-notmobile
+  height: 335px
   width: 300px
 .on-mobile
   height: 235px

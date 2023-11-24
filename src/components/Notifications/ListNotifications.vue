@@ -14,7 +14,6 @@
 export interface NotificationsProps {
   notification_id: number;
   message: string;
-  notification_type: string;
   notification_date: string;
   status: string;
 }
@@ -22,7 +21,6 @@ export interface NotificationsProps {
 withDefaults(defineProps<NotificationsProps>(), {
   notification_id: 0,
   message: '',
-  notification_type: '',
   notification_date: '',
   status: '',
 });
