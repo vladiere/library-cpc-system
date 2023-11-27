@@ -1,3 +1,8 @@
+<style lang="sass" scope>
+.dropdown-class
+  width: 250px
+</style>
+
 <template>
   <q-layout view="hHr lpR lFr">
     <q-header elevated class="bg-blue-12">
@@ -11,8 +16,7 @@
                 : 'q-mx-xs text-grey-2 text-h4 text-bold'
             "
             >CPC
-            <small
-              :style="
+            <small :style="
                 Platform.is.mobile
                   ? 'font-size: 14px !important'
                   : 'font-size: 18px !important'
@@ -45,10 +49,11 @@
             :dropdown-icon="unReadCounts > 0 ? 'mdi-bell-ring' : 'mdi-bell-outline'"
             :color="unReadCounts > 0 ? 'warning' : undefined"
             no-icon-animation
+            content-class="dropdown-class"
           >
           <q-list separator>
             <q-virtual-scroll
-              style="max-height: 300px; overflow-x: hidden; max-width: 450px"
+              style="max-height: 300px; overflow-x: hidden; max-width: 100%"
               :items="notifications"
               separator
               v-slot="{ item, index }"
@@ -148,7 +153,7 @@
 
 <script setup lang="ts">
 import { ref, defineAsyncComponent, onMounted, watch } from 'vue';
-import { Platform } from 'quasar';
+import { Platform, debounce } from 'quasar';
 import { EssentialLinkProps } from 'components/EssentialLink.vue';
 import { BrowseLinksProps } from 'components/BrowseLinks.vue';
 import LibraryLogo from 'src/assets/applogo.png';
@@ -156,9 +161,9 @@ import { NotificationsProps } from 'components/Notifications/ListNotifications.v
 import { api } from 'src/boot/axios';
 import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
-import { useRouter } from 'vue-router';
 import { SpinnerFacebook } from 'src/utils/loading';
 import users from 'src/utils/Users/users';
+import { useRouter } from 'vue-router';
 
 const FooterComponent = defineAsyncComponent({
   loader: () => import('components/Footer/FooterComponent.vue'),
@@ -188,8 +193,7 @@ const ListNotifications = defineAsyncComponent({
   suspensible: false
 });
 
-
-const router = useRouter();
+const router = useRouter()
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
 const isRouteLoading = ref(false);
@@ -292,15 +296,6 @@ const clearMyNotifications = async () => {
   }
 }
 
-const routeLoading = async () => {
-  isRouteLoading.value = true;
-  SpinnerFacebook(isRouteLoading.value, 'Loading...');
-  await setTimeout(() => {
-    isRouteLoading.value = false;
-    SpinnerFacebook(isRouteLoading.value);
-  }, 1100);
-}
-
 const setFullnameDepartment = async () => {
   await users.getUserdata();
   await userStore.getUserData.map((item: unknown) => {
@@ -309,13 +304,23 @@ const setFullnameDepartment = async () => {
   })
 }
 
-onMounted( async () => {
-  await getNotifications();
-  await setFullnameDepartment();
-})
+const setDebounce = debounce(async() => {
+  try {
+    await getNotifications();
+    await setFullnameDepartment();
+  } catch (error) {
+    throw error
+  } finally {
+    SpinnerFacebook(false);
+  }
+}, 1500)
 
-watch(() => router.currentRoute.value, () => {
-  routeLoading();
+onMounted( async () => {
+  SpinnerFacebook(true, 'Loading...');
+  setDebounce();
+});
+
+watch(() => router.currentRoute.value.name, () => {
   rightDrawerOpen.value = false;
 })
 </script>

@@ -23,8 +23,8 @@ export const useMybookStore = defineStore('mybooks', {
       }
     },
     clearTransactions () {
-      this.transaction_pending = [];
-      this.transaction_book = [];
+      this.transaction_pending = [] as Arrray<IPending>;
+      this.transaction_book = [] as Array<IHistorybook>;
     },
     getTransactionPendingByStatus (status) {
       return this.transaction_pending.filter((transaction) => transaction.status === status)

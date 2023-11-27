@@ -17,6 +17,8 @@ const getTransactionPendingAndBooks = async () => {
       });
       mybookStore.initTransactions(response.data.transaction_pending, response.data.transaction_book);
     }
+
+    mybookStore.initTransactions(response.data.transaction_pending, response.data.transaction_book);
   } catch (error) {
     throw error;
   }

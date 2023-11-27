@@ -24,6 +24,7 @@
 
 <template>
   <q-page class="bg-grey-2">
+    <LoadingComponent v-if="isLoading" />
     <div
       :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
       :style="
@@ -231,11 +232,12 @@
 <script setup lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import Logo from '/src/assets/librarylogo.png';
-import { Platform, Notify } from 'quasar';
+import { Platform, debounce, Notify } from 'quasar';
 import { useRouter } from 'vue-router';
 import { notApi } from 'src/boot/axios';
 import { useUserStore } from 'src/stores/user-store';
 import { socket } from 'src/utils/socket';
+import LoadingComponent from 'components/Loaders/LoadingComponent.vue';
 
 defineComponent({
   name: 'LoginViewPage',
@@ -248,13 +250,26 @@ const form = ref({
   email: '',
   password: '',
 });
+const isLoading = ref(false);
 
-const submitForm = async () => {
+const submitLoginform = debounce(async () => {
   try {
     const response = await notApi.post('/user/login', { form: form.value });
     socket.emit('user_connected', form.value.email);
     userStore.initAuthorize(response.data);
+    isLoading.value = false;
     router.push('/home');
+  } catch (error) {
+    throw error;
+  } finally {
+    isLoading.value = false;
+  }
+}, 1500)
+
+const submitForm = async () => {
+  try {
+    isLoading.value = true;
+    await submitLoginform();
   } catch (error: unknown) {
     if (error.response.data.message) {
       Notify.create({

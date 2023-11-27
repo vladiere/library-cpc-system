@@ -7,7 +7,6 @@ const userStore = useUserStore();
 const getUserdata = async () => {
   try {
     if (userStore.getUserData.length === 0 ) {
-      console.log('initialized')
       const decoded = jwtDecode(userStore.token);
 
       const response = await api.post('/user/get/details', { user_id: decoded.user_id }, {

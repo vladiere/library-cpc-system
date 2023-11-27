@@ -10,7 +10,7 @@ export const SpinnerFacebook = (loading_state: boolean, message?: string) => {
     Loading.show({
       message: message,
       spinner: QSpinnerFacebook,
-      spinnerColor: 'blue',
+      spinnerColor: 'blue-8',
       spinnerSize: 120,
       backgroundColor: 'grey-10',
       messageColor: 'grey-11',

@@ -4,7 +4,7 @@
         <q-item-label >{{ notification_date }}</q-item-label>
       </q-item-section>
       <q-item-section>
-        <q-item-label caption lines="2" :class="status === 'unread' ? 'text-grey-10' : ''">{{ message }}</q-item-label>
+        <q-item-label caption :class="status === 'unread' ? 'text-grey-10' : ''">{{ message }}</q-item-label>
       </q-item-section>
     </q-item>
 </template>
