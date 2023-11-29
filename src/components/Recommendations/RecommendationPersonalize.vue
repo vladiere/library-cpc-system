@@ -20,7 +20,7 @@
         :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img :src="`https://picsum.photos/1200/800?random=${index}`" spinner-color="primary" />
+          <q-img :src="checkIfImage(item.img_path)" spinner-color="primary" />
 
           <q-card-section>
             <q-item-label lines="2" class="text-subtitle1 text-capitalize">{{ item.title }}</q-item-label>

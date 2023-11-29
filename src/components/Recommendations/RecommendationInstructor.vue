@@ -20,11 +20,11 @@
         :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img :src="checkIfImage(img_path)" spinner-color="primary" />
+          <q-img :src="checkIfImage(item.img_path)" spinner-color="primary" />
 
           <q-card-section>
             <q-item-label lines="1" class="text-subtitle1 text-capitalize">{{ item.title }}</q-item-label>
-            <div class="text-caption">by {{ wordFormatter(item.author_name) }}</div>
+            <div class="text-caption text-capitalize">{{ item.author_name }}</div>
             <div class="row ">
               <q-btn
                 flat
@@ -63,10 +63,6 @@ defineComponent({
 const recommendationStore = useRecommendationStore();
 const recommendationInstructor = ref<IRecommendedInstructor>([]);
 
-const wordFormatter = (word: string) => {
-  return format.capitalize(word);
-}
-
 const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
 }
@@ -76,6 +72,6 @@ onMounted(async() => {
     await recommendations.getAllRecommendations();
   }
 
-  recommendationInstructor.value = await recommendationStore.getRecommendations;
+  recommendationInstructor.value = recommendationStore.getRecommendations;
 });
 </script>

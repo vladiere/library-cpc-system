@@ -5,14 +5,22 @@ export const useRecommendationStore = defineStore('recommendation', {
   state: () => ({
     recommendation: [] as Array<IRecommendedInstructor>,
     personalize: [] as Array<IRecommendPersonal>,
+    all_recommendations: [] as Array<IRecommendedInstructor>,
   }),
 
   getters: {
     getRecommendations: (state) => state.recommendation,
     getPersonalize: (state) => state.personalize,
+    getAllRecommendations: (state) => state.all_recommendations,
   },
 
   actions: {
+    initAllRecommendations (all_recommendations) {
+      this.all_recommendations = all_recommendations;
+    },
+    addRecommendation (recommendation) {
+      this.recommendation.push(recommendation);
+    },
     initRecommendation (recommendations) {
       this.recommendation = recommendations;
     },
@@ -40,6 +48,7 @@ export const useRecommendationStore = defineStore('recommendation', {
     clearAll () {
       this.recommendation = [];
       this.personalize = [];
+      this.all_recommendations = [];
     },
     // setVisibility ()
   }

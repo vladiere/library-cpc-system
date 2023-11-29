@@ -8,13 +8,19 @@
 </style>
 
 <template>
-  <q-card :class="!Platform.is.mobile ? 'my-card relative-position bg-blue-12 text-white shadow-15' : 'on-mobile q-mb-lg relative-position bg-blue-12 text-white shadow-15'">
-      <div class="absolute-top-right bg-teal-10 text-white q-mr-xs q-mt-xs" style="border-radius: 5px !important; padding: 5px 5px">
+  <q-card :class="!Platform.is.mobile ? 'my-card relative-position bg-blue-12 text-white shadow-15' : 'on-mobile q-mb-md relative-position bg-blue-12 text-white shadow-15'">
+      <div class="absolute-top-right bg-teal-10 text-white q-mr-xs q-mt-xs" style="border-radius: 5px !important; padding: 2px 5px">
         {{ formatNumber(file_total_downloads) }}
       </div>
-      <q-card-section style="height: 130px">
+      <q-card-section >
         <div :class="!Platform.is.mobile ? 'text-h6 text-capitalize' : 'text-subtitle1 text-capitalize'">{{ file_title }}</div>
         <div :class="!Platform.is.mobile ? 'text-subtitle2 text-capitalize' : 'text-body text-capitalize'">{{ author_fullname }}</div>
+      </q-card-section>
+
+      <q-card-section>
+        <q-item-label class="text-capitalize">
+          {{ category_name }}
+        </q-item-label>
       </q-card-section>
 
       <q-card-section>
@@ -23,6 +29,7 @@
       </q-card-section>
 
       <q-separator dark />
+
       <q-card-actions style="height: 50px">
         <q-btn flat class="absolute-bottom q-my-sm self-center" :href="linkfile +'/'+ file_path">Download</q-btn>
       </q-card-actions>
@@ -55,7 +62,6 @@ import { ref } from 'vue';
 import { format, Platform } from 'quasar';
 import { linkfile } from 'src/utils/links';
 
-const expanded = ref(false);
 const { capitalize } = format;
 const clickMore = ref(false);
 

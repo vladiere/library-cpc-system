@@ -6,7 +6,7 @@
           <span :class="Platform.is.mobile ? 'text-h6 text-blue-9 self-center' : 'text-h4 text-blue-9 self-center'">All Books available at CPC Library</span>
           <q-btn icon-right="mdi-chevron-double-right" flat rounded text-color="blue-9" label="See all books list" no-caps to="book/collections" />
         </div>
-        <div class="row q-gutter-x-md justify-center q-mb-md home-div">
+        <div class="row q-gutter-x-md justify-center q-mb-md">
           <BooksCard v-for="books in allBooks" :key="books.book_id" v-bind="books" />
         </div>
       </div>
@@ -59,16 +59,16 @@ const bookStore = useBooksStore();
 const booksTimeout = async () => {
   await setTimeout(async () => {
     await bookStore.getAllBooks.map((item: unknown, index: number) => {
-      if (index <= 5) allBooks.value.push(item);
+      if (index < 5) allBooks.value.push(item);
     })
     await bookStore.getAllEBooks.map((item: unknown, index: number) => {
-      if (index <= 5) contributionList.value.push(item)
+      if (index < 5) contributionList.value.push(item)
     });
   }, 500);
 }
 
 onMounted(async () => {
-  if (allBooks.value.length === 0 || contributionList.value.lenght === 0) {
+  if (allBooks.value.length === 0 || contributionList.value.length === 0) {
     await books.getAllContributorsBooks();
   }
   await booksTimeout();

@@ -46,6 +46,7 @@
             flat
             rounded
             dense
+            :loading="isLoadNotifications"
             :dropdown-icon="unReadCounts > 0 ? 'mdi-bell-ring' : 'mdi-bell-outline'"
             :color="unReadCounts > 0 ? 'warning' : undefined"
             no-icon-animation
@@ -197,6 +198,7 @@ const router = useRouter()
 const userStore = useUserStore();
 const rightDrawerOpen = ref(false);
 const isRouteLoading = ref(false);
+const isLoadNotifications = ref(false);
 const notifications = ref<NotificationsProps>([]);
 const unReadCounts = ref(0);
 const userData = ref({
@@ -267,7 +269,7 @@ const essentialLinks = ref<EssentialLinkProps[]>([
 ]);
 
 
-const getNotifications = async () => {
+const getNotifications = debounce(async () => {
   try {
     const response = await api.post('/notifications/user', { user_id: decoded.user_id }, {
       headers: {
@@ -279,10 +281,12 @@ const getNotifications = async () => {
     unReadCounts.value = notifications.value.filter((item: unknown) => item.status === 'unread').length;
   } catch (error) {
     throw error;
+  } finally {
+    isLoadNotifications.value = false;
   }
-}
+}, 1500);
 
-const clearMyNotifications = async () => {
+const clearMyNotifications = debounce(async () => {
   try {
     await api.post('/notifications/clear', { user_id: decoded.user_id, notification_id: 0 }, {
       headers: {
@@ -293,8 +297,10 @@ const clearMyNotifications = async () => {
     unReadCounts.value = 0;
   } catch (error) {
     throw error;
+  } finally {
+    isLoadNotifications.value = false;
   }
-}
+}, 1500);
 
 const setFullnameDepartment = async () => {
   await users.getUserdata();
@@ -311,12 +317,12 @@ const setDebounce = debounce(async() => {
   } catch (error) {
     throw error
   } finally {
-    SpinnerFacebook(false);
+    isLoadNotifications.value = false;
   }
 }, 1500)
 
 onMounted( async () => {
-  SpinnerFacebook(true, 'Loading...');
+  isLoadNotifications.value = true;
   setDebounce();
 });
 

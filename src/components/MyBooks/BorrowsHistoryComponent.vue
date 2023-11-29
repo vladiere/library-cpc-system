@@ -18,7 +18,7 @@
 </style>
 
 <template>
-    <div class="row q-gutter-sm q-pt-md text-capitalize">
+    <div class="row justify-center q-gutter-sm q-pt-md text-capitalize">
       <q-intersection
         v-for="item in myBooks"
         :key="item"
@@ -26,7 +26,11 @@
         :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
       >
         <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card q-pt-md relevant-position' : 'q-ma-sm relevant-position on-mobile-card'">
-          <img :src="checkIfImage(item.img_path)" class="q-mb-sm" />
+          <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" class="q-mb-sm" >
+            <div class="absolute-full text-h6 text-blue-1 text-bold flex flex-center" v-if="checkDueDate(item.due_date)" >
+              Overdue
+            </div>
+          </q-img>
 
             <q-expansion-item
               icon="mdi-information-variant"
@@ -44,8 +48,8 @@
                 </q-card-section>
               </q-card>
             </q-expansion-item>
-            <q-btn class="absolute-top-right q-ma-sm" icon="mdi-calendar-plus" flat dense color="blue-8" v-if="!checkDueDate(item.due_date)" @click="handleShowDialog(item.transaction_id)">
-              <q-tooltip class="bg-grey-10 text-grey-2" :delay="200">renew book this book</q-tooltip>
+            <q-btn class="absolute-top-right q-ma-sm" label="renew" flat dense color="blue-8" v-if="!checkDueDate(item.due_date)" @click="handleShowDialog(item.transaction_id)">
+              <q-tooltip class="bg-grey-10 text-grey-2" :delay="200">renew this book</q-tooltip>
             </q-btn>
         </q-card>
       </q-intersection>
@@ -120,15 +124,17 @@ const sendRenewalDate = debounce(async(number_date: number, transaction_id: numb
     });
     if (response.status === 200) {
       showDateDialog.value = false;
+      date_number.value = null;
       Notify.create({
         message: response.data.message,
         position: 'top',
         progress: true,
-        type: response.data.status === 200 ? 'positive' : 'warning',
+        type: response.data.status === 200 || 201 ? 'positive' : 'warning',
         timeout: 2300
       });
     } else {
       showDateDialog.value = false;
+      date_number.value = null;
       Notify.create({
         message: 'Something went wrong.',
         position: 'top',
@@ -142,6 +148,7 @@ const sendRenewalDate = debounce(async(number_date: number, transaction_id: numb
   } finally {
     showDateDialog.value = false;
     isLoading.value = false;
+    date_number.value = null;
   }
 }, 1500);
 

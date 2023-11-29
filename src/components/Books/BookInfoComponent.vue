@@ -104,11 +104,13 @@ import { useUserStore } from 'src/stores/user-store';
 import { jwtDecode } from 'jwt-decode';
 import { api } from 'src/boot/axios';
 import { socket } from 'src/utils/socket'
-import { Notify, Platform } from 'quasar'
+import { Notify, Platform, debounce } from 'quasar'
 import { useRouter } from 'vue-router'
 import DefaultImg from 'src/assets/no-image-available.jpeg'
 import { linkimg } from 'src/utils/links';
 import { useMybookStore } from 'stores/mybooks-store';
+import { useBooksStore } from 'stores/books-store';
+import { useRecommendationStore } from 'stores/recommendation-store';
 
 
 export interface BookInfoInterface {
@@ -142,6 +144,8 @@ const props = withDefaults(defineProps<BookInfoInterface>(), {
 const router = useRouter()
 const userStore = useUserStore();
 const mybookStore = useMybookStore();
+const bookStore = useBooksStore();
+const recommendationStore = useRecommendationStore();
 const decoded = jwtDecode(userStore.token);
 const dialog = ref({
   show: false,
@@ -149,7 +153,6 @@ const dialog = ref({
 });
 
 const addNewTransactionPending = (book_id: number, transaction_type: string) => {
-
     mybookStore.addTransactionPending({
       pending_transaction_id: 1,
       user_id: decoded.user_id,
@@ -175,6 +178,7 @@ const sendTransaction = async (book_id: number, transaction_type: string) => {
       dialog.value.show = true;
       dialog.value.message = response.data.message + ' Do you want to check your books of borrowed history?';
     } else {
+      addNewTransactionPending(book_id,transaction_type);
       Notify.create({
         message: response.data.message + ' Check your borrowed book history',
         type: 'warning',
@@ -195,7 +199,7 @@ const addTomyRecommendations = async (book_id: number) => {
         Authorization: `Bearer ${userStore.token}`
       }
     });
-    console.log(response);
+
     if (response.status === 200) {
       if (response.data.status === 201) {
         Notify.create({
@@ -225,6 +229,9 @@ const addTomyRecommendations = async (book_id: number) => {
 const handleAddRecommendation = async (book_id: number) => {
   try {
     await addTomyRecommendations(book_id);
+    const newBookRecommend = bookStore.getBookById(book_id);
+    console.log(newBookRecommend)
+    recommendationStore.addRecommendation(newBookRecommend);
   } catch (error) {
     throw error;
   }
@@ -238,7 +245,7 @@ const handleClickActions = async (actions: string, book_id: number, copies?: num
     transaction_type = 'Reserved';
   }
 
-  sendTransaction(book_id,transaction_type);
+  await sendTransaction(book_id,transaction_type);
 };
 
 const calculateLogRating = (downloadCount: number) => {

@@ -1,13 +1,22 @@
 <template>
   <q-page padding>
     <div class=" q-pa-md bg-blue-2 q-gutter-md q-pb-lg" :style="!Platform.is.mobile ? 'margin: 2em 10em 0px 10rem' : ''">
-      <div class="row justify-between">
-        <div class="column ">
-          <q-img :src="img_path ? img_path : 'https://picsum.photos/id/209/1200/820'" fit="cover" height="300px" :width="!Platform.is.mobile ? '350px' : '300px'"/>
+      <div :class="!Platform.is.mobile ? 'row' : 'column'">
+        <div :class="!Platform.is.mobile ? 'column col-5 q-gutter-y-md' : 'column'">
+          <q-img :src="userData.img_path ? userData.img_path : 'https://picsum.photos/id/209/1200/820'" fit="cover" height="300px" :max-width="!Platform.is.mobile ? '350px' : '300px'"/>
+          <div class="row justify-between">
+            <div class="column">
+              <div :class="!Platform.is.mobile ? 'text-capitalize text-h4 text-weight-bold' : 'text-capitalize text-h5 '"> {{ userData.fullname }} </div>
+              <div class="text-capitalize">
+                Joined {{ userData.created_at }}
+              </div>
+            </div>
+           </div>
         </div>
-        <div :class="!Platform.is.mobile ? 'column text-body q-mr-md' : ''">
-          <div class="column">
-            Last edited on {{ userData.updated_at }}
+
+        <div :class="!Platform.is.mobile ? 'col column q-gutter-y-md text-body q-mx-md' : 'column q-mt-lg q-gutter-y-md'">
+          <div class="column self-end justify-end">
+            Last edited on {{ userData.edited_at }}
             <q-btn
               bordered
               no-caps
@@ -17,19 +26,14 @@
               class="self-end"
             />
           </div>
-          <span class="text-subtitle1 text-weight-light">{{ userData.email_address }}</span>
-          <span class="text-subtitle1 text-weight-light">{{ userData.id_number }}</span>
-          <span class="text-subtitle1 text-weight-light text-uppercase">{{ userData.department }}</span>
-        </div>
-      </div>
-      <div class="row justify-between">
-        <div class="column">
-          <span :class="!Platform.is.mobile ? 'text-capitalize text-h4 text-weight-bold' : 'text-capitalize text-h5 '"> {{ userData.fullname }} </span>
-          <div class="text-capitalize">
-            Joined {{ userData.created_at }}
+          <div class="column">
+            <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Email: <p>{{ userData.email_address }}</p></div>
+            <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">ID Number: <p>{{ userData.id_number }}</p></div>
+            <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Department: <p class="text-uppercase">{{ userData.department }}</p></div>
+            <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Fines and fees due: <p>{{ userData.total_amount }}</p></div>
           </div>
         </div>
-       </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -38,34 +42,16 @@
 import { defineComponent, ref, onMounted, defineAsyncComponent } from 'vue';
 import { Platform } from 'quasar';
 import { useUserStore } from 'stores/user-store';
+import { IUser } from 'src/utils/interface/user';
 
 defineComponent({
   name: 'UserProfilePage',
 });
 
 const userStore = useUserStore();
-const userData = ref({
-  fullname: '',
-  created_at: '',
-  updated_at: '',
-  created_at: '',
-  department: '',
-  email_address: '',
-  id_number: null,
-  img_path: null,
-  updated_at: '',
-});
-
-const setUserProfile = async () => {
-  console.log(userStore.getUserData);
-  await userStore.getUserData.map((item: unknown) => {
-    userData.value.fullname = item.fullname;
-    userData.value.created_at = item.created_at;
-    userData.value.updated_at = item.updated_at;
-  })
-}
+const userData = ref<UserData>({});
 
 onMounted(async () => {
-  await setUserProfile()
+  userData.value = userStore.getUserData[0]
 })
 </script>

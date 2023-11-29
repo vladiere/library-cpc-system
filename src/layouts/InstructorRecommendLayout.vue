@@ -9,10 +9,11 @@
           color="grey-10"
           text-color="grey-10"
           v-model="search"
-          @keyup.enter="handleEnter"
+          @blur="onItemClick('all')"
+          @keyup.enter="onItemClick(search)"
         >
           <template v-slot:append>
-            <q-icon name="search" />
+            <q-icon :name="!search ? 'search' : 'cancel'" @click="search = null" class="cursor-pointer" />
           </template>
         </q-input>
         <q-btn-dropdown color="primary" size="lg" flat dense rounded dropdown-icon="mdi-sort-variant" no-icon-animation menu-anchor="top left">
@@ -51,34 +52,34 @@
     </q-header>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import recommendations from 'src/utils/Books/recommendation';
 
 defineComponent({
   name: 'InstructorRecommendLayout',
 });
 
 const leftDrawerOpen = ref(false);
+const search = ref(null);
+const router = useRouter();
+
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 
-const search = ref();
-const router = useRouter();
-
 const onItemClick = (link: string) => {
+  search.value = null;
   router.replace({ query: { q: link } });
 };
 
-const handleEnter = () => {
-  console.log(search.value);
-  gotoLink(search.value);
-  search.value = '';
-};
+onMounted(async () => {
+  await recommendations.getRecommendations();
+})
 </script>

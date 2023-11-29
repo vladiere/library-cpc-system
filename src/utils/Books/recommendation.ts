@@ -1,5 +1,5 @@
 import { api } from 'boot/axios';
-import {  useRecommendationStore } from 'stores/recommendation-store';
+import { useRecommendationStore } from 'stores/recommendation-store';
 import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from 'stores/user-store';
 
@@ -26,6 +26,22 @@ const getAllRecommendations = async () => {
   }
 }
 
+const getRecommendations = async () => {
+  try {
+    if (recommendationStore.getAllRecommendations.length === 0) {
+      const response = await api.get('/student/get/instructor/recommendations', {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`
+        }
+      });
+      recommendationStore.initAllRecommendations(response.data);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getAllRecommendations,
+  getRecommendations
 }

@@ -50,16 +50,24 @@
           :error="errorsMap.author.error"
           :error-message="errorsMap.author.message"
         />
-        <q-input
-          color="grey-10"
+         <q-select
           outlined
-          dense
+          color="grey-10"
           v-model="books.category"
-          label="Category"
-          placeholder="e.g Science Fiction, Romance, Horror"
+          use-input
+          use-chips
+          multiple
+          hide-dropdown-icon
+          input-debounce="200"
+          :options="options"
+          dense
+          popup-content-style="width: 150px; max-height: 210px"
+          @filter="filterFn"
           lazy-rules
+          @new-value="createValue"
           :error="errorsMap.category.error"
           :error-message="errorsMap.category.message"
+          label="Category"
         />
         <q-input
           color="grey-10"
@@ -113,6 +121,7 @@
             label="Send File"
             type="submit"
             dense
+            :loading="isLoading"
             padding="5px 20px"
             no-caps
             color="blue-9"
@@ -120,6 +129,7 @@
         <q-btn
           label="Reset"
           type="reset"
+          v-if="!isLoading"
           no-caps
           dense
           flat
@@ -153,6 +163,8 @@ interface Book {
 const userStore = useUserStore();
 const model = ref(null);
 const decoded = jwtDecode(userStore.token);
+const multiple = ref(null)
+const isLoading = ref(false);
 const books = ref<Book>({
   title: null,
   author: null,
@@ -160,6 +172,43 @@ const books = ref<Book>({
   publisher: null,
   description: null,
 });
+const categories = [
+  'Adventure',
+  'Art',
+  'Biography/Autobiography',
+  'Business/Finance',
+  'Classics',
+  'Comic/Graphic Novels',
+  'Cookbooks',
+  'Crime/Mystery',
+  'Drama/Play',
+  'Education',
+  'Fantasy',
+  'Health/Fitness',
+  'Historical Fiction',
+  'History',
+  'Horror',
+  'Humor',
+ 'Inspirational/Self-Help',
+  'Information Technology',
+  'Music',
+ 'Parenting/Family',
+  'Philosophy',
+  'Poetry',
+ 'Politics/Current Affairs',
+  'Psychology',
+  'Religion/Spirituality',
+  'Romance',
+ 'Science',
+ 'Science Fiction',
+  'Sports',
+ 'Technology',
+  'Thriller',
+  'Travel',
+  'True Crime',
+  'Weste',
+];
+const options = ref(categories);
 
 const errorsMap = ref({
   title: {
@@ -263,6 +312,30 @@ const checkInputs = () => {
   return isValid;
 };
 
+const filterFn = (val: unknown, update: unknown) => {
+  setTimeout(() => {
+    update(() => {
+      if (val === '') {
+        options.value = categories;
+      } else {
+        const needle = val.toLowerCase();
+        options.value = categories.filter(
+          v => v.toLowerCase().indexOf(needle) > -1
+        )
+      }
+    })
+  }, 1000);
+}
+
+const createValue = (val: unknown, done: unknown) => {
+  if (val.length > 0) {
+    if (!categories.includes(val)) {
+      categories.push(val);
+    }
+    done(val, 'toggle');
+  }
+}
+
 const addContribution = debounce(async (formdata: object) => {
   try {
     const response = await api.post('/user/book/contribute', formdata, {
@@ -273,6 +346,7 @@ const addContribution = debounce(async (formdata: object) => {
     });
 
     if (response.data.status === 201) {
+      isLoading.value = false;
       Notify.create({
         message: response.data.message,
         position: 'top',
@@ -282,19 +356,23 @@ const addContribution = debounce(async (formdata: object) => {
     }
     await socket.emit('notifications', decoded.user_id);
   } catch (error) {
+    isLoading.value = false;
     throw error;
   }
 }, 1500);
 
 const sendContribution = async () => {
   try {
+    isLoading.value = true;
+
     if (checkInputs()) {
+      const temp = books.value.category.map(item => item.toLowerCase()).join(', ');
       const formData= new FormData();
       formData.append('file_book', model.value);
       formData.append('user_id', decoded.user_id);
       formData.append('file_title', books.value.title.toLowerCase());
       formData.append('file_author', books.value.author.toLowerCase());
-      formData.append('file_category', books.value.category.toLowerCase());
+      formData.append('file_category', temp);
       formData.append('file_publisher', books.value.publisher.toLowerCase());
       formData.append('file_description', books.value.description.toLowerCase());
 
@@ -302,6 +380,7 @@ const sendContribution = async () => {
 
       resetForm();
     } else {
+      isLoading.value = false;
       Notify.create({
         message: response.data.message,
         position: 'top',
@@ -310,6 +389,7 @@ const sendContribution = async () => {
       })
     }
   } catch (error) {
+    isLoading.value = false;
     throw error;
   }
 }

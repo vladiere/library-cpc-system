@@ -15,7 +15,7 @@
         width="20%"
         style="border-radius: 50%"
       />
-      <q-btn flat dense label="Back to login" icon="mdi-chevron-left" to="/"/>
+      <q-btn flat dense label="Back to login" icon="mdi-chevron-left" to="/" padding="2px 10px 2px 2px"/>
       <q-stepper
         header-nav
         class="full-width q-mt-md"
@@ -84,7 +84,9 @@
             color="primary"
             lazy-rules
             :rules="[
-              val => val && val.length > 0 || 'Please enter your password'
+              val => val && val.length > 0 || 'Please enter your password',
+              val => val.length > 1 && val.length > 8 || 'Must be at least 8 characters',
+              val => passwordRegex.test(val) || 'Must be at least one special characters'
             ]"
           >
             <template v-slot:prepend>
@@ -105,10 +107,7 @@
             color="primary"
             v-model="confirmPass"
             lazy-rules
-            :rules="[
-              val => val && val.length > 0 || 'Please confirm your password',
-              val => (val === form.password) || 'Passsword does not match'
-            ]"
+            :rules="[ val => val && val.length > 0 || 'Please confirm your password', val => (val === form.password) || 'Passsword does not match' ]"
           >
             <template v-slot:prepend>
               <q-icon name="lock" />
@@ -236,6 +235,7 @@ const isPwd = ref(true);
 const role = ref(null);
 const roleField = ref('')
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+const passwordRegex = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/;
 const disableSteps = ref({
   step1: false,
   step2: true,
@@ -291,7 +291,7 @@ const onUploadedImage = (data: any) => {
     }
 
     form.value.fullname = fullname;
-    form.value.department = dataArray[0];
+    form.value.department = dataArray[0].includes("BS") ? dataArray[0] : dataArray[0] === 'IT' ? 'BS' + dataArray[0] : dataArray[0];
     form.value.role = role.value;
     form.value.id_number = dataArray[dataArray.length - 1]
 

@@ -4,9 +4,9 @@
       Platform.is.mobile ? 'column q-pa-md' : 'column fullscreen relative'
     "
   >
-    <div v-if="!Platform.is.mobile" class="col-4 bg-blue-10 q-pa-md">
+    <div v-if="!Platform.is.mobile" class="col-4 bg-blue-8 q-pa-md">
       <span
-        class="text-h3 text-bold text-grey-1"
+        class="text-h2 text-bold text-grey-1"
         style="
           font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
             'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -47,7 +47,7 @@
             <q-icon name="email" />
           </template>
         </q-input>
-        <q-btn label="next" square color="blue-7" />
+        <q-btn label="reset password" square color="blue-7" />
         <span class="cursor-pointer flex flex-center" @click="handleClick"
           ><q-icon name="arrow_back_ios" /> Back to Login</span
         >

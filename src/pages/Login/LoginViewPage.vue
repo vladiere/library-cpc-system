@@ -141,16 +141,16 @@
                 style="border-radius: 8px"
               />
 
-              <!-- <span -->
-              <!--   @click="gotoLink('/forgot-password')" -->
-              <!--   :class=" -->
-              <!--     Platform.is.mobile -->
-              <!--       ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer' -->
-              <!--       : 'text-subtitle1 text-dark cursor-pointer' -->
-              <!--   " -->
-              <!--   style="text-decoration: none" -->
-              <!--   >Forgot Password?</span -->
-              <!-- > -->
+              <span
+                @click="gotoLink('/forgot-password')"
+                :class="
+                  Platform.is.mobile
+                    ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer'
+                    : 'text-subtitle1 text-dark cursor-pointer'
+                "
+                style="text-decoration: none"
+                >Forgot Password?</span
+              >
             </div>
           </q-form>
         </div>
@@ -257,13 +257,23 @@ const submitLoginform = debounce(async () => {
     const response = await notApi.post('/user/login', { form: form.value });
     socket.emit('user_connected', form.value.email);
     userStore.initAuthorize(response.data);
-    isLoading.value = false;
+
+    isLoading.value = true;
     router.push('/home');
-  } catch (error) {
-    throw error;
-  } finally {
-    isLoading.value = false;
+  } catch (error: unknown) {
+    if (error.response.data.message) {
+      isLoading.value = false;
+      Notify.create({
+        message: error.response.data.message,
+        type: 'negative',
+        position: 'top',
+        timeout: 2300
+      })
+    } else {
+      throw new Error(error)
+    }
   }
+
 }, 1500)
 
 const submitForm = async () => {

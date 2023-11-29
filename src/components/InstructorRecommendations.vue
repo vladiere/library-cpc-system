@@ -1,58 +1,70 @@
 <style lang="sass" scoped>
-.on-mobile
-  height: 200px
-  max-width: 150px
-.on-notmobile
-  height: 240px
-  max-width: 200px
+.onmobile-item
+  height: 220px
+  width: 168px
+
+.notmobile-item
+  height: 340px
+  width: 290px
 </style>
 
 <template>
-  <div class="column q-gutter-y-md q-ml-md">
-    <span class="text-h6 text-grey-9 self-center"
-      >Instructor Recommendations</span
-    >
-    <div class="col">
-      <div
-        v-if="myBooks.length === 0"
-        class="column content-center self-center q-gutter-y-md"
-      >
-        <q-img :src="ManEmpty" style="width: 15rem" />
-        <span class="text-grey-9">There are no books in this shelf</span>
+  <q-page padding>
+      <div v-if="instructorRecommendations.length === 0" class="column content-center self-center q-gutter-y-md" >
+        <span class="text-blue-4 text-h4">No results found in your search.</span>
       </div>
+
       <div class="row justify-center q-gutter-sm">
         <q-intersection
-          v-for="myBook in myBooks"
-          :key="myBook.id"
-          :class=" Platform.is.mobile ? 'q-ma-sm on-mobile' : 'on-notmobile q-ma-md cursor-pointer rounded-borders ' "
+          v-for="item in instructorRecommendations"
+          :key="item.recommendation_id"
           transition="scale"
+          :class="Platform.is.mobile ? 'onmobile-item' : 'notmobile-item'"
         >
-          <q-img
-              :src="myBook.link"
-              spinner-color="primary"
-            >
-              <div class="absolute-bottom column text-subtitle1 text-center" >
-                {{ myBook.title }}
-                <span class="text-caption">by: {{ myBook.recommendedBy }}</span>
-              </div>
-            </q-img>
+          <q-card bordered class="q-ma-sm">
+            <q-item :class="Platform.is.mobile ? 'q-pa-sm' : ''">
+              <q-item-section>
+                <q-item-label class="text-body text-capitalize" lines="1">{{ item.fullname }}</q-item-label>
+                <q-item-label caption lines="1" class="text-uppercase">{{ item.department }}</q-item-label>
+              </q-item-section>
+
+              <q-item-section side top>
+                <q-icon name="mdi-information" @click="gotoBookInfo(item.book_id)" class="cursor-pointer">
+                  <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">book information</q-tooltip>
+                </q-icon>
+              </q-item-section>
+            </q-item>
+
+            <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" width="100%" />
+
+            <q-card-section :class="Platform.is.mobile ? 'q-pa-sm' : ''">
+              <q-item-label class="text-body text-capitalize" lines="1">{{ item.title }}</q-item-label>
+              <q-item-label caption lines="1" class="text-capitalize">{{ item.author_name }}</q-item-label>
+            </q-card-section>
+          </q-card>
         </q-intersection>
       </div>
-    </div>
-  </div>
+  </q-page>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, ref, watch, onMounted, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import ManEmpty from 'assets/man-empty.png';
 import { Platform } from 'quasar';
+import { useRecommendationStore } from 'stores/recommendation-store';
+import { IRecommendedInstructor } from 'src/utils/recommendation';
+import recommendations from 'src/utils/Books/recommendation';
+import DefaultImg from 'src/assets/no-image-available.jpeg'
+import { linkimg } from 'src/utils/links';
 
 defineComponent({
   name: 'MyBooksPage',
 });
 
 const router = useRouter();
+const route = useRoute();
+const recommendationStore = useRecommendationStore();
 
 interface MyBook {
   id: number;
@@ -61,64 +73,36 @@ interface MyBook {
   recommendedBy: string;
 }
 
-const myBooks = ref<MyBook[]>([
-  {
-    id: 1,
-    link: 'https://picsum.photos/200/300?random=1',
-    title: 'The one',
-    recommendedBy: 'pending',
-  },
-  {
-    id: 2,
-    link: 'https://picsum.photos/200/300?random=2',
-    title: 'The two',
-    recommendedBy: 'should return',
-  },
-  {
-    id: 3,
-    link: 'https://picsum.photos/200/300?random=3',
-    title: 'The three',
-    recommendedBy: 'pending',
-  },
-  {
-    id: 4,
-    link: 'https://picsum.photos/200/300?random=4',
-    title: 'The four',
-    recommendedBy: 'should return',
-  },
-  {
-    id: 5,
-    link: 'https://picsum.photos/200/300?random=5',
-    title: 'the five',
-    recommendedBy: 'pending',
-  },
-  {
-    id: 6,
-    link: 'https://picsum.photos/200/300?random=6',
-    title: 'the six',
-    recommendedBy: 'should return',
-  },
-  {
-    id: 7,
-    link: 'https://picsum.photos/200/300?random=7',
-    title: 'the seven',
-    recommendedBy: 'pending',
-  },
-  {
-    id: 8,
-    link: 'https://picsum.photos/200/300?random=8',
-    title: 'the eight',
-    recommendedBy: 'should return',
-  },
-  {
-    id: 9,
-    link: 'https://picsum.photos/200/300?random=9',
-    title: 'the nine',
-    recommendedBy: 'pending',
-  },
-]);
+const instructorRecommendations = computed(() => searchInstructorRecommendations(route.query.q as string));
+const recommendationsData = ref<IRecommendedInstructor>([]);
 
-const gotoLink = (link: string) => {
-  router.push(link);
-};
+const gotoBookInfo = (book_id: number) => {
+  router.push({ path: '/book/info', query: { book_id: book_id }});
+}
+
+const searchInstructorRecommendations = (search_query: string) => {
+  if (search_query.toLowerCase() === 'all') {
+    return recommendationsData.value;
+  }
+
+  return recommendationsData.value.filter(recommend =>
+    Object.values(recommend).some(value => String(value).toLowerCase().includes(search_query.toLowerCase()))
+  )
+}
+
+onMounted(async() => {
+  if (instructorRecommendations.value.length === 0) {
+    await recommendations.getRecommendations();
+  }
+
+  recommendationsData.value = recommendationStore.getAllRecommendations;
+})
+
+const checkIfImage = (img: string | null) => {
+  return img ? linkimg + img : DefaultImg;
+}
+
+watch(() => route.query, () => {
+  console.log(route.query.q)
+})
 </script>
