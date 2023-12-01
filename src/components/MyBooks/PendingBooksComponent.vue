@@ -1,9 +1,10 @@
 <style lang="sass" scoped>
 .on-notmobile
-  max-height: 400px
+  height: 400px
   width: 260px
+
 .on-notmobile-card
-  max-height: 400px
+  height: 400px
   width: 250px
   img
     height: calc(100% - 60px)
@@ -25,7 +26,7 @@
           <q-img :src="checkIfImage(item.img_path)" />
 
           <q-card-section>
-            <div class="text-subtitle1">{{ wordFormatter(item.title) }}</div>
+            <div class="text-subtitle1 text-capitalize">{{item.title }}</div>
             <div class="text-caption text-uppercase text-orange-10">{{ item.status }}</div>
          </q-card-section>
         </q-card>
@@ -51,7 +52,7 @@ const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
 }
 
-const wordFormatter = (word_title: stirng) => format.capitalize(word_title);
+// const wordFormatter = (word_title: stirng) => format.capitalize(word_title);
 
 onMounted(async() => {
   if (myBooks.value.length === 0) {

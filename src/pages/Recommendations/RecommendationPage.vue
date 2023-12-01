@@ -17,6 +17,7 @@ defineComponent({
 
 const userStore = useUserStore();
 const decode = jwtDecode(userStore.token);
+console.log(decode)
 
 const RecommendationInstructor = defineAsyncComponent({
   loader: () => import('components/Recommendations/RecommendationInstructor.vue'),

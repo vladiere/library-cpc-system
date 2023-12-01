@@ -17,6 +17,12 @@ export const useUserStore = defineStore('user', {
       this.refresh = tokens.refreshToken;
       this.authorize = true;
     },
+    initToken (token) {
+      this.token = token;
+    },
+    initRefresh (refresh) {
+      this.refresh = refresh;
+    },
     logoutUser() {
       this.refresh = '';
       this.token = '';
@@ -29,6 +35,6 @@ export const useUserStore = defineStore('user', {
     getUserData: (state) => state.users,
   },
   persist: {
-    storage: sessionStorage,
+    storage: localStorage,
   },
 });

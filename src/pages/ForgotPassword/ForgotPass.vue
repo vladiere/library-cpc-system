@@ -22,9 +22,11 @@
       "
       style="height: 450px; border-radius: 15px !important"
     >
-      <div
+      <q-form
+        greedy
+        @submit.prevent="handleClick('reset')"
         class="column q-gutter-y-md"
-        :style="Platform.is.mobile ? '' : 'width: 400px'"
+        :style="Platform.is.mobile ? 'margin-top: 3em' : 'width: 400px'"
       >
         <q-img :src="ForgotPass" width="20%" class="self-center" fit="cover" />
         <span class="text-h6 text-bold text-uppercase self-center"
@@ -47,33 +49,72 @@
             <q-icon name="email" />
           </template>
         </q-input>
-        <q-btn label="reset password" square color="blue-7" />
-        <span class="cursor-pointer flex flex-center" @click="handleClick"
-          ><q-icon name="arrow_back_ios" /> Back to Login</span
-        >
-      </div>
+        <q-btn label="reset password" :loading="isLoading" square color="blue-7" type="submit"/>
+        <span v-if="!isLoading" class="cursor-pointer flex flex-center" @click="handleClick('login')" >
+          <q-icon name="arrow_back_ios" /> Back to Login</span>
+      </q-form>
     </div>
+
+    <q-dialog v-model="confirm" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="mdi-email-check-outline" color="primary" text-color="white" />
+            <span class="q-ml-sm">{{ prompt_message }}</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Confirm" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import ForgotPass from 'src/assets/forgotpass.png';
-import { Platform } from 'quasar';
+import { Platform, debounce } from 'quasar';
 import { useRouter } from 'vue-router';
+import { notApi } from 'boot/axios';
 
 defineComponent({
   name: 'ForgotPassword',
 });
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const isLoading = ref(false);
 const router = useRouter();
+const confirm = ref(false);
+const prompt_message = ref('');
 const form = ref({
   email: '',
 });
 
-const handleClick = () => {
-  router.push('/');
+const sendResetPasswordRequest = debounce(async () => {
+  try {
+    const response = await notApi.post('/send/email', { email_address: form.value.email });
+
+    if (response.status === 200) {
+      confirm.value = true;
+      isLoading.value = false;
+      prompt_message.value = response.data.message;
+    }
+  } catch (error) {
+    throw error;
+  }
+},1500);
+
+const handleClick = async (option: string) => {
+  try {
+    if (option === 'login') {
+      router.push('/');
+    } else {
+      isLoading.value = true;
+      await sendResetPasswordRequest();
+    }
+  } catch (error) {
+    throw error;
+  }
 };
 
 const validateEmail = ref([

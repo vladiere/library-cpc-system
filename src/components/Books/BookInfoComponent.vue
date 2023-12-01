@@ -176,7 +176,7 @@ const sendTransaction = async (book_id: number, transaction_type: string) => {
     if (response.data.status === 201) {
       addNewTransactionPending(book_id,transaction_type);
       dialog.value.show = true;
-      dialog.value.message = response.data.message + ' Do you want to check your books of borrowed history?';
+      dialog.value.message = ' Do you want to check your books of borrowed history?';
     } else {
       addNewTransactionPending(book_id,transaction_type);
       Notify.create({

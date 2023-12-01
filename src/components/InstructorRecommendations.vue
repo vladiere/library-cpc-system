@@ -50,7 +50,6 @@
 <script setup lang="ts">
 import { defineComponent, ref, watch, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import ManEmpty from 'assets/man-empty.png';
 import { Platform } from 'quasar';
 import { useRecommendationStore } from 'stores/recommendation-store';
 import { IRecommendedInstructor } from 'src/utils/recommendation';
@@ -65,13 +64,6 @@ defineComponent({
 const router = useRouter();
 const route = useRoute();
 const recommendationStore = useRecommendationStore();
-
-interface MyBook {
-  id: number;
-  link: string;
-  title: string;
-  recommendedBy: string;
-}
 
 const instructorRecommendations = computed(() => searchInstructorRecommendations(route.query.q as string));
 const recommendationsData = ref<IRecommendedInstructor>([]);

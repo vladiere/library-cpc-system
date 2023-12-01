@@ -1,38 +1,30 @@
 <style lang="sass" scoped>
 .my-card
-  width: 100%
-  max-width: 300px
-.on-mobile
-  width: 100%
-  max-width: 290px
+  width: 300px
 </style>
 
 <template>
-  <q-card :class="!Platform.is.mobile ? 'my-card relative-position bg-blue-12 text-white shadow-15' : 'on-mobile q-mb-md relative-position bg-blue-12 text-white shadow-15'">
-      <div class="absolute-top-right bg-teal-10 text-white q-mr-xs q-mt-xs" style="border-radius: 5px !important; padding: 2px 5px">
-        {{ formatNumber(file_total_downloads) }}
-      </div>
-      <q-card-section >
-        <div :class="!Platform.is.mobile ? 'text-h6 text-capitalize' : 'text-subtitle1 text-capitalize'">{{ file_title }}</div>
-        <div :class="!Platform.is.mobile ? 'text-subtitle2 text-capitalize' : 'text-body text-capitalize'">{{ author_fullname }}</div>
-      </q-card-section>
+  <q-card class="my-card q-pa-sm shadow-3" bordered>
+    <q-card-section horizontal >
+      <div class="column q-gutter-y-sm col">
+        <div :class="!Platform.is.mobile ? 'text-h6 text-capitalize text-blue-9' : 'text-subtitle1 text-blue-9 text-capitalize'">{{ file_title }}</div>
+        <div :class="!Platform.is.mobile ? 'text-caption text-capitalize' : 'text-body text-capitalize'">{{ author_fullname }}</div>
 
-      <q-card-section>
-        <q-item-label class="text-capitalize">
+        <q-item-label class="q-mt-md text-capitalize text-caption">
           {{ category_name }}
         </q-item-label>
-      </q-card-section>
+      </div>
 
-      <q-card-section>
-        <q-item-label lines="3">{{ wordCapitalizer(file_description) }}</q-item-label>
-        <q-btn flat dense rounded icon="mdi-information-outline" @click="clickMore = !clickMore"/>
-      </q-card-section>
-
-      <q-separator dark />
-
-      <q-card-actions style="height: 50px">
-        <q-btn flat class="absolute-bottom q-my-sm self-center" :href="linkfile +'/'+ file_path">Download</q-btn>
+      <q-card-actions vertical class="justify-around column">
+        <q-badge rounded floating text-color="grey-1" :label="formatNumber(file_total_downloads)" />
+        <q-btn flat round color="teal-5" icon="mdi-download" :href="linkfile +'/'+ file_path" >
+          <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">Download to read</q-tooltip>
+        </q-btn>
+        <q-btn flat round color="warning" icon="mdi-information-outline" @click="clickMore = !clickMore" >
+          <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">Show more info</q-tooltip>
+        </q-btn>
       </q-card-actions>
+    </q-card-section>
   </q-card>
 
   <q-dialog v-model="clickMore" persistent>

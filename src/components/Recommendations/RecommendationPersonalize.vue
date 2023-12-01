@@ -73,6 +73,7 @@ onMounted(async() => {
   if (recommendationPersonal.value.length === 0) {
     await recommendations.getAllRecommendations();
   }
-  recommendationPersonal.value = await recommendationStore.getPersonalize;
+  recommendationPersonal.value = recommendationStore.getPersonalize;
+  console.log(recommendationStore.getPersonalize)
 });
 </script>

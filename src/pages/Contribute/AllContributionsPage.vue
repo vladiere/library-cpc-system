@@ -7,7 +7,7 @@
 
     <q-separator size="2px" width="95%" class="self-center"/>
     <div :class="!Platform.is.mobile ? 'q-ml-xl row q-gutter-x-md q-my-md justify-between' : 'column items-center q-gutter-y-xs q-my-sm'">
-      <div class="row content-center">
+      <div class="row content-center items-center">
         <span class="text-subtitle1 text-blue-9">Pages</span>
         <q-pagination
           v-model="current"
@@ -37,13 +37,11 @@
 
     <q-separator size="2px" width="95%" class="self-center"/>
 
-    <div :class="!Platform.is.mobile ? 'row q-gutter-lg justify-center q-mt-md' : 'row q-gutter-md justify-center q-mt-sm'">
+    <div class="row q-gutter-md q-mt-md justify-center">
       <q-intersection
         v-for="item in paginatedContributeList"
         :key="item.book_id"
         transition="scale"
-        :class="!Platform.is.mobile ? 'book-item text-capitalize' : 'book-item-mobile text-capitalize'"
-        @click="gotoBookInfo(item.book_id)"
       >
         <AllContributionComponent v-bind="item" />
       </q-intersection>
@@ -59,6 +57,7 @@ import { defineComponent, defineAsyncComponent, onMounted, ref, computed } from 
 import { AllContributionProps } from 'components/Contribute/AllContributionComponent.vue';
 import { Platform } from 'quasar';
 import { useBooksStore } from 'stores/books-store';
+import books from 'src/utils/Books/books';
 
 defineComponent({
   name: 'AllContributionsPage'
@@ -94,8 +93,14 @@ const filteredContributeList = computed(() => {
   });
 });
 
-onMounted(() => {
-  contributionList.value = bookStore.getEBooks
+onMounted(async() => {
+  if (contributionList.value.length === 0 ) {
+    await books.getAllContributorsBooks();
+  }
+
+  setTimeout(() => {
+    contributionList.value = bookStore.getEBooks
+  }, 400);
 });
 
 </script>

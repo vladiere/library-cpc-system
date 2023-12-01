@@ -10,7 +10,7 @@
 </style>
 
 <template>
-  <q-layout>
+  <q-layout >
     <q-header class="bg-grey-2 column justify-center">
       <div v-if="!Platform.is.mobile" class="q-mt-md row justify-center q-gutter-x-md relative-position">
        <div :class="ifRoute === 'mybooks' ? 'bg-blue-7 text-grey-10 text-subtitle1 chips-menu' : 'bg-blue-2 chips-menu text-grey-10 text-subtitle1'" @click="gotoLink('/userbooks')">
@@ -26,6 +26,7 @@
           My Contributions
         </div>
       </div>
+
       <q-btn v-else class="self-start" flat no-caps icon="mdi-tune" label="Filters" color="grey-10" @click="showDialog = !showDialog"/>
      </q-header>
 

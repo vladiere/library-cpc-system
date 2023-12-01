@@ -9,24 +9,52 @@
     height: calc(100% - 60px)
 .on-mobile
   height: 235px
-  width: 170px
+  width: 160px
 .on-mobile-card
   height: 235px
-  width: 170px
+  width: 160px
   img
     height: calc(100% - 95px)
 </style>
 
 <template>
-    <div class="row justify-center q-gutter-sm q-pt-md text-capitalize">
+    <div v-if="Platform.is.mobile" class="row justify-center q-gutter-sm q-pt-md text-capitalize">
+      <q-list bordered class="rounded-borders" style="width: 95%">
+        <q-expansion-item
+          expand-separator
+          v-for="item in myBooks"
+          :key="item"
+          icon="mdi-information"
+          :label="item.title"
+          :header-class="checkDueDate(item.due_date) ? 'bg-warning text-dark' : ''"
+          style="text-overflow: ellipsis; overflow:hidden;"
+          :caption="item.author_name"
+        >
+          <q-card flat class="bg-transparent row q-mt-sm">
+            <q-card-section class="q-pt-none">
+              <div class="row q-gutter-x-md">
+                <img :src="checkIfImage(item.img_path)" class="col" style="width: 100%">
+                <div class="col column">
+                  <span class="text-caption">Due date</span>
+                  <span class="text-caption">{{ item.due_date }}</span>
+                  <div class="row justify-center text-h6 text-weight-light text-blue-8 q-mt-sm">{{ checkDueDate(item.due_date) ? 'Overdue' : item.transaction_type }}</div>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
+      </q-list>
+    </div>
+
+    <div v-if="!Platform.is.mobile"  class="row justify-center q-gutter-sm q-pt-md text-capitalize">
       <q-intersection
+        transition="scale"
         v-for="item in myBooks"
         :key="item"
-        transition="scale"
         :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
       >
-        <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card q-pt-md relevant-position' : 'q-ma-sm relevant-position on-mobile-card'">
-          <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" class="q-mb-sm" >
+        <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card relevant-position' : 'q-ma-sm relevant-position on-mobile-card'">
+          <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" class="q-mb-sm" height="235px" fit="fill" >
             <div class="absolute-full text-h6 text-blue-1 text-bold flex flex-center" v-if="checkDueDate(item.due_date)" >
               Overdue
             </div>
@@ -48,7 +76,7 @@
                 </q-card-section>
               </q-card>
             </q-expansion-item>
-            <q-btn class="absolute-top-right q-ma-sm" label="renew" flat dense color="blue-8" v-if="!checkDueDate(item.due_date)" @click="handleShowDialog(item.transaction_id)">
+            <q-btn class="absolute-top-right q-ma-sm" label="renew" flat dense color="blue-8" v-if="!checkDueDate(item.due_date) && item.transaction_type !== 'Returned'" @click="handleShowDialog(item.transaction_id)">
               <q-tooltip class="bg-grey-10 text-grey-2" :delay="200">renew this book</q-tooltip>
             </q-btn>
         </q-card>
@@ -58,6 +86,7 @@
   <div v-if="myBooks.length === 0" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
       You do not have any History records here
   </div>
+
   <q-dialog v-model="showDateDialog" persistent>
     <q-card style="min-width: 350px">
       <q-card-section>
@@ -181,10 +210,12 @@ const checkDueDate = (due_date: string) => {
 }
 
 onMounted(async() => {
+  isLoading.value = true;
+
   if (myBooks.value.length === 0) {
     await mybooks.getTransactionPendingAndBooks();
   }
-  myBooks.value = mybookStore.getTransactionBook;
+  myBooks.value = await mybookStore.getTransactionBook;
 })
 
 </script>

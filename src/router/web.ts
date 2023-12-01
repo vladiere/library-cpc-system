@@ -1,8 +1,36 @@
 import { RouteRecordRaw } from 'vue-router';
+import { jwtDecode } from 'jwt-decode';
 
 const routes: RouteRecordRaw[] = [];
 
 routes.push(
+  {
+    path: '/expire',
+    component: () => import('pages/LinkUnavailable.vue'),
+  },
+  {
+    path: '/auth',
+    component: () => import('layouts/ForgotPassword/ResetPasswordLayout.vue'),
+      children: [
+      {
+        path: '',
+        component: () => import('pages/ForgotPassword/ResetPasswordPage.vue'),
+      },
+    ],
+    beforeEnter: (to, from, next) => {
+      if (!to.query.reset) {
+        next({ name: 'login' })
+      } else {
+        const currentDate = new Date();
+        const decodedToken = jwtDecode(to.query.reset);
+        if (decodedToken.exp * 1000 < currentDate.getTime()) {
+          next('/expire')
+        } else {
+          next();
+        }
+      }
+    }
+  },
   {
     path: '/',
     component: () => import('layouts/OutsideLayout.vue'),

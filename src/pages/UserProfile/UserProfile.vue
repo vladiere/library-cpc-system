@@ -30,7 +30,7 @@
             <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Email: <p>{{ userData.email_address }}</p></div>
             <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">ID Number: <p>{{ userData.id_number }}</p></div>
             <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Department: <p class="text-uppercase">{{ userData.department }}</p></div>
-            <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Fines and fees due: <p>{{ userData.total_amount }}</p></div>
+            <div class="text-subtitle1 text-weight-light row q-gutter-x-sm q-ml-md">Fines and fees due: <p>{{ userData.total_amount ? userData.total_amount : 0 }}</p></div>
           </div>
         </div>
       </div>

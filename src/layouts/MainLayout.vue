@@ -4,7 +4,7 @@
 </style>
 
 <template>
-  <q-layout view="hHr lpR lFr">
+  <q-layout view="hHr lpR lFr" >
     <q-header elevated class="bg-blue-12">
       <q-toolbar>
         <q-toolbar-title class="row items-center">
@@ -66,7 +66,7 @@
               Empty notifications
             </div>
             <div v-if="notifications.length > 0" class="column absolute-top-right">
-              <q-btn flat dense no-caps icon="mdi-broom" class="self-center" @click="clearMyNotifications">
+              <q-btn flat dense no-caps icon="mdi-broom" :loading="isLoadNotifications" class="self-center" @click="notificationsClear">
                 <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">Clear notifications</q-tooltip>
               </q-btn>
             </div>
@@ -162,7 +162,6 @@ import { NotificationsProps } from 'components/Notifications/ListNotifications.v
 import { api } from 'src/boot/axios';
 import { jwtDecode } from 'jwt-decode';
 import { useUserStore } from 'src/stores/user-store';
-import { SpinnerFacebook } from 'src/utils/loading';
 import users from 'src/utils/Users/users';
 import { useRouter } from 'vue-router';
 
@@ -218,11 +217,11 @@ const browseLinks: BrowseLinksProps[] = [
     icon: 'fas fa-hashtag',
     link: '/trending',
   },
-  {
-    title: 'Newly Added',
-    icon: 'fas fa-burst',
-    link: '/recent',
-  },
+//  {
+//    title: 'Newly Added',
+//    icon: 'fas fa-burst',
+//    link: '/recent',
+//  },
   //{
    // title: 'Advance Search',
   //  icon: 'fas fa-magnifying-glass',
@@ -285,6 +284,16 @@ const getNotifications = debounce(async () => {
     isLoadNotifications.value = false;
   }
 }, 1500);
+
+const notificationsClear = async () => {
+  try {
+    isLoadNotifications.value = true;
+    await clearMyNotifications();
+  } catch (error) {
+    isLoadNotifications.value = false;
+    throw error;
+  }
+}
 
 const clearMyNotifications = debounce(async () => {
   try {

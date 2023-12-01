@@ -52,15 +52,16 @@
         />
       </div>
         <q-input
-          placeholder="Search Book or Author"
+          placeholder="Search..."
           outlined
           :class="!Platform.is.mobile ? 'q-mr-xl' : ''"
           dense
           v-model="filter"
           rounded
+          @blur="filter = ''"
           >
           <template v-slot:append>
-            <q-icon name="mdi-magnify" />
+            <q-icon :name="filter ? 'mdi-close-circle' : 'mdi-magnify'" @click="filter = ''" class="cursor-pointer" />
           </template>
         </q-input>
     </div>
@@ -118,13 +119,12 @@ const paginatedBooksList = computed(() => {
 });
 
 const filteredBooksList = computed(() => {
-  const searchTerm = filter.value.toLowerCase();
-  return booksData.value.filter((book) => {
-    return (
-      book.title.toLowerCase().includes(searchTerm) ||
-      book.author_name.toLowerCase().includes(searchTerm)
-    );
-  });
+  if (filter.value.toLowerCase() === '') {
+    return booksData.value;
+  }
+  return booksData.value.filter(book =>
+    Object.values(book).some(value => String(value).toLowerCase().includes(filter.value.toLowerCase()))
+  );
 });
 
 const gotoBookInfo = (book_id: number) => {

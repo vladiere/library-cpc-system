@@ -66,7 +66,6 @@ defineComponent({
   name: 'InstructorRecommendLayout',
 });
 
-const leftDrawerOpen = ref(false);
 const search = ref(null);
 const router = useRouter();
 
