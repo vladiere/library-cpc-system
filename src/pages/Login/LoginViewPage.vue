@@ -54,7 +54,7 @@
           <span
             :class="
               Platform.is.mobile
-                ? 'text-bold text-h3 text-blue-10'
+                ? 'text-weight-bolder text-h3 text-blue-10'
                 : 'hidden'
             "
             >CPC Library</span

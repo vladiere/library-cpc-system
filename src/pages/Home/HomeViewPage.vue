@@ -1,7 +1,7 @@
 <template>
-  <q-page padding class="bg-grey-1">
+  <q-page padding class="bg-grey-2">
     <div :class="Platform.is.mobile ? 'q-pa-none q-ma-none column q-gutter-y-lg' : 'q-mb-lg column q-gutter-y-xl'">
-      <div class="shadow-2 rounded-borders column q-gutter-y-lg q-px-md">
+      <div class="rounded-borders column q-gutter-y-lg q-px-md">
         <div class="col column items-center">
           <span :class="Platform.is.mobile ? 'text-h6 text-blue-9 self-center' : 'text-h4 text-blue-9 self-center'">All Books available at CPC Library</span>
           <q-btn icon-right="mdi-chevron-double-right" flat rounded text-color="blue-9" label="See all books list" no-caps to="book/collections" />
@@ -10,7 +10,7 @@
           <BooksCard v-for="books in allBooks" :key="books.book_id" v-bind="books" />
         </div>
       </div>
-      <div class="shadow-2 rounded-borders column q-gutter-y-lg q-px-md" v-if="contributionList.length !== 0">
+      <div class="rounded-borders column q-gutter-y-lg q-px-md" v-if="contributionList.length !== 0">
         <div class="col column items-center">
           <span :class="Platform.is.mobile ? 'text-h6 text-blue-9 self-center' : 'text-h4 text-blue-9 self-center'">Contributed eBooks available</span>
           <q-btn icon-right="mdi-chevron-double-right" flat rounded text-color="blue-9" label="See more" no-caps to="contribute/all" />

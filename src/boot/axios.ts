@@ -16,9 +16,12 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 // For development
-const api = axios.create({ baseURL: 'http://localhost:3000/api/' });
-const notApi = axios.create({ baseURL: 'http://localhost:3000/api/' });
+// const api = axios.create({ baseURL: 'http://localhost:3000/api/' });
+// const notApi = axios.create({ baseURL: 'http://localhost:3000/api/' });
 const userStore = useUserStore();
+
+const api = axios.create({ baseURL: 'https://library-backend-y0o3.onrender.com/api/' });
+const notApi = axios.create({ baseURL: 'https://library-backend-y0o3.onrender.com/api/' });
 // const api = axios.create({
 //   baseURL: 'https://cpc-backend.up.railway.app/api/',
 // });
