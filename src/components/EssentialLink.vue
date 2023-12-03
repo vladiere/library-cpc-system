@@ -54,7 +54,7 @@ const userLogout = debounce(async() => {
       recommendationStore.clearAll();
       console.log('Logging out');
 
-      router.push('/');
+      router.push('/account/login');
     } else {
       throw new Error(response);
     }

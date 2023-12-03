@@ -74,7 +74,7 @@
             >Don't have an account?</span
           >
           <span
-            @click="gotoLink('/register')"
+            @click="gotoLink('/account/register')"
             class="text-subtitle1 text-blue-7"
             style="text-decoration: none"
             >Signup Now</span
@@ -142,7 +142,7 @@
               />
 
               <span
-                @click="gotoLink('/forgot-password')"
+                @click="gotoLink('/account/forgot-password')"
                 :class="
                   Platform.is.mobile
                     ? 'text-h6 text-grey-10 self-center q-pt-xl cursor-pointer'

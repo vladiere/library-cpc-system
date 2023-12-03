@@ -5,6 +5,10 @@ const routes: RouteRecordRaw[] = [];
 
 routes.push(
   {
+    path: '',
+    component: () => import('pages/LandingPage.vue')
+  },
+  {
     path: '/expire',
     component: () => import('pages/LinkUnavailable.vue'),
   },
@@ -32,23 +36,23 @@ routes.push(
     }
   },
   {
-    path: '/',
+    path: '/account',
     component: () => import('layouts/OutsideLayout.vue'),
     children: [
       {
-        path: '/',
+        path: 'login',
         name: 'login',
         meta: { auth: false },
         component: () => import('pages/Login/LoginViewPage.vue'),
       },
       {
-        path: '/forgot-password',
+        path: 'forgot-password',
         name: 'ForgotPassword',
         meta: { auth: false },
         component: () => import('pages/ForgotPassword/ForgotPass.vue'),
       },
       {
-        path: '/register',
+        path: 'register',
         name: 'register',
         meta: { auth: false },
         component: () => import('pages/RegisterPage/RegisterPage.vue'),

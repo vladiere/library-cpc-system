@@ -1,9 +1,9 @@
 <style lang="sass" scoped>
-.on-notmobile
-  height: 400px
+.on-notmobile1
+  max-height: 200px
   width: 260px
 
-.on-notmobile-card
+.on-mobile1
   height: 400px
   width: 250px
   img
@@ -20,10 +20,9 @@
         v-for="item in myBooks"
         :key="item"
         transition="scale"
-        :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img :src="checkIfImage(item.img_path)" />
+          <q-img :src="checkIfImage(item.img_path)" height="280px" width="150px"/>
 
           <q-card-section>
             <div class="text-subtitle1 text-capitalize">{{item.title }}</div>
