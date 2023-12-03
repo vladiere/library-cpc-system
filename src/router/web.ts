@@ -1,12 +1,23 @@
 import { RouteRecordRaw } from 'vue-router';
 import { jwtDecode } from 'jwt-decode';
+import { LocalStorage } from 'quasar';
 
 const routes: RouteRecordRaw[] = [];
 
 routes.push(
   {
     path: '',
-    component: () => import('pages/LandingPage.vue')
+    component: () => import('pages/LandingPage.vue'),
+    // beforeEnter: (to, from, next) => {
+    //   if (LocalStorage.getItem('done_visit')) {
+    //     console.log('Done visit');
+    //     next({ name: 'login' });
+    //   } else {
+    //     console.log('Not Done');
+    //     LocalStorage.set('done_visit', true);
+    //     next();
+    //   }
+    // }
   },
   {
     path: '/expire',
@@ -15,7 +26,7 @@ routes.push(
   {
     path: '/auth',
     component: () => import('layouts/ForgotPassword/ResetPasswordLayout.vue'),
-      children: [
+    children: [
       {
         path: '',
         component: () => import('pages/ForgotPassword/ResetPasswordPage.vue'),

@@ -26,7 +26,7 @@
   <q-page class="bg-grey-2">
     <LoadingComponent v-if="isLoading" />
     <div
-      :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row'"
+      :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row justify-center'"
       :style="
         Platform.is.mobile ? '' : 'border: 1px solid #000; height: 100vh'
       "
@@ -39,24 +39,17 @@
         "
       >
         <div
-          :class="
-            Platform.is.mobile
-              ? 'column items-center content-center q-gutter-y-md q-pb-lg'
-              : 'col-4 column justify-center content-center'
-          "
+          class="column items-center content-center q-gutter-y-md q-pb-lg "
         >
           <q-img
             :src="Logo"
             fit="contain"
             width="50%"
+            class="col"
             style="border-radius: 50%"
           />
           <span
-            :class="
-              Platform.is.mobile
-                ? 'text-weight-bolder text-h3 text-blue-10'
-                : 'hidden'
-            "
+            class="text-weight-bolder text-h3 text-blue-10"
             >CPC Library</span
           >
         </div>
@@ -153,76 +146,6 @@
               >
             </div>
           </q-form>
-        </div>
-      </div>
-      <div :class="Platform.is.mobile ? 'hidden' : 'col row relative'">
-        <div class="absolute-center q-ml-xl">
-          <span
-            class="text-weight-bolder text-blue-10"
-            style="
-              font-size: 5rem;
-              font-family: system-ui, -apple-system, BlinkMacSystemFont,
-                'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-                'Helvetica Neue', sans-serif;
-            "
-            >CPC Library</span
-          >
-          <div
-            class="col column q-ml-md text-h5 text-left"
-            style="font-family: 'Indie Flower', cursive"
-          >
-            <span
-              >you are
-              <span class="text-green text-bold text-strike"
-                >READERS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-yellow text-bold text-strike"
-                >DREAMERS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-red text-bold text-strike"
-                >EXPLORERS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-orange text-bold text-strike"
-                >RESEARCHERS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-light-blue text-bold text-strike"
-                >AUTHORS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-green-9 text-bold text-strike"
-                >ADVENTURERS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-yellow-9 text-bold text-strike"
-                >STORYTELLERS</span
-              ></span
-            >
-            <span
-              >you are
-              <span class="text-red-9 text-bold text-strike"
-                >THE FUTURE</span
-              ></span
-            >
-            <span class="text-uppercase text-decoration"
-              >you are the reason why we are here!</span
-            >
-          </div>
         </div>
       </div>
     </div>
