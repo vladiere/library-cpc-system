@@ -12,18 +12,18 @@
       :class="
         Platform.is.mobile
           ? 'column q-gutter-y-md text-center content-center items-center'
-          : 'row q-gutter-x-md'
+          : 'row q-gutter-x-md justify-center'
       "
     >
-      <div class="col column">
+      <div class="col column justify-center">
         <span>Providing Knowledge Since 2020</span>
         <span>Proudly Serving the CPC Community</span>
       </div>
-      <div class="col column">
+      <div class="col column justify-center">
         <span>School CPC Founded in March 2005</span>
         <span>CPC Library Establish in July 2020</span>
       </div>
-      <div class="col column">
+      <div class="col column justify-center">
         <div class="row q-gutter-x-sm q-mt-lg">
           <span class="text-bold">Address: </span>
           <span>Cordova, Poblacion, 6017, Cebu</span>
