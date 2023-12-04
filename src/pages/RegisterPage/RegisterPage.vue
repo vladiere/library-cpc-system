@@ -139,7 +139,7 @@
             :form-fields="role !== null ? [{ name: 'role', value: `${role}`}] : '[]'"
             @failed="uploaderFailed"
             field-name="image"
-            accept=".jpg, image/*"
+            accept=".jpg, .png, .jpeg, image/*"
             @rejected="onRejected"
             @uploaded="onUploadedImage"
             @uploading="SpinnerFacebook(true, 'Reading Image')"
