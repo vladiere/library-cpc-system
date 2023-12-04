@@ -28,7 +28,8 @@
 
 <script setup lang="ts">
 import { Platform } from 'quasar';
-import DefaultImg from 'src/assets/no-image-available.jpeg'
+import { linkimg } from 'src/utils/links';
+import DefaultImg from 'src/assets/no-image-available.png'
 
 export interface AuthorBooksInterface {
   author_name: string | null;
@@ -43,6 +44,6 @@ withDefaults(defineProps<AuthorBooksInterface>(), {
 })
 
 const checkIfImage = (img: string | null) => {
-  return img ? `http://localhost:3000/images/${img}` : DefaultImg;
+  return img ? linkimg + img : DefaultImg;
 }
 </script>
