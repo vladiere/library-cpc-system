@@ -134,7 +134,7 @@
             :style="Platform.is.mobile ? 'width: 250px; max-height: 450px' : 'max-width: 350px'"
             flat
             dense
-            url="http://localhost:3000/api/user/register/upload/image"
+            url="https://library-backend-y0o3.onrender.com/api/user/register/upload/image"
             auto-upload
             :form-fields="role !== null ? [{ name: 'role', value: `${role}`}] : '[]'"
             @failed="uploaderFailed"
@@ -333,7 +333,6 @@ const onSubmit = async () => {
 
 watchEffect(() => {
   if (role.value !== null) {
-    console.log(role.value)
     disableSteps.value.step2 = false;
   }
   if (form.value.email && (form.value.password !== '' && confirmPass.value !== '') && (form.value.password === confirmPass.value)) {
