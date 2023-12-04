@@ -41,7 +41,7 @@
 <script setup lang="ts">
   import { defineComponent } from 'vue';
   import { Platform, format } from 'quasar'
-  import DefaultImg from 'src/assets/no-image-available.jpeg'
+  import DefaultImg from 'src/assets/no-image-available.png'
   import { linkimg } from 'src/utils/links';
 
   defineComponent({

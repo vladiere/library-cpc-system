@@ -13,34 +13,23 @@
       <div v-if="recommendationPersonal.length === 0" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
       Sorry, no recommendations are currently available.
     </div>
-      <q-intersection
+      <q-img
         v-for="item in recommendationPersonal"
         :key="item.recomendation_id"
-        transition="scale"
-        :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
+        :src="checkIfImage(item.img_path)"
+        sizes="(min-width: 100px) and (max-width: 400px) 400w,
+              (min-width: 400px) and (max-width: 800px) 800w,
+              (min-width: 800px) and (max-width: 1200px) 1200w,
+              (min-width: 1200px) 1600w"
+        :style="Platform.is.mobile ? 'height: 250px; max-width: 160px' : 'height: 280px; max-width: 300px'"
+        fit="contain"
+        class="shadow-2"
+        @click="gotoBookInfo(item.book_id)"
       >
-        <q-card flat bordered>
-          <q-img :src="checkIfImage(item.img_path)" spinner-color="primary" />
-
-          <q-card-section>
-            <q-item-label lines="2" class="text-subtitle1 text-capitalize">{{ item.title }}</q-item-label>
-            <div class="text-caption">by {{ wordFormatter(item.author_name )}}</div>
-            <div class="row ">
-              <q-btn
-                flat
-                icon="mdi-information-outline"
-                color="dark"
-                round
-                :to="`/book/info?book_id=${item.book_id}`"
-              >
-                <q-tooltip class="bg-grey-8 text-grey-3"
-                  >Book Information</q-tooltip
-                >
-              </q-btn>
-            </div>
-          </q-card-section>
-        </q-card>
-      </q-intersection>
+        <div class="absolute-bottom text-body2 text-center text-capitalize" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+          {{ item.title }}
+        </div>
+      </q-img>
     </div>
   </q-page>
 </template>

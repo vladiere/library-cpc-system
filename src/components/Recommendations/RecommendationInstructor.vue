@@ -9,38 +9,27 @@
 
 <template>
   <q-page>
-    <div class="row justify-center q-gutter-sm q-mt-lg">
+    <div class="row justify-center q-gutter-sm">
       <div class="flex flex-center text-weight-light text-h4 text-blue-8" v-if="recommendationInstructor.length === 0">
         Sorry, no recommendations are currently available.
       </div>
-      <q-intersection
+      <q-img
         v-for="item in recommendationInstructor"
         :key="item.recomendation_id"
-        transition="scale"
-        :class="!Platform.is.mobile ? 'on-notmobile q-mb-md' : 'on-mobile'"
+        :src="checkIfImage(item.img_path)"
+        sizes="(min-width: 100px) and (max-width: 400px) 400w,
+              (min-width: 400px) and (max-width: 800px) 800w,
+              (min-width: 800px) and (max-width: 1200px) 1200w,
+              (min-width: 1200px) 1600w"
+        :style="Platform.is.mobile ? 'height: 250px; max-width: 160px' : 'height: 280px; max-width: 300px'"
+        fit="contain"
+        class="shadow-2"
+        @click="gotoBookInfo(item.book_id)"
       >
-        <q-card flat bordered>
-          <q-img :src="checkIfImage(item.img_path)" spinner-color="primary" />
-
-          <q-card-section>
-            <q-item-label lines="1" class="text-subtitle1 text-capitalize">{{ item.title }}</q-item-label>
-            <div class="text-caption text-capitalize">{{ item.author_name }}</div>
-            <div class="row ">
-              <q-btn
-                flat
-                icon="mdi-information-outline"
-                color="dark"
-                round
-                :to="`/book/info?book_id=${item.book_id}`"
-              >
-                <q-tooltip class="bg-grey-8 text-grey-3"
-                  >Book Information</q-tooltip
-                >
-              </q-btn>
-            </div>
-          </q-card-section>
-        </q-card>
-      </q-intersection>
+        <div class="absolute-bottom text-body2 text-center text-capitalize" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+          {{ item.title }}
+        </div>
+      </q-img>
     </div>
   </q-page>
 </template>
@@ -51,20 +40,25 @@ import { Platform, format } from 'quasar';
 import recommendations from 'src/utils/Books/recommendation';
 import { IRecommendedInstructor, IRecommendPersonal } from 'src/utils/recommendation';
 import { useRecommendationStore } from 'stores/recommendation-store';
-import DefaultImg from 'src/assets/no-image-available.jpeg'
+import DefaultImg from 'src/assets/no-image-available.png'
 import { linkimg } from 'src/utils/links';
-
+import { useRouter } from 'vue-router';
 
 
 defineComponent({
   name: 'RecommendationPage',
 });
 
+const router = useRouter()
 const recommendationStore = useRecommendationStore();
 const recommendationInstructor = ref<IRecommendedInstructor>([]);
 
 const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
+}
+
+const gotoBookInfo = (book_id: number) => {
+  router.push({ path: '/book/info', query: { book_id: book_id }});
 }
 
 onMounted(async() => {

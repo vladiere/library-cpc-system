@@ -26,16 +26,17 @@
   <q-page class="bg-grey-2">
     <LoadingComponent v-if="isLoading" />
     <div
-      :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row justify-center'"
+      :class="Platform.is.mobile ? 'column q-pt-lg q-gutter-y-md' : 'row items-center justify-center'"
       :style="
         Platform.is.mobile ? '' : 'border: 1px solid #000; height: 100vh'
       "
     >
       <div
+        style="border-radius: 15px; height: 90vh"
         :class="
           Platform.is.mobile
             ? 'q-px-md'
-            : 'col-4 column q-px-lg justify-center'
+            : 'col-4 column q-px-lg justify-center shadow-3'
         "
       >
         <div
