@@ -67,7 +67,7 @@ api.interceptors.response.use(
         // console.log('Token refreshed successfully. Retrying the previous request.');
         prevRequest.headers['Authorization'] = `Bearer ${token.accessToken}`;
 
-        userStore.initToken(token.accessToken);
+        userStore.initAuthorize({ accessToken: token.accessToken, refreshToken: token.refreshToken });
         return api(prevRequest);
       } else {
         // console.error('Failed to refresh token. Redirect to login or handle accordingly.');
