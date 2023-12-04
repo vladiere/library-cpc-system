@@ -98,7 +98,7 @@
           <span :class="!Platform.is.mobile ? 'text-weight-light text-grey-2' : 'text-subtile1 text-weight-light text-grey-1'">Elevate your college experience with our online resources. Dive into a world of knowledge, anytime, anywhere. Explore today!</span>
           <div class="column flex flex-center q-gutter-y-md">
             <span :class="!Platform.is.mobile ? 'text-h2 text-weight-regular text-grey-1' : 'text-h3 text-weight-regular text-grey-1'">CPCnians!</span>
-            <a href="/account/register" rel="manifest" class="btn-download">Register Now!</a>
+            <q-btn to="/account/register" color="primary" padding="15px 5em" size="md" rounded no-caps>Register Now!</q-btn>
           </div>
         </div>
         <div class="col-4 column flex flex-center">
