@@ -198,6 +198,7 @@
               icon="arrow_left"
               label="Back"
               flat
+              :loading="isLoading"
               dense
               @click="$refs.stepper.previous()"
             />
@@ -208,6 +209,7 @@
               v-if="!disableSteps.step2"
               :label="step === 4 ? 'Submit' : 'Next'"
               color="primary"
+              :loading="isLoading"
               @click="doneFillUps($refs)"
             />
           </q-stepper-navigation>
@@ -218,7 +220,7 @@
 </template>
 
 <script setup lang="ts">
-import { Platform, Notify  } from 'quasar';
+import { Platform, Notify, debounce  } from 'quasar';
 import { defineComponent, ref, watchEffect } from 'vue';
 import LibraryLogo from 'src/assets/librarylogo.png';
 import { useRouter } from 'vue-router';
@@ -251,6 +253,7 @@ const form = ref({
   role: '',
   id_number: null,
 });
+const isLoading = ref(false);
 
 const uploaderFailed = (faileds) => {
   const xhrResponse = JSON.parse(faileds.xhr.response);
@@ -263,9 +266,10 @@ const uploaderFailed = (faileds) => {
   SpinnerFacebook(false);
 }
 
-const doneFillUps = (refs) => {
+const doneFillUps = async (refs) => {
   if (step.value === 4) {
-    onSubmit();
+    isLoading.value = true;
+    await onSubmit();
   }
 
   return refs.stepper.next();
@@ -307,7 +311,7 @@ const onUploadedImage = (data: any) => {
   }
 }
 
-const onSubmit = async () => {
+const onSubmit = debounce(async () => {
   try {
     const response = await notApi.post('/user/register', { form: form.value });
 
@@ -318,6 +322,7 @@ const onSubmit = async () => {
         router.push('/');
       }, 2300);
     } else {
+      isLoading.value = false;
       Notify.create({
         message: response.data[0].message,
         type: 'negative',
@@ -326,10 +331,11 @@ const onSubmit = async () => {
       })
     }
   } catch (error: any) {
-    console.error(error)
     throw new Error(error)
+  } finally {
+    isLoading.value = false;
   }
-}
+}, 1500);
 
 watchEffect(() => {
   if (role.value !== null) {
