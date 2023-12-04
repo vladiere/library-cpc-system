@@ -280,7 +280,7 @@ const onRejected = (rejectedEntries) => {
 }
 
 const onUploadedImage = (data: any) => {
-  SpinnerFacebook(false);
+  SpinnerFacebook(true, 'Filling information from image');
   disableSteps.value.step4 = false;
   const { xhr } = data;
   const responseText = xhr.responseText;
@@ -288,6 +288,7 @@ const onUploadedImage = (data: any) => {
 
   if (jsonResponse.status === 200) {
     const dataArray = jsonResponse.valueFromDepartmentToIdNumber;
+    console.log(dataArray)
     let fullname = '';
 
     for (let index = 1; index < dataArray.length - 1; index++) {
@@ -299,7 +300,7 @@ const onUploadedImage = (data: any) => {
     form.value.role = role.value;
     form.value.id_number = dataArray[dataArray.length - 1]
 
-
+    SpinnerFacebook(false);
     disableSteps.value.step3 = false
   } else {
     Notify.create({
