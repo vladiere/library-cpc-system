@@ -9,6 +9,7 @@ import {
 import routes from './routes';
 import { useUserStore } from 'src/stores/user-store';
 import { SpinnerFacebook } from 'src/utils/loading';
+import { Platform } from 'quasar';
 
 /*
  * If not building with SSR mode, you can
@@ -44,7 +45,11 @@ export default route(function (/* { store, ssrContext } */) {
       next({ name: 'login' });
     } else if (!to.meta.auth && userStore.isAuthenticated) {
       SpinnerFacebook(false);
-      next('/home');
+      if (Platform.is.mobile) {
+        next('/home');
+      } else {
+        next();
+      }
     } else {
       SpinnerFacebook(false);
       next();
