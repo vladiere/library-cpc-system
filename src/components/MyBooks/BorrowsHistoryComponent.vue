@@ -3,7 +3,7 @@
   max-height: 400px
   width: 260px
 .on-notmobile-card
-  max-height: 400px
+  max-height: 420px
   width: 250px
   img
     height: calc(100% - 60px)
@@ -26,7 +26,7 @@
           :key="item"
           icon="mdi-information"
           :label="item.title"
-          :header-class="checkDueDate(item.due_date) ? 'bg-warning text-dark' : ''"
+          :header-class="(checkDueDate(item.due_date) && item.status === 'Active') ? 'bg-warning text-dark' : ''"
           style="text-overflow: ellipsis; overflow:hidden;"
           :caption="item.author_name"
         >
@@ -51,12 +51,12 @@
         transition="scale"
         v-for="item in myBooks"
         :key="item"
-        :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
+        :class="!Platform.is.mobile ? 'on-notmobile q-mb-lg' : 'on-mobile'"
       >
         <q-card bordered :class="!Platform.is.mobile ? 'q-ma-sm on-notmobile-card relevant-position' : 'q-ma-sm relevant-position on-mobile-card'">
           <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" class="q-mb-sm" height="235px" fit="fill" >
-            <div class="absolute-full text-h6 text-blue-1 text-bold flex flex-center" v-if="checkDueDate(item.due_date)" >
-              Overdue
+            <div class="absolute-full text-h6 text-blue-1 text-bold flex flex-center" v-if="checkDueDate(item.due_date) && item.status === 'Active'" >
+              Overdue please return
             </div>
           </q-img>
 

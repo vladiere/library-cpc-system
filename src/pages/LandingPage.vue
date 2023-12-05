@@ -97,7 +97,7 @@
           <span class="text-grey-2">Studying with us!.</span>
           <span :class="!Platform.is.mobile ? 'text-weight-light text-grey-2' : 'text-subtile1 text-weight-light text-grey-1'">Elevate your college experience with our online resources. Dive into a world of knowledge, anytime, anywhere. Explore today!</span>
           <div class="column flex flex-center q-gutter-y-md">
-            <span :class="!Platform.is.mobile ? 'text-h2 text-weight-regular text-grey-1' : 'text-h3 text-weight-regular text-grey-1'">CPCnians!</span>
+            <span :class="!Platform.is.mobile ? 'text-h3 text-weight-regular text-grey-1' : 'text-h4 text-weight-regular text-grey-1'">Come and join!</span>
             <q-btn to="/account/register" color="primary" padding="15px 5em" size="md" rounded no-caps>Register Now!</q-btn>
           </div>
         </div>
@@ -113,7 +113,7 @@
           </h2>
         </div>
         <div class="column items-center q-gutter-y-md body-text">
-          <span>This year, CPC Library underwent remarkable enhancements, introducing an extensive array of digital resources and innovative features. In 2024, envision accessing the vast world of knowledge seamlessly on CPC Library, empowering millions of users.</span>
+          <span>This year, CPC Library underwent remarkable enhancements, introducing an extensive array of digital resources and innovative features. In 2024, envision accessing the vast world of knowledge seamlessly on CPC Library, empowering students.</span>
           <span>You are the reason why we are here! If CPC Library adds value to your academic journey, kindly consider contributing a donation to CPC and help us achieve our mission.</span>
         </div>
       </div>

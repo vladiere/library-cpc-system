@@ -93,9 +93,6 @@
               : 'text-dark text-h5 text-bold row q-gutter-x-md'
           "
         >
-          <q-avatar>
-            <q-img :src="userData.img_path || 'https://cdn-icons-png.flaticon.com/128/1144/1144760.png'" fit="contain" />
-          </q-avatar>
           <div class="column">
             <span class="text-subtitle2 text-capitalize">{{ userData.fullname }}</span>
             <span class="text-caption text-uppercase">{{ userData.department }}</span>

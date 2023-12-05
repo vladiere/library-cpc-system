@@ -10,8 +10,11 @@
 <template>
   <q-page>
     <div class="row justify-center q-gutter-sm">
-      <div class="flex flex-center text-weight-light text-h4 text-blue-8" v-if="recommendationInstructor.length === 0">
+      <div class="flex flex-center text-weight-light text-h4 text-blue-8" v-if="recommendationInstructor.length === 0 && !loading">
         Sorry, no recommendations are currently available.
+      </div>
+      <div v-if="loading" class="row justify-center q-gutter-sm q-mt-lg">
+        <q-skeleton animation="wave" height="335px" width="300px" v-for="index in 4" :key="index" />
       </div>
       <q-img
         v-for="item in recommendationInstructor"
@@ -52,6 +55,7 @@ defineComponent({
 const router = useRouter()
 const recommendationStore = useRecommendationStore();
 const recommendationInstructor = ref<IRecommendedInstructor>([]);
+const loading = ref(false);
 
 const checkIfImage = (img: string | null) => {
   return img ? linkimg + img : DefaultImg;
@@ -63,7 +67,9 @@ const gotoBookInfo = (book_id: number) => {
 
 onMounted(async() => {
   if (recommendationInstructor.value.length === 0) {
+    loading.value = true;
     await recommendations.getAllRecommendations();
+    loading.value = false;
   }
 
   recommendationInstructor.value = recommendationStore.getRecommendations;
