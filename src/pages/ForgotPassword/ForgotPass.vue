@@ -107,7 +107,7 @@ const sendResetPasswordRequest = debounce(async () => {
 const handleClick = async (option: string) => {
   try {
     if (option === 'login') {
-      router.push('/');
+      router.push('/account/login');
     } else {
       isLoading.value = true;
       await sendResetPasswordRequest();
