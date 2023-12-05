@@ -15,7 +15,7 @@
         width="20%"
         style="border-radius: 50%"
       />
-      <q-btn flat dense label="Back to login" icon="mdi-chevron-left" to="/account/login" padding="2px 10px 2px 2px"/>
+        <q-btn flat dense label="Back to login" icon="mdi-chevron-left" :to="{ name: 'login' }" padding="2px 10px 2px 2px"/>
       <q-stepper
         header-nav
         class="full-width q-mt-md"
@@ -319,7 +319,7 @@ const onSubmit = debounce(async () => {
       SpinnerHourglass(true, 'Redirecting to login...')
       setTimeout(() => {
         SpinnerHourglass(false);
-        router.push('/');
+        router.push({ name: 'login' });
       }, 2300);
     } else {
       isLoading.value = false;
