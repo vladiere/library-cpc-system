@@ -280,7 +280,6 @@ const onRejected = (rejectedEntries) => {
 }
 
 const onUploadedImage = (data: any) => {
-  SpinnerFacebook(true, 'Filling information from image');
   disableSteps.value.step4 = false;
   const { xhr } = data;
   const responseText = xhr.responseText;
