@@ -47,7 +47,7 @@
               borderless
               dense
               v-model="role"
-              :options="['Instructor', 'Student']"
+              :options="['Faculty Staff', 'Student']"
               style="width: 250px"
             />
           </div>
