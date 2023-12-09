@@ -289,6 +289,7 @@ const onUploadedImage = (data: any) => {
   if (jsonResponse.status === 200) {
     const dataArray = jsonResponse.valueFromDepartmentToIdNumber;
     let fullname = '';
+    console.log(dataArray);
 
     for (let index = 1; index < dataArray.length - 1; index++) {
       fullname += dataArray[index] + ' '
