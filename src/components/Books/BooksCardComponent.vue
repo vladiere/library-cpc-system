@@ -6,13 +6,12 @@
   img
     width: 170px
     height: 210px
-    border-radius: 15px
+    border-radius: 5px
     transition: all 0.5s cubic-bezier(0.79, 0.33, 0.14, 0.53)
     object-fit: fill
     transform: scale(1.01)
 
     &:hover
-      border-radius: 50px 5px 50px 5px
       box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
 
 .mobile-card

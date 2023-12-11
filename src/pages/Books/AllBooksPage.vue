@@ -1,14 +1,14 @@
 <style lang="sass" >
 .book-item
-  height: 350px
-  width: 240px
+  height: 300px
+  width: 200px
+
 .my-book-card
-  height: 350px
-  width: 240px
+  height: 300px
+  width: 200px
   transform: scale(1.01)
   transition: 0.5s ease
   &:hover
-    border-radius: 40px 2px 40px 2px
     box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
   img
     height: calc(100% - 85px)

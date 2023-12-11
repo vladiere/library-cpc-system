@@ -1,8 +1,8 @@
 <style lang="sass" scoped>
 .on-notmobile
   width: 100%
-  max-width: 400px
-  max-height: 250px
+  max-width: 320px
+  max-height: 200px
 
 .on-mobile
   width: 100%
