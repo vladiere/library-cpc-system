@@ -134,7 +134,7 @@
             :style="Platform.is.mobile ? 'width: 250px; max-height: 450px' : 'max-width: 350px'"
             flat
             dense
-            url="https://library-backend-y0o3.onrender.com/api/user/register/upload/image"
+            url="https://library-backend-cmg9.onrender.com/api/user/register/upload/image"
             auto-upload
             :form-fields="role !== null ? [{ name: 'role', value: `${role}`}] : '[]'"
             @failed="uploaderFailed"
@@ -226,16 +226,18 @@ import LibraryLogo from 'src/assets/librarylogo.png';
 import { useRouter } from 'vue-router';
 import { notApi } from 'src/boot/axios.ts'
 import { SpinnerFacebook, SpinnerHourglass } from 'src/utils/loading.ts'
+import { useUserStore } from 'stores/user-store';
+import { socket } from 'src/utils/socket';
 
 defineComponent({
   name: 'RegisterPage',
 });
 
 const router = useRouter();
+const userStore = useUserStore();
 const step = ref(1);
 const isPwd = ref(true);
 const role = ref(null);
-const roleField = ref('')
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const passwordRegex = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/;
 const disableSteps = ref({
@@ -279,7 +281,7 @@ const onRejected = (rejectedEntries) => {
   console.log(rejectedEntries)
 }
 
-const onUploadedImage = (data: any) => {
+const onUploadedImage = (data: unknown) => {
   SpinnerFacebook(false);
   disableSteps.value.step4 = false;
   const { xhr } = data;
@@ -289,14 +291,13 @@ const onUploadedImage = (data: any) => {
   if (jsonResponse.status === 200) {
     const dataArray = jsonResponse.valueFromDepartmentToIdNumber;
     let fullname = '';
-    console.log(dataArray);
 
     for (let index = 1; index < dataArray.length - 1; index++) {
       fullname += dataArray[index] + ' '
     }
 
     form.value.fullname = fullname;
-    form.value.department = dataArray[0].includes("BS") ? dataArray[0] : dataArray[0] === 'IT' ? 'BS' + dataArray[0] : dataArray[0];
+    form.value.department = dataArray[0].includes('BS') ? dataArray[0] : dataArray[0] === 'IT' ? 'BS' + dataArray[0] : dataArray[0];
     form.value.role = role.value;
     form.value.id_number = dataArray[dataArray.length - 1]
 
@@ -311,16 +312,33 @@ const onUploadedImage = (data: any) => {
   }
 }
 
+const submitLoginform = debounce(async (email, password) => {
+  try {
+    const form = {
+      email,
+      password
+    }
+    const response = await notApi.post('/user/login', { form });
+    socket.emit('user_connected', email);
+    userStore.initAuthorize(response.data);
+
+    isLoading.value = true;
+    router.push('/home');
+  } catch (error) {
+    throw error;
+  } finally {
+    SpinnerHourglass(false);
+    isLoading.value = false;
+  }
+}, 1500)
+
 const onSubmit = debounce(async () => {
   try {
     const response = await notApi.post('/user/register', { form: form.value });
 
     if (response.data[0].status === 201) {
-      SpinnerHourglass(true, 'Redirecting to login...')
-      setTimeout(() => {
-        SpinnerHourglass(false);
-        router.push({ name: 'login' });
-      }, 2300);
+      SpinnerHourglass(true, 'Logging in please wait...');
+      await submitLoginform(form.value.email, form.value.password);
     } else {
       isLoading.value = false;
       Notify.create({
@@ -330,7 +348,7 @@ const onSubmit = debounce(async () => {
         timeout: 2300
       })
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     throw new Error(error)
   } finally {
     isLoading.value = false;
