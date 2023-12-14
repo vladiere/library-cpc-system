@@ -76,7 +76,7 @@
   });
 
 const checkIfImage = (img: string | null) => {
-  return img ? linkimg + '/' + img : DefaultImg;
+  return img ? linkimg + img : DefaultImg;
 }
 
 const titleAndAuthor = (title: string, author: string) => {
