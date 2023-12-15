@@ -1,6 +1,5 @@
-
 <template>
-  <q-card :class="!Platform.is.mobile ? 'q-ma-sm my-book-card cursor-pointer relative-position' : 'relative-position onmobile-book-card cursor-pointer'">
+  <q-card :class="!Platform.is.mobile ? 'q-ma-sm my-book-card cursor-pointer relative-position bg-transparent' : 'relative-position onmobile-book-card cursor-pointer'">
     <img :src="checkIfImage(img_path)" :alt="author_name" :title="titleAndAuthor(title, author_name)" />
     <q-card-section>
       <q-item-label lines="2" :class="!Platform.is.mobile ? 'text-body1' : ''">{{ title ? title : 'no book title available' }}</q-item-label>

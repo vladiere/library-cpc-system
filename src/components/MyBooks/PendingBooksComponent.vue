@@ -54,9 +54,7 @@ const checkIfImage = (img: string | null) => {
 // const wordFormatter = (word_title: stirng) => format.capitalize(word_title);
 
 onMounted(async() => {
-  if (myBooks.value.length === 0) {
-    await mybooks.getTransactionPendingAndBooks();
-  }
+  await mybooks.getTransactionPendingAndBooks();
 
   bookStore.getTransactionPending.forEach((item: unknown) => {
     if (item.status === 'Pending') {

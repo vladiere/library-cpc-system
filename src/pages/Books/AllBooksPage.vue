@@ -9,7 +9,7 @@
   transform: scale(1.01)
   transition: 0.5s ease
   &:hover
-    box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
+    box-shadow: 4px 4px 18px -2px rgba(0, 0, 0, 1)
   img
     height: calc(100% - 85px)
     object-fit: fill
@@ -58,7 +58,6 @@
           dense
           v-model="filter"
           rounded
-          @blur="filter = ''"
           >
           <template v-slot:append>
             <q-icon :name="filter ? 'mdi-close-circle' : 'mdi-magnify'" @click="filter = ''" class="cursor-pointer" />

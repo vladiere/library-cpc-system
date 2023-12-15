@@ -76,7 +76,7 @@
                 </q-card-section>
               </q-card>
             </q-expansion-item>
-            <q-btn class="absolute-top-right q-ma-sm" label="renew" flat dense color="blue-8" v-if="!checkDueDate(item.due_date) && item.transaction_type !== 'Returned'" @click="handleShowDialog(item.transaction_id)">
+            <q-btn class="absolute-top-right q-ma-sm" label="renew" flat dense color="primary" v-if="!checkDueDate(item.due_date) && item.transaction_type !== 'Returned'" @click="handleShowDialog(item.transaction_id)">
               <q-tooltip class="bg-grey-10 text-grey-2" :delay="200">renew this book</q-tooltip>
             </q-btn>
         </q-card>
@@ -206,7 +206,7 @@ const checkDueDate = (due_date: string) => {
   // Get the current date
   const currentDate = new Date();
   // Compare the input date with the current date
-  return (duedate < currentDate);
+  return (duedate <= currentDate);
 }
 
 onMounted(async() => {

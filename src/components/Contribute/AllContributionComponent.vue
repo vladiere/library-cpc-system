@@ -71,6 +71,7 @@ export interface AllContributionProps {
   file_description: string;
   file_total_downloads: number;
   file_status: string;
+  user_status: string;
 }
 
 withDefaults(defineProps<AllContributionProps>(), {
@@ -87,6 +88,7 @@ withDefaults(defineProps<AllContributionProps>(), {
   file_description: '',
   file_total_downloads: 0,
   file_status: '',
+  user_status: '',
 })
 
 const formatNumber = (total_downloads: number) => {

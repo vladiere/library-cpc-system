@@ -12,7 +12,7 @@
     transform: scale(1.01)
 
     &:hover
-      box-shadow: 4px 4px 22px -2px rgba(0, 0, 0, 1)
+      box-shadow: 4px 4px 15px -2px rgba(0, 0, 0, 1)
 
 .mobile-card
   width: 100%

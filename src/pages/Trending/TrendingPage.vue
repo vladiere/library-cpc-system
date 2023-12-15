@@ -1,7 +1,7 @@
 <style lang="sass" scoped>
 .on-notmobile
-  height: 400px
-  width: 325px
+  height: 320px
+  width: 200px
 .on-mobile
   height: 280px
   width: 170px
@@ -10,7 +10,7 @@
 <template>
   <q-page>
     <div v-if="isLoading" class="row justify-center q-gutter-sm q-pt-md">
-      <q-skeleton :height="!Platform.is.mobile ? '335px' : '280px'" :width="!Platform.is.mobile ? '325px' : '170px'" animation="wave" v-for="index in 6" :key="index" />
+      <q-skeleton :height="!Platform.is.mobile ? '320px' : '280px'" :width="!Platform.is.mobile ? '200px' : '170px'" animation="wave" v-for="index in 12" :key="index" />
     </div>
     <div v-if="!isLoading" class="row justify-center q-gutter-sm q-pt-md">
       <q-intersection
@@ -20,7 +20,7 @@
         :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'"
       >
         <q-card flat bordered>
-          <q-img :src="checkIfImage(trend.img_path)" :height="!Platform.is.mobile ? '280px' : '165px'" fit="fill" />
+          <q-img :src="checkIfImage(trend.img_path)" :height="!Platform.is.mobile ? '200px' : '165px'" fit="fill" />
 
           <q-card-section>
             <q-item-label lines="1" class="text-subtitle2 text-capitalize">{{ trend.title }}</q-item-label>

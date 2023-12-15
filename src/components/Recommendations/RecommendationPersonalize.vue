@@ -10,7 +10,7 @@
 <template>
   <q-page>
     <div class="row justify-center q-gutter-sm q-mt-lg">
-      <div v-if="recommendationPersonal.length === 0 && !loading" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center text-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
+      <div v-if="recommendationPersonal.length === 0 && !loading" :class="Platform.is.mobile ? 'q-mt-lg flex flex-center q-mt-xl text-center text-h5 text-grey-7 text-weight-light' : 'q-mt-xl flex flex-center text-h3 text-grey-7 text-weight-light'">
       Sorry, no recommendations are currently available.
     </div>
       <div v-if="loading" class="row justify-center q-gutter-sm q-mt-lg">

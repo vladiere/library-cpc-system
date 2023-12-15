@@ -77,8 +77,7 @@
         <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', props.book_id, props.borrowed_copies)">
           <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase">{{ props.borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
         </q-btn>
-
-        <q-btn flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege === 'instructor'" @click="handleAddRecommendation(props.book_id)">
+        <q-btn flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege !== 'student'" @click="handleAddRecommendation(props.book_id)">
           <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">add to your recommendations</q-tooltip>
         </q-btn>
         </div>

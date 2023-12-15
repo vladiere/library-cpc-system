@@ -4,8 +4,8 @@
   width: 168px
 
 .notmobile-item
-  height: 340px
-  width: 290px
+  height: 250px
+  width: 220px
 </style>
 
 <template>
@@ -35,7 +35,7 @@
               </q-item-section>
             </q-item>
 
-            <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" width="100%" />
+            <q-img spinner-color="primary" :src="checkIfImage(item.img_path)" width="100%" height="200px" fit="fill" :title="`${item.title}`" />
 
             <q-card-section :class="Platform.is.mobile ? 'q-pa-sm' : ''">
               <q-item-label class="text-body text-capitalize" lines="1">{{ item.title }}</q-item-label>

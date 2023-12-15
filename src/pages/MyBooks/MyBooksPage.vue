@@ -1,8 +1,8 @@
 <style lang="sass" scoped>
 .on-notmobile
   width: 100%
-  max-width: 320px
-  max-height: 200px
+  max-width: 220px
+  max-height: 240px
 
 .on-mobile
   width: 100%
@@ -15,8 +15,8 @@
       No recent pending status
     </div>
     <div class="row justify-center q-gutter-md q-mt-lg">
-        <q-img :src="checkIfImage(item.img_path)" :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'" v-for="item in myBooks" :key="item" fit="fill" style="border-radius: 10px">
-          <div class="absolute-full text-subtitle2 flex flex-center column">
+        <q-img :src="checkIfImage(item.img_path)" :class="!Platform.is.mobile ? 'on-notmobile' : 'on-mobile'" v-for="item in myBooks" :key="item" fit="fill" style="border-radius: 5px">
+          <div class="absolute-full text-subtitle2 flex flex-center column text-center">
             <div class="text-subtitle1 text-capitalize">{{item.title }}</div>
             <div class="text-subtitle2 text-uppercase text-orange-5">{{ item.status }}</div>
           </div>

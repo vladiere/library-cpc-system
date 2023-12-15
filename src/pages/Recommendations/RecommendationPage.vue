@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <!-- content -->
-    <RecommendationInstructor v-if="decode.privilege === 'instructor'" />
+    <RecommendationInstructor v-if="decode.privilege === 'instructor' || 'faculty staff'" />
     <RecommendationPersonalize v-if="decode.privilege === 'student'" />
   </q-page>
 </template>
@@ -17,7 +17,6 @@ defineComponent({
 
 const userStore = useUserStore();
 const decode = jwtDecode(userStore.token);
-console.log(decode)
 
 const RecommendationInstructor = defineAsyncComponent({
   loader: () => import('components/Recommendations/RecommendationInstructor.vue'),

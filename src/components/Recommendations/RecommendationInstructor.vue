@@ -10,7 +10,7 @@
 <template>
   <q-page>
     <div class="row justify-center q-gutter-sm">
-      <div class="flex flex-center text-weight-light text-h4 text-blue-8" v-if="recommendationInstructor.length === 0 && !loading">
+      <div class="flex flex-center q-mt-xl text-weight-light text-h4 text-blue-8" v-if="recommendationInstructor.length === 0 && !loading">
         Sorry, no recommendations are currently available.
       </div>
       <div v-if="loading" class="row justify-center q-gutter-sm q-mt-lg">
