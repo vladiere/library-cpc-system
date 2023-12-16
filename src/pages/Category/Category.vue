@@ -3,7 +3,7 @@
     <div
       :class="Platform.is.mobile ? '' : 'row q-px-xl x-py-md q-gutter-x-md'"
     >
-      <span class="text-h5 text-bold">Categories </span>
+      <span class="text-h5 text-bold">Available Categories </span>
       <span class="text-caption">Dewey Decimal Classification</span>
     </div>
     <q-list separator :class="Platform.is.mobile ? '' : 'q-pa-xl'">
@@ -11,7 +11,6 @@
         clickable
         v-for="category in categories"
         :key="category.id"
-        :to="category.link"
       >
         <q-item-section>
           {{ category.name }}
