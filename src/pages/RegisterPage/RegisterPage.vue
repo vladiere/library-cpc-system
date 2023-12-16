@@ -128,22 +128,20 @@
           prefix="3"
           :disable="disableSteps.step3"
         >
-        <div class="column justify-center items-center content-center" >
-
-        <q-uploader
-            :style="Platform.is.mobile ? 'width: 250px; max-height: 450px' : 'max-width: 350px'"
-            flat
-            dense
-            url="https://library-backend-cmg9.onrender.com/api/user/register/upload/image"
-            auto-upload
-            :form-fields="role !== null ? [{ name: 'role', value: `${role}`}] : '[]'"
-            @failed="uploaderFailed"
-            field-name="image"
-            accept=".jpg, .png, .jpeg, image/*"
-            @rejected="onRejected"
-            @uploaded="onUploadedImage"
-            @uploading="SpinnerFacebook(true, 'Reading Image')"
-          />
+        <div class="column items-center content-center" >
+          <div class="column items-center" style="width: 50%">
+            <q-file style="width:60%" v-model="file" outlined dense label="School ID" accept="image/*" @input="handleFileChange" >
+              <template v-slot:append>
+                <q-icon :name="file ? 'mdi-close' : ''" @click="clearFileAndImageURL" class="cursor-pointer"/>
+              </template>
+            </q-file>
+            <img
+              v-if="imageURL"
+              :src="imageURL"
+              class="rounded-borders"
+              style="width: 40%; max-height: 350px; object-fit: contain"
+            />
+          </div>
         </div>
         </q-step>
         <q-step
@@ -221,18 +219,21 @@
 
 <script setup lang="ts">
 import { Platform, Notify, debounce  } from 'quasar';
-import { defineComponent, ref, watchEffect } from 'vue';
+import { defineComponent, ref, watchEffect, watch } from 'vue';
 import LibraryLogo from 'src/assets/librarylogo.png';
 import { useRouter } from 'vue-router';
 import { notApi } from 'src/boot/axios.ts'
 import { SpinnerFacebook, SpinnerHourglass } from 'src/utils/loading.ts'
 import { useUserStore } from 'stores/user-store';
 import { socket } from 'src/utils/socket';
+import { handleImagesComparison } from 'src/utils/register/registerHandler';
 
 defineComponent({
   name: 'RegisterPage',
 });
 
+const imageURL = ref('');
+const file = ref(null);
 const router = useRouter();
 const userStore = useUserStore();
 const step = ref(1);
@@ -257,15 +258,69 @@ const form = ref({
 });
 const isLoading = ref(false);
 
-const uploaderFailed = (faileds) => {
-  const xhrResponse = JSON.parse(faileds.xhr.response);
-  Notify.create({
-    message: xhrResponse.message,
-    type: 'negative',
-    position: 'top',
-    timeout: 2300
-  })
-  SpinnerFacebook(false);
+const handleFileChange = async () => {
+  imageURL.value = '';
+  if (file.value) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      imageURL.value = reader.result;
+      SpinnerFacebook(true, 'Reading image this may take a while...');
+      await sendFileToHandler(reader.result, role.value);
+    };
+    reader.readAsDataURL(file.value);
+  } else {
+    imageURL.value = '';
+  }
+
+}
+
+const clearFileAndImageURL = () => {
+  file.value = null;
+  imageURL.value = '';
+}
+
+const sendFileToHandler = async (fileImage: unknown, userRole: string) => {
+  try {
+    const result = await handleImagesComparison(fileImage, userRole.toUpperCase())
+      console.log(result);
+    if (result.status === 200) {
+
+      const dataArray = result.valueFromDepartmentToIdNumber;
+      let fullname = '';
+
+      for (let index = 1; index < dataArray.length - 1; index++) {
+        fullname += dataArray[index] + ' '
+      }
+
+      form.value.fullname = fullname;
+      form.value.department = dataArray[0].includes('BS') ? dataArray[0] : dataArray[0] === 'IT' ? 'BS' + dataArray[0] : dataArray[0];
+      form.value.role = role.value;
+      form.value.id_number = dataArray[dataArray.length - 1]
+
+      disableSteps.value.step4 = false
+
+      Notify.create({
+        message: 'Done reading image',
+        type: 'positive',
+        position: 'top',
+        timeout: 3100,
+        progress: true
+      });
+
+    } else {
+      Notify.create({
+        message: result.message,
+        type: 'warning',
+        position: 'top',
+        timeout: 3100,
+        progress: true
+      });
+    }
+  } catch (error) {
+    throw error
+  } finally {
+    SpinnerFacebook(false);
+  }
 }
 
 const doneFillUps = async (refs) => {
@@ -275,41 +330,6 @@ const doneFillUps = async (refs) => {
   }
 
   return refs.stepper.next();
-}
-
-const onRejected = (rejectedEntries) => {
-  console.log(rejectedEntries)
-}
-
-const onUploadedImage = (data: unknown) => {
-  SpinnerFacebook(false);
-  disableSteps.value.step4 = false;
-  const { xhr } = data;
-  const responseText = xhr.responseText;
-  const jsonResponse = JSON.parse(responseText);
-
-  if (jsonResponse.status === 200) {
-    const dataArray = jsonResponse.valueFromDepartmentToIdNumber;
-    let fullname = '';
-
-    for (let index = 1; index < dataArray.length - 1; index++) {
-      fullname += dataArray[index] + ' '
-    }
-
-    form.value.fullname = fullname;
-    form.value.department = dataArray[0].includes('BS') ? dataArray[0] : dataArray[0] === 'IT' ? 'BS' + dataArray[0] : dataArray[0];
-    form.value.role = role.value;
-    form.value.id_number = dataArray[dataArray.length - 1]
-
-    disableSteps.value.step3 = false
-  } else {
-    Notify.create({
-      message: 'Cannot read image try again',
-      type: 'negative',
-      position: 'top',
-      timeout: 3000,
-    });
-  }
 }
 
 const submitLoginform = debounce(async (email, password) => {
@@ -354,6 +374,8 @@ const onSubmit = debounce(async () => {
     isLoading.value = false;
   }
 }, 1500);
+
+watch(file, handleFileChange);
 
 watchEffect(() => {
   if (role.value !== null) {
