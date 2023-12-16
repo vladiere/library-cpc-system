@@ -129,10 +129,10 @@
           :disable="disableSteps.step3"
         >
         <div class="column items-center content-center" >
-          <div class="column items-center" style="width: 50%">
-            <q-file style="width:60%" v-model="file" outlined dense label="School ID" accept="image/*" @input="handleFileChange" >
+          <div class="column items-center" :style="Platform.is.mobile ? '' : 'width: 50%'">
+            <q-file :style="Platform.is.mobile ? 'width: 100%' : 'width:60%'" v-model="file" outlined dense label="School ID" accept="image/*" @input="handleFileChange" >
               <template v-slot:append>
-                <q-icon :name="file ? 'mdi-close' : ''" @click="clearFileAndImageURL" class="cursor-pointer"/>
+                <q-icon :name="file ? 'mdi-close' : 'mdi-image'" @click="clearFileAndImageURL" class="cursor-pointer"/>
               </template>
             </q-file>
             <img
