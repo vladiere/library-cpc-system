@@ -37,7 +37,7 @@
 
     <q-separator size="2px" width="95%" class="self-center"/>
 
-    <div class="row q-gutter-md q-mt-md justify-center">
+    <div :class="!Platform.is.mobile ? 'row q-gutter-lg justify-center q-mt-md' : 'row q-gutter-md justify-center q-mt-sm'">
       <q-intersection
         v-for="item in paginatedContributeList"
         :key="item.book_id"

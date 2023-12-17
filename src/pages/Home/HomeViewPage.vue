@@ -42,14 +42,14 @@ const BooksCard = defineAsyncComponent({
   loadingComponent: BooksCardSkeleton,
   delay: 500,
   timeout: 2300,
-  suspensible: false,
+  suspensible: true,
 });
 
 const AllContributionComponent = defineAsyncComponent({
   loader: () => import('components/Contribute/AllContributionComponent.vue'),
   delay: 500,
   timeout: 2300,
-  suspensible: false
+  suspensible: true
 })
 
 const allBooks = ref<AllBooksInterface>([]);
@@ -68,9 +68,7 @@ const booksTimeout = async () => {
 }
 
 onMounted(async () => {
-  if (allBooks.value.length === 0 || contributionList.value.length === 0) {
-    await books.getAllContributorsBooks();
-  }
+  await books.getAllContributorsBooks();
   await booksTimeout();
 })
 

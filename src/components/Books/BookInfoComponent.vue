@@ -68,18 +68,18 @@
         </div>
 
         <div class="row q-gutter-x-md">
-        <q-btn label="reserve" color="primary" :disable="props.borrowed_copies === 0" @click="handleClickActions('reserve', props.book_id)">
-          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">
-            Reserve this book
-          </q-tooltip>
-        </q-btn>
+          <q-btn :loading="isLoading" label="reserve" color="primary" :disable="props.borrowed_copies === 0" @click="handleClickActions('reserve', props.book_id)">
+            <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">
+              Reserve this book
+            </q-tooltip>
+          </q-btn>
 
-        <q-btn :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', props.book_id, props.borrowed_copies)">
-          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase">{{ props.borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
-        </q-btn>
-        <q-btn flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege !== 'student'" @click="handleAddRecommendation(props.book_id)">
-          <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">add to your recommendations</q-tooltip>
-        </q-btn>
+          <q-btn :loading="isLoading" :label="borrowed_copies === 0 ? 'Hold' : 'Borrow'" color="blue-9" padding="5px 20px" @click="handleClickActions('action-btn', props.book_id, props.borrowed_copies)">
+            <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase">{{ props.borrowed_copies === 0 ? 'Hold this book' : 'Borrow this book' }}</q-tooltip>
+          </q-btn>
+          <q-btn :loading="isLoading" flat dense icon="mdi-plus-box-outline" color="grey-9" v-if="decoded.privilege !== 'student'" @click="handleAddRecommendation(props.book_id)">
+            <q-tooltip class="bg-grey-10 text-grey-2 text-lowercase" :delay="300">add to your recommendations</q-tooltip>
+          </q-btn>
         </div>
       </div>
     </div>
@@ -110,7 +110,6 @@ import { linkimg } from 'src/utils/links';
 import { useMybookStore } from 'stores/mybooks-store';
 import { useBooksStore } from 'stores/books-store';
 import { useRecommendationStore } from 'stores/recommendation-store';
-
 
 export interface BookInfoInterface {
   book_id: number;
@@ -143,6 +142,7 @@ const props = withDefaults(defineProps<BookInfoInterface>(), {
 const router = useRouter()
 const userStore = useUserStore();
 const mybookStore = useMybookStore();
+const isLoading = ref(false);
 const bookStore = useBooksStore();
 const recommendationStore = useRecommendationStore();
 const decoded = jwtDecode(userStore.token);
@@ -164,7 +164,7 @@ const addNewTransactionPending = (book_id: number, transaction_type: string) => 
     })
 }
 
-const sendTransaction = async (book_id: number, transaction_type: string) => {
+const sendTransaction = debounce(async (book_id: number, transaction_type: string) => {
   try {
     const response = await api.post('/transaction/insert', { book_id: book_id, user_id: decoded.user_id, transaction_type: transaction_type }, {
       headers: {
@@ -188,10 +188,12 @@ const sendTransaction = async (book_id: number, transaction_type: string) => {
     }
   } catch (error) {
     throw error;
+  } finaly {
+    isLoading.value = false;
   }
-}
+}, 1000);
 
-const addTomyRecommendations = async (book_id: number) => {
+const addTomyRecommendations = debounce(async (book_id: number) => {
   try {
     const response = await api.post('/instructor/add/recommendations', { user_id: decoded.user_id, book_id: book_id }, {
       headers: {
@@ -222,14 +224,16 @@ const addTomyRecommendations = async (book_id: number) => {
     }
   } catch (error) {
     throw error;
+  } finally {
+    isLoading.value = false;
   }
-}
+}, 1000);
 
 const handleAddRecommendation = async (book_id: number) => {
   try {
+    isLoading.value = true;
     await addTomyRecommendations(book_id);
     const newBookRecommend = bookStore.getBookById(book_id);
-    console.log(newBookRecommend)
     recommendationStore.addRecommendation(newBookRecommend);
   } catch (error) {
     throw error;
@@ -243,7 +247,7 @@ const handleClickActions = async (actions: string, book_id: number, copies?: num
   } else if (actions === 'reserve') {
     transaction_type = 'Reserved';
   }
-
+  isLoading.value = true;
   await sendTransaction(book_id,transaction_type);
 };
 
