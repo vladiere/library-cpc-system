@@ -22,12 +22,6 @@ const userStore = useUserStore();
 
 const api = axios.create({ baseURL: 'https://library-backend-cmg9.onrender.com/api/' });
 const notApi = axios.create({ baseURL: 'https://library-backend-cmg9.onrender.com/api/' });
-// const api = axios.create({
-//   baseURL: 'https://cpc-backend.up.railway.app/api/',
-// });
-// const notApi = axios.create({
-//   baseURL: 'https://cpc-backend.up.railway.app/api/',
-// });
 
 const refreshToken = async () => {
   try {

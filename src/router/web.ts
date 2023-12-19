@@ -8,16 +8,14 @@ routes.push(
   {
     path: '',
     component: () => import('pages/LandingPage.vue'),
-    // beforeEnter: (to, from, next) => {
-    //   if (LocalStorage.getItem('done_visit')) {
-    //     console.log('Done visit');
-    //     next({ name: 'login' });
-    //   } else {
-    //     console.log('Not Done');
-    //     LocalStorage.set('done_visit', true);
-    //     next();
-    //   }
-    // }
+    beforeEnter: (to, from, next) => {
+      if (LocalStorage.getItem('done_visit')) {
+        next({ name: 'login' });
+      } else {
+        LocalStorage.set('done_visit', true);
+        next();
+      }
+    }
   },
   {
     path: '/expire',
