@@ -1,9 +1,9 @@
 <template>
    <q-item v-if="props.user_status === 'active'">
      <q-item-section v-if="!isEditting">
-        <q-item-label v-if="user_id != decoded.user_id" overline>{{ props.department }}</q-item-label>
         <q-item-label>{{ wordCapitalizer(props.file_title) }} Format ({{ props.file_path.split('.')[1] }})</q-item-label>
         <q-item-label class="text-capitalize" >{{ props.author_fullname }}</q-item-label>
+        <q-item-label caption>{{ wordCapitalizer(props.file_description) }}</q-item-label>
         <q-item-label caption>{{ wordCapitalizer(props.file_description) }}</q-item-label>
     </q-item-section>
 
@@ -130,15 +130,6 @@ const form = ref({
   description: props.file_description,
 });
 
-const formatNumber = (total_downloads: number) => {
-  if (total_downloads < 1000) {
-    return total_downloads.toString();
-  } else if (total_downloads < 1000000) {
-    return (total_downloads / 1000).toFixed(1) + 'k';
-  } else {
-    return (total_downloads / 1000000).toFixed(1) + 'M';
-  }
-}
 
 const wordCapitalizer = (word: string) => {
   return capitalize(word);

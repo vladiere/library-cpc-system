@@ -16,13 +16,12 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 // For development
-// const api = axios.create({ baseURL: 'http://localhost:3000/api/' });
-// const notApi = axios.create({ baseURL: 'http://localhost:3000/api/' });
+const api = axios.create({ baseURL: 'http://localhost:3000/api/' });
+const notApi = axios.create({ baseURL: 'http://localhost:3000/api/' });
 const userStore = useUserStore();
 
-const api = axios.create({ baseURL: 'https://library-backend-cmg9.onrender.com/api/' });
-const notApi = axios.create({ baseURL: 'https://library-backend-cmg9.onrender.com/api/' });
-
+// const api = axios.create({ baseURL: 'https://library-backend-cmg9.onrender.com/api/' });
+// const notApi = axios.create({ baseURL: 'https://library-backend-cmg9.onrender.com/api/' });
 const refreshToken = async () => {
   try {
     const response = await api.post('/refresh/user/tokens', {
@@ -34,16 +33,6 @@ const refreshToken = async () => {
     throw error;
   }
 };
-
-api.interceptors.request.use(
-  config => {
-    if (!config.headers['Authorization']) {
-       config.headers['Authorization'] = `Bearer ${userStore.token}`;
-    }
-
-    return config;
-  }, (error) => Promise.reject(error)
-)
 
 // Add a request interceptors
 api.interceptors.response.use(
