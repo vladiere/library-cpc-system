@@ -17,12 +17,13 @@
 
 <script setup lang="ts">
 import { defineComponent, ref, onMounted, watch, defineAsyncComponent } from 'vue';
-import { Platform } from 'quasar';
+import { Platform, debounce } from 'quasar';
 import { BookInfoInterface } from 'components/Books/BookInfoComponent.vue'
 import { useRouter } from 'vue-router';
 import { AuthorBooksInterface } from 'components/Author/AuthorBooksComponent.vue'
 import { useBooksStore } from 'stores/books-store';
 import books from 'src/utils/Books/books';
+import { SpinnerFacebook } from 'src/utils/loading';
 
 defineComponent({
   name: 'BookInfoPage'
@@ -54,6 +55,8 @@ const getBookInfo = async () => {
     authorBooks.value = await bookStore.getBookAuthor(bookInfo.value.author_name);
   } catch (error) {
     throw error;
+  } finally {
+    SpinnerFacebook(false);
   }
 };
 
@@ -62,6 +65,7 @@ const gotoBookInfo = (book_id: number) => {
 }
 
 onMounted(async () => {
+  SpinnerFacebook(true, 'Loading book');
   await getBookInfo();
 });
 

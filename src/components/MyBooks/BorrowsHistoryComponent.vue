@@ -36,7 +36,7 @@
                 <img :src="checkIfImage(item.img_path)" class="col" style="width: 100%">
                 <div class="col column">
                   <span class="text-caption">Due date</span>
-                  <span class="text-caption">{{ item.due_date }}</span>
+                  <span class="text-caption">{{ item.due_date ? item.due_date : 'Not yet checked out' }}</span>
                   <div class="row justify-center text-h6 text-weight-light text-blue-8 q-mt-sm">{{ checkDueDate(item.due_date) ? 'Overdue' : item.transaction_type }}</div>
                 </div>
               </div>
@@ -71,7 +71,7 @@
                   <q-separator class="q-mb-md"/>
                   <q-item-label lines="2" class="text-subtitle1">{{ item.title }}</q-item-label>
                   <q-item-label lines="1" class="text-caption">by: {{ item.author_name }}</q-item-label>
-                  <q-item-label lines="1" class="text-caption">Due date: {{ item.due_date }}</q-item-label>
+                  <q-item-label lines="1" class="text-caption">Due date: {{ item.due_date ? item.due_date : 'Not yet checked out' }}</q-item-label>
                   <div class="row justify-center text-h6 text-weight-light text-blue-8 q-mt-sm">{{ item.transaction_type }}</div>
                 </q-card-section>
               </q-card>
@@ -200,13 +200,16 @@ const handleRenewalBook = async () => {
   }
 }
 
-const checkDueDate = (due_date: string) => {
+const checkDueDate = (due_date: string | null) => {
+  if (due_date === null) {
+    return false;
+  }
   // Parse the due date string into a Date object
   const duedate = new Date(due_date);
   // Get the current date
   const currentDate = new Date();
   // Compare the input date with the current date
-  return (duedate <= currentDate);
+  return (duedate < currentDate);
 }
 
 onMounted(async() => {
