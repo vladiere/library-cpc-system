@@ -4,7 +4,7 @@
       <div class="rounded-borders column q-gutter-y-lg q-px-md">
         <div class="col column items-center">
           <span :class="Platform.is.mobile ? 'text-h6 text-blue-9 self-center' : 'text-h4 text-blue-9 self-center'">All Books available at CPC Library</span>
-          <q-btn icon-right="mdi-chevron-double-right" flat rounded text-color="blue-9" label="See all books list" no-caps to="book/collections" />
+          <q-btn :loading="isLoading" icon-right="mdi-chevron-double-right" flat rounded text-color="blue-9" label="See all books list" no-caps to="book/collections" />
         </div>
         <div class="row q-gutter-x-md justify-center q-mb-md">
           <BooksCard v-for="books in allBooks" :key="books.book_id" v-bind="books" />
@@ -55,8 +55,10 @@ const AllContributionComponent = defineAsyncComponent({
 const allBooks = ref<AllBooksInterface>([]);
 const contributionList = ref<AllContributionProps>([]);
 const bookStore = useBooksStore();
+const isLoading = ref(false);
 
 const booksTimeout = async () => {
+  isLoading.value = true;
   await setTimeout(async () => {
     await bookStore.getAllBooks.map((item: unknown, index: number) => {
       if (index < 5) allBooks.value.push(item);
@@ -64,6 +66,7 @@ const booksTimeout = async () => {
     await bookStore.getAllEBooks.map((item: unknown, index: number) => {
       if (index < 5) contributionList.value.push(item)
     });
+    isLoading.value = false;
   }, 500);
 }
 
