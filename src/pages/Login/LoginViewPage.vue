@@ -44,7 +44,6 @@
         >
           <q-img
             :src="Logo"
-            fit="contain"
             width="50%"
             class="col"
             style="border-radius: 50%"

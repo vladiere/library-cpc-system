@@ -188,7 +188,7 @@ const sendTransaction = debounce(async (book_id: number, transaction_type: strin
     }
   } catch (error) {
     throw error;
-  } finaly {
+  } finally {
     isLoading.value = false;
   }
 }, 1000);
