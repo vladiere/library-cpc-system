@@ -6,6 +6,7 @@
     </div>
 
     <q-separator size="2px" width="95%" class="self-center"/>
+
     <div :class="!Platform.is.mobile ? 'q-ml-xl row q-gutter-x-md q-my-md justify-between' : 'column items-center q-gutter-y-xs q-my-sm'">
       <div class="row content-center items-center">
         <span class="text-subtitle1 text-blue-9">Pages</span>
@@ -24,7 +25,7 @@
         <q-input
           placeholder="Search ebook or author"
           outlined
-          :class="!Platform.is.mobile ? 'q-mr-xl' : ''"
+          :class="!Platform.is.mobile ? 'q-mr-xl' : 'q-my-sm'"
           dense
           v-model="filter"
           rounded
@@ -37,14 +38,14 @@
 
     <q-separator size="2px" width="95%" class="self-center"/>
 
-    <div :class="!Platform.is.mobile ? 'row q-gutter-lg justify-center q-mt-md' : 'row q-gutter-md justify-center q-mt-sm'">
-      <q-intersection
-        v-for="item in paginatedContributeList"
-        :key="item.book_id"
-        transition="scale"
-      >
-        <AllContributionComponent v-bind="item" />
-      </q-intersection>
+    <div :class="!Platform.is.mobile ? 'row justify-center q-mt-md' : 'column q-gutter-y-md items-center q-mt-md'">
+      <!-- <q-intersection -->
+      <!--   v-for="item in paginatedContributeList" -->
+      <!--   :key="item.book_id" -->
+      <!--   :class="!Platform.is.mobile ? 'q-ma-sm' : ''" -->
+      <!-- > -->
+        <AllContributionComponent v-for="item in paginatedContributeList" :key="item.book_id" v-bind="item" />
+      <!-- </q-intersection> -->
       <div v-if="filteredContributeList.length === 0" class="q-mt-xl flex flex-center text-center text-h6 text-weight-light text-grey-8">
         Apologies, but the ebooks you were searching for could not be found.
       </div>

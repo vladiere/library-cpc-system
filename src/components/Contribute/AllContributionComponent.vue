@@ -16,7 +16,6 @@
       </div>
 
       <q-card-actions vertical class="justify-around column">
-        <q-badge rounded floating text-color="grey-1" :label="formatNumber(file_total_downloads)" />
         <q-btn flat round color="teal-5" icon="mdi-download" :href="linkfile +'/'+ file_path" >
           <q-tooltip class="bg-grey-10 text-grey-2" :delay="300">Download to read</q-tooltip>
         </q-btn>
