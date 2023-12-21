@@ -42,11 +42,10 @@
         <div
           class="column items-center content-center q-gutter-y-md q-pb-lg "
         >
-          <q-img
+          <img
             :src="Logo"
-            width="50%"
             class="col"
-            style="border-radius: 50%"
+            style="width: 40%;border-radius: 50%"
           />
           <span
             class="text-weight-bolder text-h3 text-blue-10"
