@@ -20,13 +20,32 @@
     </q-item-section>
 
     <q-item-section side top>
-      <q-badge color="teal" :label="formatNumber(props.file_total_downloads)" >
-        <q-tooltip class="bg-grey-10 text-grey-2" :delay="200">
-          Total downloads
-        </q-tooltip>
-      </q-badge>
-      <q-item-label>{{ props.uploaded_date }}</q-item-label>
-      <div class="row ">
+
+      <q-btn-dropdown color="primary" :loading="isLoading" dense flat rounded dropdown-icon="mdi-dots-vertical" v-if="Platform.is.mobile">
+        <q-list>
+          <q-item clickable v-close-popup @click="isEditting = !isEditting">
+            <q-item-section>
+              <q-item-label>
+                <q-icon :loading="isLoading" size="1.5em" flat no-caps dense rounded color="green-5" :name="!isEditting ? 'mdi-file-edit' : 'mdi-file-remove'" />
+                {{ !isEditting ? 'Edit Ebook' : 'Cancel Edit' }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable v-close-popup type="submit" @click="handleRedButton(props.contribution_id)">
+            <q-item-section>
+              <q-item-label>
+                <q-icon :loading="isLoading" size="1.5em" flat no-caps dense rounded :color="!isEditting ? 'red-5' : 'primary'" :name="!isEditting ? 'mdi-trash-can' : 'mdi-check-all'" />
+                {{ !isEditting ? 'Remove Ebook' : 'Save Changes' }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+        </q-list>
+      </q-btn-dropdown>
+
+      <q-item-label v-if="!Platform.is.mobile">{{ props.uploaded_date }}</q-item-label>
+      <div class="row" v-if="!Platform.is.mobile">
         <q-btn :loading="isLoading" flat no-caps dense rounded color="green-5" :icon="!isEditting ? 'mdi-file-edit' : 'mdi-file-remove'" @click="isEditting = !isEditting">
           <q-tooltip class="bg-grey-10 text-grey-2" :delay="300" anchor="bottom left">{{ !isEditting ? 'edit ebook' : 'cancel edit' }}</q-tooltip>
         </q-btn>
@@ -54,7 +73,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { format, debounce, Notify } from 'quasar';
+import { format, debounce, Notify, Platform } from 'quasar';
 import { useUserStore } from 'src/stores/user-store';
 import { jwtDecode } from 'jwt-decode';
 import { api } from 'boot/axios';
