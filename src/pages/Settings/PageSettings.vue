@@ -13,7 +13,6 @@
         align="justify"
       >
         <q-tab name="password" label="Password" />
-        <q-tab name="mail" label="Email Address" />
       </q-tabs>
 
       <q-separator />
@@ -23,9 +22,10 @@
         animated
         class="bg-grey-2 text-dark text-center"
       >
+
         <q-tab-panel name="password">
           <div class="text-h6">Change Password</div>
-          <q-form @reset="onSuccess" greedy @submit.prevent="changePassword" class="column q-gutter-y-md">
+          <q-form @reset="onSuccess" greedy @submit.prevent="handleChangePassword" class="column q-gutter-y-md">
             <q-input
               square
               outlined
@@ -36,7 +36,8 @@
               lazy-rules
               :rules="[
                 val => val && val.length > 0 || 'Please enter your new password',
-                val => val.length > 8 || 'Password must be at least 8 characters'
+                val => val.length >= 1 && val.length > 8 || 'Must be at least 8 characters',
+                val => passwordRegex.test(val) || 'Must be at least one special characters'
               ]"
             >
               <template v-slot:append>
@@ -79,44 +80,6 @@
           </q-form>
         </q-tab-panel>
 
-        <q-tab-panel name="mail" class="bg-grey-2 text-dark">
-          <div class="text-h6">Change Email</div>
-          <div class="column q-gutter-y-md">
-            <q-input
-              square
-              outlined
-              label="Old Email"
-              v-model="emails.oldEmail"
-            >
-              <template v-slot:prepend>
-                <q-icon name="email" />
-              </template>
-            </q-input>
-            <q-input
-              square
-              outlined
-              label="New Email"
-              v-model="emails.newEmail"
-            >
-              <template v-slot:prepend>
-                <q-icon name="email" />
-              </template>
-            </q-input>
-            <q-input
-              square
-              outlined
-              label="Confirm New Email"
-              v-model="emails.confirmEmail"
-            >
-              <template v-slot:prepend>
-                <q-icon name="email" />
-              </template>
-            </q-input>
-            <div class="row">
-              <q-btn color="grey-5" text-color="grey-10" label="Save email" />
-            </div>
-          </div>
-        </q-tab-panel>
       </q-tab-panels>
     </div>
   </q-page>
@@ -124,7 +87,7 @@
 
 <script setup lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue';
-import { Platform, SessionStorage, Notify } from 'quasar'
+import { Platform, SessionStorage, Notify, debounce } from 'quasar'
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios'
 import { useUserStore } from 'src/stores/user-store';
@@ -137,25 +100,21 @@ const router = useRouter();
 const userStore = useUserStore();
 const tab = ref('password');
 const isPwd = ref(true);
+const passwordRegex = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/;
 const password = ref({
   newPass: '',
   confirmPass: '',
 });
-const emails = ref({
-  oldemail: '',
-  newEmail: '',
-  confirmEmail: '',
-  confirmCode: '',
-});
+const isLoading = ref(false);
 
 const onSuccess = () => {
   password.value.newPass = '';
   password.value.confirmPass = '';
 }
 
-const changePassword = async () => {
+const changePassword = debounce(async (email: string, password: string) => {
   try {
-    const response = await api.post('/user/change/password', { email: router.currentRoute.value.params.email, password: password.value.newPass }, {
+    const response = await api.post('/user/change/password', { email: email, password: }, {
       headers: {
         Authorization: `Bearer ${userStore.token}`
       }
@@ -175,6 +134,17 @@ const changePassword = async () => {
     }
   } catch (error: any) {
     throw new Error(error);
+  } finally {
+    isLoading.value = false;
+  }
+}, 1000);
+
+const handleChangePassword = async () => {
+  try {
+    isLoading.value = true;
+    await changePassword(router.currentRoute.value.params.email, password.value.newPass);
+  } catch (error) {
+    throw error;
   }
 }
 
